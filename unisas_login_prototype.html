@@ -1,0 +1,952 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap');
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --verde:#2D7A3A;--verde-mid:#3B9E4A;--verde-light:#EAF3DE;--verde-50:#F2FAF4;
+    --amarelo:#D4A017;--amarelo-light:#FDF6DC;--amarelo-mid:#F0C040;
+    --branco:#FFFFFF;--cinza-bg:#F8F9FA;--cinza-borda:#E2E8F0;
+    --cinza-texto:#64748B;--texto:#1A2332;--texto-leve:#475569;
+    --fonte-display:'Sora',sans-serif;--fonte-corpo:'DM Sans',sans-serif;
+  }
+
+  .screen{display:none;width:100%;min-height:660px;font-family:var(--fonte-corpo)}
+  .screen.active{display:flex}
+
+  /* ── TELA DE LOGIN ─────────────────────────────────────── */
+  #login{flex-direction:column;background:#fff;position:relative;overflow:hidden}
+
+  .login-bg{
+    position:absolute;top:0;left:0;right:0;height:320px;
+    background:linear-gradient(135deg,#1a3a23 0%,#2D7A3A 55%,#3B9E4A 100%);
+    z-index:0
+  }
+  .login-bg::after{
+    content:'';position:absolute;bottom:-2px;left:0;right:0;height:80px;
+    background:#fff;
+    clip-path:ellipse(58% 100% at 50% 100%)
+  }
+
+  .login-deco{
+    position:absolute;top:18px;right:32px;
+    width:110px;height:110px;border-radius:50%;
+    background:rgba(255,255,255,0.06);
+    border:2px solid rgba(212,160,23,0.35)
+  }
+  .login-deco2{
+    position:absolute;top:60px;right:80px;
+    width:48px;height:48px;border-radius:50%;
+    background:rgba(212,160,23,0.18)
+  }
+
+  .login-content{
+    position:relative;z-index:1;
+    display:flex;flex-direction:column;align-items:center;
+    padding:48px 24px 32px
+  }
+
+  .brand{display:flex;flex-direction:column;align-items:center;margin-bottom:28px}
+  .brand-logo{
+    width:64px;height:64px;border-radius:18px;
+    background:var(--amarelo-mid);
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:12px;box-shadow:0 4px 16px rgba(0,0,0,0.18)
+  }
+  .brand-logo svg{width:36px;height:36px}
+  .brand-name{
+    font-family:var(--fonte-display);font-size:26px;font-weight:700;
+    color:#fff;letter-spacing:-0.5px
+  }
+  .brand-tagline{font-size:12px;color:rgba(255,255,255,0.7);margin-top:2px;letter-spacing:0.3px}
+
+  .login-card{
+    background:#fff;border-radius:20px;
+    box-shadow:0 8px 40px rgba(0,0,0,0.10);
+    padding:28px 28px 24px;
+    width:100%;max-width:380px
+  }
+
+  .step-title{
+    font-family:var(--fonte-display);font-size:16px;font-weight:600;
+    color:var(--texto);margin-bottom:4px
+  }
+  .step-sub{font-size:13px;color:var(--cinza-texto);margin-bottom:20px}
+
+  /* Seleção de perfil */
+  .perfil-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+  .perfil-card{
+    border:1.5px solid var(--cinza-borda);border-radius:14px;
+    padding:14px 10px;cursor:pointer;text-align:center;
+    transition:all .18s ease;background:#fff;user-select:none
+  }
+  .perfil-card:hover{border-color:var(--verde-mid);background:var(--verde-50)}
+  .perfil-card.selected{
+    border-color:var(--verde);background:var(--verde-light);
+    box-shadow:0 0 0 3px rgba(45,122,58,0.12)
+  }
+  .perfil-icon{
+    width:40px;height:40px;border-radius:12px;
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto 8px;font-size:20px
+  }
+  .perfil-label{font-family:var(--fonte-display);font-size:12px;font-weight:600;color:var(--texto)}
+  .perfil-desc{font-size:10.5px;color:var(--cinza-texto);margin-top:2px}
+
+  .perfil-card.selected .perfil-label{color:var(--verde)}
+
+  /* Inputs */
+  .field{margin-bottom:14px}
+  .field label{
+    display:block;font-size:12px;font-weight:500;
+    color:var(--texto-leve);margin-bottom:5px
+  }
+  .field input{
+    width:100%;height:42px;border-radius:10px;
+    border:1.5px solid var(--cinza-borda);
+    padding:0 14px;font-size:14px;font-family:var(--fonte-corpo);
+    color:var(--texto);background:#fff;outline:none;
+    transition:border-color .15s
+  }
+  .field input:focus{border-color:var(--verde)}
+
+  .forgot{
+    font-size:12px;color:var(--verde);cursor:pointer;
+    text-align:right;margin-top:-8px;margin-bottom:14px;
+    display:block;font-weight:500
+  }
+  .forgot:hover{text-decoration:underline}
+
+  .btn-primary{
+    width:100%;height:44px;border-radius:12px;border:none;cursor:pointer;
+    background:linear-gradient(135deg,var(--verde) 0%,var(--verde-mid) 100%);
+    color:#fff;font-size:14px;font-weight:600;
+    font-family:var(--fonte-display);letter-spacing:0.2px;
+    transition:opacity .15s,transform .1s
+  }
+  .btn-primary:hover{opacity:.92}
+  .btn-primary:active{transform:scale(0.98)}
+  .btn-primary:disabled{opacity:.45;cursor:not-allowed}
+
+  .badge-perfil{
+    display:inline-flex;align-items:center;gap:5px;
+    background:var(--verde-light);border-radius:8px;
+    padding:5px 10px;margin-bottom:16px;font-size:12px;
+    font-weight:500;color:var(--verde)
+  }
+
+  .divider{
+    display:flex;align-items:center;gap:10px;
+    margin:18px 0;color:var(--cinza-texto);font-size:12px
+  }
+  .divider::before,.divider::after{
+    content:'';flex:1;height:0.5px;background:var(--cinza-borda)
+  }
+
+  /* ── DASHBOARDS ────────────────────────────────────────── */
+  .dash{
+    flex-direction:column;background:var(--cinza-bg);
+    font-family:var(--fonte-corpo)
+  }
+
+  .topbar{
+    background:#fff;border-bottom:1px solid var(--cinza-borda);
+    padding:0 20px;height:56px;
+    display:flex;align-items:center;justify-content:space-between
+  }
+  .topbar-brand{
+    display:flex;align-items:center;gap:8px;
+    font-family:var(--fonte-display);font-weight:700;font-size:15px;color:var(--verde)
+  }
+  .topbar-brand span{
+    width:28px;height:28px;border-radius:8px;background:var(--amarelo-mid);
+    display:flex;align-items:center;justify-content:center
+  }
+  .topbar-user{
+    display:flex;align-items:center;gap:8px;cursor:pointer
+  }
+  .avatar{
+    width:32px;height:32px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:600;color:#fff
+  }
+  .user-info{text-align:right}
+  .user-name{font-size:13px;font-weight:500;color:var(--texto)}
+  .user-role{font-size:11px;color:var(--cinza-texto)}
+
+  .btn-sair{
+    font-size:12px;color:var(--cinza-texto);cursor:pointer;
+    background:none;border:none;font-family:var(--fonte-corpo);
+    padding:4px 8px;border-radius:6px
+  }
+  .btn-sair:hover{background:var(--cinza-borda)}
+
+  .dash-body{padding:16px;display:flex;flex-direction:column;gap:14px}
+
+  .welcome-banner{
+    background:linear-gradient(135deg,#1a3a23 0%,#2D7A3A 100%);
+    border-radius:16px;padding:18px 20px;color:#fff;
+    display:flex;justify-content:space-between;align-items:center
+  }
+  .welcome-title{
+    font-family:var(--fonte-display);font-size:15px;font-weight:600;margin-bottom:3px
+  }
+  .welcome-sub{font-size:12px;opacity:.75}
+  .welcome-badge{
+    background:var(--amarelo-mid);border-radius:10px;
+    padding:6px 12px;font-size:11px;font-weight:600;
+    color:#1a2332;white-space:nowrap
+  }
+
+  .cards-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  .stat-card{
+    background:#fff;border-radius:14px;border:1px solid var(--cinza-borda);
+    padding:14px;
+  }
+  .stat-label{font-size:11px;color:var(--cinza-texto);margin-bottom:4px}
+  .stat-value{font-family:var(--fonte-display);font-size:22px;font-weight:700;color:var(--texto)}
+  .stat-sub{font-size:11px;color:var(--verde);margin-top:2px}
+  .stat-icon{
+    width:32px;height:32px;border-radius:9px;
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:8px;font-size:16px
+  }
+
+  .section-title{
+    font-family:var(--fonte-display);font-size:13px;font-weight:600;
+    color:var(--texto);margin-bottom:10px
+  }
+
+  .quick-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+  .qa-btn{
+    background:#fff;border:1px solid var(--cinza-borda);border-radius:12px;
+    padding:12px 10px;text-align:center;cursor:pointer;
+    transition:all .15s;user-select:none
+  }
+  .qa-btn:hover{border-color:var(--verde);background:var(--verde-50)}
+  .qa-icon{font-size:20px;margin-bottom:4px}
+  .qa-label{font-size:12px;font-weight:500;color:var(--texto)}
+
+  .list-card{
+    background:#fff;border-radius:14px;border:1px solid var(--cinza-borda);
+    overflow:hidden
+  }
+  .list-header{
+    padding:12px 14px;border-bottom:1px solid var(--cinza-borda);
+    font-family:var(--fonte-display);font-size:13px;font-weight:600;color:var(--texto);
+    display:flex;justify-content:space-between;align-items:center
+  }
+  .list-header span{font-size:11px;color:var(--verde);font-weight:400;cursor:pointer}
+  .list-item{
+    padding:11px 14px;border-bottom:0.5px solid var(--cinza-borda);
+    display:flex;align-items:center;gap:10px;font-size:13px
+  }
+  .list-item:last-child{border-bottom:none}
+  .li-icon{
+    width:32px;height:32px;border-radius:9px;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;font-size:15px
+  }
+  .li-text{flex:1}
+  .li-title{font-weight:500;color:var(--texto);font-size:12.5px}
+  .li-sub{font-size:11px;color:var(--cinza-texto)}
+  .li-badge{
+    font-size:10px;padding:3px 7px;border-radius:6px;font-weight:600
+  }
+  .badge-verde{background:var(--verde-light);color:var(--verde)}
+  .badge-amarelo{background:var(--amarelo-light);color:#92630A}
+  .badge-cinza{background:#F1F5F9;color:#64748B}
+
+  /* Recuperar senha */
+  .back-link{
+    display:flex;align-items:center;gap:5px;
+    font-size:12px;color:var(--cinza-texto);cursor:pointer;
+    margin-bottom:16px;font-weight:500
+  }
+  .back-link:hover{color:var(--verde)}
+
+  .success-box{
+    background:var(--verde-50);border:1px solid var(--verde-light);
+    border-radius:12px;padding:16px;text-align:center;display:none
+  }
+  .success-icon{font-size:32px;margin-bottom:8px}
+  .success-title{font-family:var(--fonte-display);font-size:14px;font-weight:600;color:var(--verde)}
+  .success-sub{font-size:12px;color:var(--cinza-texto);margin-top:4px}
+
+  .nav-tabs{
+    display:flex;gap:0;background:#fff;
+    border-bottom:1px solid var(--cinza-borda);
+    padding:0 16px;overflow-x:auto
+  }
+  .nav-tab{
+    padding:10px 14px;font-size:12px;font-weight:500;
+    color:var(--cinza-texto);cursor:pointer;white-space:nowrap;
+    border-bottom:2px solid transparent;margin-bottom:-1px;
+    transition:color .15s
+  }
+  .nav-tab.active{color:var(--verde);border-bottom-color:var(--verde)}
+
+  /* Progress bar */
+  .prog-bar-wrap{height:6px;background:#E2E8F0;border-radius:3px;overflow:hidden}
+  .prog-bar{height:100%;background:linear-gradient(90deg,var(--verde),var(--verde-mid));border-radius:3px}
+
+  /* Gamificação */
+  .xp-badge{
+    display:inline-flex;align-items:center;gap:4px;
+    background:var(--amarelo-light);border-radius:8px;
+    padding:4px 8px;font-size:11px;font-weight:600;color:#92630A
+  }
+</style>
+
+<!-- <h2 class="sr-only">Protótipo UniSAS — tela de login e dashboards por perfil</h2> -->
+
+
+<!-- TELA 1: LOGIN — SELEÇÃO DE PERFIL                      -->
+
+<div id="login" class="screen active">
+  <div class="login-bg">
+    <div class="login-deco"></div>
+    <div class="login-deco2"></div>
+  </div>
+  <div class="login-content">
+    <div class="brand">
+      <div class="brand-logo">
+        <svg viewBox="0 0 36 36" fill="none">
+          <rect x="4" y="10" width="28" height="20" rx="4" fill="#1a3a23"/>
+          <rect x="8" y="14" width="8" height="2" rx="1" fill="#F0C040"/>
+          <rect x="8" y="18" width="12" height="2" rx="1" fill="rgba(255,255,255,0.6)"/>
+          <rect x="8" y="22" width="9" height="2" rx="1" fill="rgba(255,255,255,0.4)"/>
+          <circle cx="26" cy="10" r="5" fill="#F0C040"/>
+          <text x="26" y="14" text-anchor="middle" font-size="7" fill="#1a3a23" font-weight="700">A</text>
+        </svg>
+      </div>
+      <div class="brand-name">UniSAS</div>
+      <div class="brand-tagline">Sistema Acadêmico Unificado · Rede Pública</div>
+    </div>
+
+    <div class="login-card" id="card-perfil">
+      <div class="step-title">Selecione seu perfil</div>
+      <div class="step-sub">Como você usa a plataforma hoje?</div>
+
+      <div class="perfil-grid">
+        <div class="perfil-card" onclick="selecionarPerfil('aluno',this)">
+          <div class="perfil-icon" style="background:#EAF3DE">📚</div>
+          <div class="perfil-label">Aluno</div>
+          <div class="perfil-desc">Acesso a conteúdos e atividades</div>
+        </div>
+        <div class="perfil-card" onclick="selecionarPerfil('professor',this)">
+          <div class="perfil-icon" style="background:#FDF6DC">🎓</div>
+          <div class="perfil-label">Professor</div>
+          <div class="perfil-desc">Gestão de turmas e conteúdo</div>
+        </div>
+        <div class="perfil-card" onclick="selecionarPerfil('responsavel',this)">
+          <div class="perfil-icon" style="background:#EAF3DE">👨‍👧</div>
+          <div class="perfil-label">Responsável</div>
+          <div class="perfil-desc">Acompanhe seu filho</div>
+        </div>
+        <div class="perfil-card" onclick="selecionarPerfil('diretor',this)">
+          <div class="perfil-icon" style="background:#FDF6DC">🏫</div>
+          <div class="perfil-label">Diretor</div>
+          <div class="perfil-desc">Gestão escolar completa</div>
+        </div>
+      </div>
+
+      <button class="btn-primary" id="btn-continuar" onclick="irParaLogin()" disabled>
+        Continuar →
+      </button>
+    </div>
+
+    <div class="login-card" id="card-login" style="display:none">
+      <div class="back-link" onclick="voltarParaPerfil()">
+        ← Trocar perfil
+      </div>
+      <div id="badge-perfil-login" class="badge-perfil"></div>
+      <div class="step-title">Acesse sua conta</div>
+      <div class="step-sub">Use o e-mail institucional da sua escola</div>
+
+      <div class="field">
+        <label>E-mail institucional</label>
+        <input type="email" placeholder="seunome@escola.edu.br" id="inp-email"/>
+      </div>
+      <div class="field">
+        <label>Senha</label>
+        <input type="password" placeholder="••••••••" id="inp-senha"/>
+      </div>
+
+      <span class="forgot" onclick="irParaRecuperar()">Esqueci minha senha</span>
+
+      <button class="btn-primary" onclick="fazerLogin()">
+        Entrar no UniSAS
+      </button>
+
+      <div class="divider">acesso seguro via JWT</div>
+      <div style="text-align:center;font-size:11.5px;color:var(--cinza-texto)">
+        Dados protegidos conforme a <strong>LGPD</strong>
+      </div>
+    </div>
+
+    <div class="login-card" id="card-recuperar" style="display:none">
+      <div class="back-link" onclick="voltarParaLogin()">
+        ← Voltar ao login
+      </div>
+      <div class="step-title">Recuperar senha</div>
+      <div class="step-sub">Enviaremos um link para seu e-mail cadastrado</div>
+
+      <div id="form-recuperar">
+        <div class="field">
+          <label>E-mail institucional</label>
+          <input type="email" placeholder="seunome@escola.edu.br" id="inp-rec-email"/>
+        </div>
+        <button class="btn-primary" onclick="enviarRecuperacao()" style="margin-top:4px">
+          Enviar link de redefinição
+        </button>
+      </div>
+
+      <div class="success-box" id="success-rec">
+        <div class="success-icon">✅</div>
+        <div class="success-title">E-mail enviado com sucesso!</div>
+        <div class="success-sub">Verifique sua caixa de entrada.<br>O link expira em 30 minutos.</div>
+        <button class="btn-primary" style="margin-top:14px" onclick="voltarParaLogin()">Voltar ao login</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- TELA 2: DASHBOARD ALUNO                               -->
+
+<div id="dash-aluno" class="screen dash">
+  <div class="topbar">
+    <div class="topbar-brand">
+      <span>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <rect x="1" y="4" width="14" height="10" rx="2" fill="#1a3a23"/>
+          <rect x="3" y="6" width="4" height="1.2" rx="0.6" fill="#F0C040"/>
+          <rect x="3" y="8.5" width="6" height="1" rx="0.5" fill="rgba(255,255,255,0.7)"/>
+        </svg>
+      </span>
+      UniSAS
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div class="xp-badge">⭐ 340 XP</div>
+      <div class="topbar-user" onclick="voltarLogin()">
+        <div style="text-align:right">
+          <div class="user-name">Ana Souza</div>
+          <div class="user-role">Aluna · 9º Ano B</div>
+        </div>
+        <div class="avatar" style="background:var(--verde)">AS</div>
+      </div>
+    </div>
+  </div>
+  <div class="nav-tabs">
+    <div class="nav-tab active">Início</div>
+    <div class="nav-tab">Minhas aulas</div>
+    <div class="nav-tab">Atividades</div>
+    <div class="nav-tab">Chat</div>
+    <div class="nav-tab">Downloads</div>
+  </div>
+  <div class="dash-body">
+    <div class="welcome-banner">
+      <div>
+        <div class="welcome-title">Bom dia, Ana! 👋</div>
+        <div class="welcome-sub">Você tem 2 atividades pendentes hoje</div>
+      </div>
+      <div class="welcome-badge">9º Ano B</div>
+    </div>
+
+    <div class="cards-grid">
+      <div class="stat-card">
+        <div class="stat-icon" style="background:var(--verde-light)">📈</div>
+        <div class="stat-label">Média geral</div>
+        <div class="stat-value">8,4</div>
+        <div class="stat-sub">↑ +0,3 esse mês</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:var(--amarelo-light)">🏆</div>
+        <div class="stat-label">Conquistas</div>
+        <div class="stat-value">12</div>
+        <div class="stat-sub">3 novas esta semana</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:var(--verde-light)">✅</div>
+        <div class="stat-label">Frequência</div>
+        <div class="stat-value">94%</div>
+        <div class="stat-sub">Acima da meta</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:var(--amarelo-light)">📥</div>
+        <div class="stat-label">Conteúdos offline</div>
+        <div class="stat-value">7</div>
+        <div class="stat-sub">Disponíveis</div>
+      </div>
+    </div>
+
+    <div class="list-card">
+      <div class="list-header">Atividades pendentes <span>Ver todas</span></div>
+      <div class="list-item">
+        <div class="li-icon" style="background:var(--amarelo-light)">📝</div>
+        <div class="li-text">
+          <div class="li-title">Simulado de Matemática</div>
+          <div class="li-sub">Prof. Carlos · Vence hoje às 23h</div>
+        </div>
+        <div class="li-badge badge-amarelo">Urgente</div>
+      </div>
+      <div class="list-item">
+        <div class="li-icon" style="background:var(--verde-light)">📖</div>
+        <div class="li-text">
+          <div class="li-title">Leitura: Capítulo 5 — Português</div>
+          <div class="li-sub">Prof. Mariana · Prazo: amanhã</div>
+        </div>
+        <div class="li-badge badge-cinza">Pendente</div>
+      </div>
+    </div>
+
+    <div class="list-card">
+      <div class="list-header">Progresso por disciplina</div>
+      <div class="list-item" style="flex-direction:column;align-items:flex-start">
+        <div style="display:flex;justify-content:space-between;width:100%;margin-bottom:5px">
+          <span style="font-size:12.5px;font-weight:500;color:var(--texto)">Matemática</span>
+          <span style="font-size:12px;color:var(--verde);font-weight:600">78%</span>
+        </div>
+        <div class="prog-bar-wrap" style="width:100%"><div class="prog-bar" style="width:78%"></div></div>
+      </div>
+      <div class="list-item" style="flex-direction:column;align-items:flex-start">
+        <div style="display:flex;justify-content:space-between;width:100%;margin-bottom:5px">
+          <span style="font-size:12.5px;font-weight:500;color:var(--texto)">Português</span>
+          <span style="font-size:12px;color:var(--verde);font-weight:600">91%</span>
+        </div>
+        <div class="prog-bar-wrap" style="width:100%"><div class="prog-bar" style="width:91%"></div></div>
+      </div>
+      <div class="list-item" style="flex-direction:column;align-items:flex-start;border:none">
+        <div style="display:flex;justify-content:space-between;width:100%;margin-bottom:5px">
+          <span style="font-size:12.5px;font-weight:500;color:var(--texto)">Ciências</span>
+          <span style="font-size:12px;color:var(--verde);font-weight:600">65%</span>
+        </div>
+        <div class="prog-bar-wrap" style="width:100%"><div class="prog-bar" style="width:65%"></div></div>
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="voltarLogin()" style="border-radius:12px">
+      ← Trocar perfil / Sair
+    </button>
+  </div>
+</div>
+
+
+<!-- TELA 3: DASHBOARD PROFESSOR                           -->
+
+<div id="dash-professor" class="screen dash">
+  <div class="topbar">
+    <div class="topbar-brand">
+      <span>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <rect x="1" y="4" width="14" height="10" rx="2" fill="#1a3a23"/>
+          <rect x="3" y="6" width="4" height="1.2" rx="0.6" fill="#F0C040"/>
+          <rect x="3" y="8.5" width="6" height="1" rx="0.5" fill="rgba(255,255,255,0.7)"/>
+        </svg>
+      </span>
+      UniSAS
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div class="topbar-user" onclick="voltarLogin()">
+        <div style="text-align:right">
+          <div class="user-name">Prof. Carlos Lima</div>
+          <div class="user-role">Professor · Matemática</div>
+        </div>
+        <div class="avatar" style="background:#854F0B">CL</div>
+      </div>
+    </div>
+  </div>
+  <div class="nav-tabs">
+    <div class="nav-tab active">Início</div>
+    <div class="nav-tab">Minhas turmas</div>
+    <div class="nav-tab">Conteúdos</div>
+    <div class="nav-tab">Banco de questões</div>
+    <div class="nav-tab">Chat</div>
+  </div>
+  <div class="dash-body">
+    <div class="welcome-banner">
+      <div>
+        <div class="welcome-title">Bem-vindo, Prof. Carlos 👋</div>
+        <div class="welcome-sub">3 turmas ativas · 87 alunos no total</div>
+      </div>
+      <div class="welcome-badge">Matemática</div>
+    </div>
+
+    <div class="cards-grid">
+      <div class="stat-card">
+        <div class="stat-icon" style="background:var(--verde-light)">👥</div>
+        <div class="stat-label">Alunos</div>
+        <div class="stat-value">87</div>
+        <div class="stat-sub">3 turmas ativas</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:var(--amarelo-light)">📋</div>
+        <div class="stat-label">Atividades abertas</div>
+        <div class="stat-value">5</div>
+        <div class="stat-sub">2 vencem hoje</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:var(--verde-light)">🎬</div>
+        <div class="stat-label">Conteúdos publicados</div>
+        <div class="stat-value">24</div>
+        <div class="stat-sub">Este semestre</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:var(--amarelo-light)">❓</div>
+        <div class="stat-label">Questões no banco</div>
+        <div class="stat-value">142</div>
+        <div class="stat-sub">Disponíveis</div>
+      </div>
+    </div>
+
+    <div class="section-title">Ações rápidas</div>
+    <div class="quick-actions">
+      <div class="qa-btn">
+        <div class="qa-icon">📤</div>
+        <div class="qa-label">Upload de aula</div>
+      </div>
+      <div class="qa-btn">
+        <div class="qa-icon">📝</div>
+        <div class="qa-label">Nova atividade</div>
+      </div>
+      <div class="qa-btn">
+        <div class="qa-icon">❓</div>
+        <div class="qa-label">Criar questão</div>
+      </div>
+      <div class="qa-btn">
+        <div class="qa-icon">📊</div>
+        <div class="qa-label">Ver desempenho</div>
+      </div>
+    </div>
+
+    <div class="list-card">
+      <div class="list-header">Minhas turmas <span>Gerenciar</span></div>
+      <div class="list-item">
+        <div class="li-icon" style="background:var(--verde-light)">🏫</div>
+        <div class="li-text">
+          <div class="li-title">9º Ano B · Matemática</div>
+          <div class="li-sub">32 alunos · Média: 7,8</div>
+        </div>
+        <div class="li-badge badge-verde">Ativa</div>
+      </div>
+      <div class="list-item">
+        <div class="li-icon" style="background:var(--amarelo-light)">🏫</div>
+        <div class="li-text">
+          <div class="li-title">8º Ano A · Matemática</div>
+          <div class="li-sub">29 alunos · Média: 6,9</div>
+        </div>
+        <div class="li-badge badge-amarelo">Atenção</div>
+      </div>
+      <div class="list-item">
+        <div class="li-icon" style="background:var(--verde-light)">🏫</div>
+        <div class="li-text">
+          <div class="li-title">7º Ano C · Matemática</div>
+          <div class="li-sub">26 alunos · Média: 8,1</div>
+        </div>
+        <div class="li-badge badge-verde">Ativa</div>
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="voltarLogin()">← Trocar perfil / Sair</button>
+  </div>
+</div>
+
+
+<!-- TELA 4: DASHBOARD RESPONSÁVEL                         -->
+
+<div id="dash-responsavel" class="screen dash">
+  <div class="topbar">
+    <div class="topbar-brand">
+      <span>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <rect x="1" y="4" width="14" height="10" rx="2" fill="#1a3a23"/>
+          <rect x="3" y="6" width="4" height="1.2" rx="0.6" fill="#F0C040"/>
+          <rect x="3" y="8.5" width="6" height="1" rx="0.5" fill="rgba(255,255,255,0.7)"/>
+        </svg>
+      </span>
+      UniSAS
+    </div>
+    <div class="topbar-user" onclick="voltarLogin()">
+      <div style="text-align:right">
+        <div class="user-name">Maria Souza</div>
+        <div class="user-role">Responsável · Ana Souza</div>
+      </div>
+      <div class="avatar" style="background:#185FA5">MS</div>
+    </div>
+  </div>
+  <div class="nav-tabs">
+    <div class="nav-tab active">Acompanhamento</div>
+    <div class="nav-tab">Frequência</div>
+    <div class="nav-tab">Notas</div>
+    <div class="nav-tab">Chat com escola</div>
+  </div>
+  <div class="dash-body">
+    <div class="welcome-banner">
+      <div>
+        <div class="welcome-title">Acompanhe Ana Souza 👧</div>
+        <div class="welcome-sub">9º Ano B · Turno Matutino</div>
+      </div>
+      <div class="welcome-badge">Responsável</div>
+    </div>
+
+    <div class="cards-grid">
+      <div class="stat-card">
+        <div class="stat-icon" style="background:var(--verde-light)">📊</div>
+        <div class="stat-label">Média geral</div>
+        <div class="stat-value">8,4</div>
+        <div class="stat-sub">Acima da média da turma</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:var(--verde-light)">✅</div>
+        <div class="stat-label">Frequência</div>
+        <div class="stat-value">94%</div>
+        <div class="stat-sub">3 faltas no mês</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:var(--amarelo-light)">📝</div>
+        <div class="stat-label">Atividades pendentes</div>
+        <div class="stat-value">2</div>
+        <div class="stat-sub">1 vence hoje</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:var(--verde-light)">🏆</div>
+        <div class="stat-label">Conquistas</div>
+        <div class="stat-value">12</div>
+        <div class="stat-sub">+3 esta semana</div>
+      </div>
+    </div>
+
+    <div class="list-card">
+      <div class="list-header">Notas recentes</div>
+      <div class="list-item">
+        <div class="li-icon" style="background:var(--verde-light)">➗</div>
+        <div class="li-text">
+          <div class="li-title">Prova de Matemática — Bimestre 2</div>
+          <div class="li-sub">Prof. Carlos Lima · 15/04</div>
+        </div>
+        <div style="font-family:'Sora',sans-serif;font-size:16px;font-weight:700;color:var(--verde)">9,0</div>
+      </div>
+      <div class="list-item">
+        <div class="li-icon" style="background:var(--amarelo-light)">📖</div>
+        <div class="li-text">
+          <div class="li-title">Redação — Português</div>
+          <div class="li-sub">Prof. Mariana · 12/04</div>
+        </div>
+        <div style="font-family:'Sora',sans-serif;font-size:16px;font-weight:700;color:#92630A">7,5</div>
+      </div>
+      <div class="list-item">
+        <div class="li-icon" style="background:var(--verde-light)">🔬</div>
+        <div class="li-text">
+          <div class="li-title">Trabalho de Ciências</div>
+          <div class="li-sub">Prof. Roberta · 10/04</div>
+        </div>
+        <div style="font-family:'Sora',sans-serif;font-size:16px;font-weight:700;color:var(--verde)">8,5</div>
+      </div>
+    </div>
+
+    <div class="list-card">
+      <div class="list-header">Mensagens recentes <span>Abrir chat</span></div>
+      <div class="list-item">
+        <div class="li-icon" style="background:#EEF2FF">💬</div>
+        <div class="li-text">
+          <div class="li-title">Prof. Carlos Lima</div>
+          <div class="li-sub">Ana fez ótima participação hoje!</div>
+        </div>
+        <div class="li-badge badge-verde">Hoje</div>
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="voltarLogin()">← Trocar perfil / Sair</button>
+  </div>
+</div>
+
+
+<!-- TELA 5: DASHBOARD DIRETOR                             -->
+
+<div id="dash-diretor" class="screen dash">
+  <div class="topbar">
+    <div class="topbar-brand">
+      <span>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <rect x="1" y="4" width="14" height="10" rx="2" fill="#1a3a23"/>
+          <rect x="3" y="6" width="4" height="1.2" rx="0.6" fill="#F0C040"/>
+          <rect x="3" y="8.5" width="6" height="1" rx="0.5" fill="rgba(255,255,255,0.7)"/>
+        </svg>
+      </span>
+      UniSAS
+    </div>
+    <div class="topbar-user" onclick="voltarLogin()">
+      <div style="text-align:right">
+        <div class="user-name">Diretora Sandra</div>
+        <div class="user-role">Diretor · E.E. João XXIII</div>
+      </div>
+      <div class="avatar" style="background:#A32D2D">SD</div>
+    </div>
+  </div>
+  <div class="nav-tabs">
+    <div class="nav-tab active">Painel geral</div>
+    <div class="nav-tab">Turmas</div>
+    <div class="nav-tab">Professores</div>
+    <div class="nav-tab">Alunos</div>
+    <div class="nav-tab">Relatórios</div>
+  </div>
+  <div class="dash-body">
+    <div class="welcome-banner">
+      <div>
+        <div class="welcome-title">Painel da Direção 🏫</div>
+        <div class="welcome-sub">E.E. João XXIII · Ano letivo 2026</div>
+      </div>
+      <div class="welcome-badge">Diretor</div>
+    </div>
+
+    <div class="cards-grid">
+      <div class="stat-card">
+        <div class="stat-icon" style="background:var(--verde-light)">👨‍🎓</div>
+        <div class="stat-label">Total de alunos</div>
+        <div class="stat-value">412</div>
+        <div class="stat-sub">Matrículas ativas</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:var(--amarelo-light)">👨‍🏫</div>
+        <div class="stat-label">Professores</div>
+        <div class="stat-value">18</div>
+        <div class="stat-sub">Em 6 disciplinas</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:var(--verde-light)">🏫</div>
+        <div class="stat-label">Turmas ativas</div>
+        <div class="stat-value">14</div>
+        <div class="stat-sub">Fund. II e Médio</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:var(--amarelo-light)">📈</div>
+        <div class="stat-label">Média da escola</div>
+        <div class="stat-value">7,6</div>
+        <div class="stat-sub">↑ +0,4 vs bimestre 1</div>
+      </div>
+    </div>
+
+    <div class="section-title">Gestão rápida</div>
+    <div class="quick-actions">
+      <div class="qa-btn">
+        <div class="qa-icon">➕</div>
+        <div class="qa-label">Nova turma</div>
+      </div>
+      <div class="qa-btn">
+        <div class="qa-icon">👤</div>
+        <div class="qa-label">Gerenciar usuários</div>
+      </div>
+      <div class="qa-btn">
+        <div class="qa-icon">📊</div>
+        <div class="qa-label">Relatório geral</div>
+      </div>
+      <div class="qa-btn">
+        <div class="qa-icon">📢</div>
+        <div class="qa-label">Comunicado geral</div>
+      </div>
+    </div>
+
+    <div class="list-card">
+      <div class="list-header">Alertas da semana</div>
+      <div class="list-item">
+        <div class="li-icon" style="background:#FEF2F2">⚠️</div>
+        <div class="li-text">
+          <div class="li-title">8º Ano A — frequência abaixo de 75%</div>
+          <div class="li-sub">12 alunos com frequência crítica</div>
+        </div>
+        <div class="li-badge" style="background:#FEF2F2;color:#A32D2D">Atenção</div>
+      </div>
+      <div class="list-item">
+        <div class="li-icon" style="background:var(--amarelo-light)">📋</div>
+        <div class="li-text">
+          <div class="li-title">Prof. João — materiais não atualizados</div>
+          <div class="li-sub">Última postagem há 12 dias</div>
+        </div>
+        <div class="li-badge badge-amarelo">Pendente</div>
+      </div>
+      <div class="list-item">
+        <div class="li-icon" style="background:var(--verde-light)">🏆</div>
+        <div class="li-text">
+          <div class="li-title">7º Ano C — melhor desempenho do mês</div>
+          <div class="li-sub">Média 8,1 · Prof. Carlos Lima</div>
+        </div>
+        <div class="li-badge badge-verde">Destaque</div>
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="voltarLogin()">← Trocar perfil / Sair</button>
+  </div>
+</div>
+
+<script>
+var perfilSelecionado = null;
+var perfilInfo = {
+  aluno:      {label:'Aluno',      icon:'📚', dash:'dash-aluno'},
+  professor:  {label:'Professor',  icon:'🎓', dash:'dash-professor'},
+  responsavel:{label:'Responsável',icon:'👨‍👧',dash:'dash-responsavel'},
+  diretor:    {label:'Diretor',    icon:'🏫', dash:'dash-diretor'},
+};
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function selecionarPerfil(p, el){
+  document.querySelectorAll('.perfil-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  perfilSelecionado = p;
+  document.getElementById('btn-continuar').disabled = false;
+}
+
+function irParaLogin(){
+  if(!perfilSelecionado) return;
+  var info = perfilInfo[perfilSelecionado];
+  document.getElementById('badge-perfil-login').innerHTML = info.icon + ' ' + info.label;
+  document.getElementById('card-perfil').style.display = 'none';
+  document.getElementById('card-login').style.display = 'block';
+}
+
+function voltarParaPerfil(){
+  document.getElementById('card-login').style.display = 'none';
+  document.getElementById('card-perfil').style.display = 'block';
+}
+
+function irParaRecuperar(){
+  document.getElementById('card-login').style.display = 'none';
+  document.getElementById('card-recuperar').style.display = 'block';
+}
+
+function voltarParaLogin(){
+  document.getElementById('card-recuperar').style.display = 'none';
+  document.getElementById('form-recuperar').style.display = 'block';
+  document.getElementById('success-rec').style.display = 'none';
+  document.getElementById('card-login').style.display = 'block';
+}
+
+function fazerLogin(){
+  if(!perfilSelecionado) return;
+  show(perfilInfo[perfilSelecionado].dash);
+}
+
+function enviarRecuperacao(){
+  var email = document.getElementById('inp-rec-email').value;
+  if(!email) return;
+  document.getElementById('form-recuperar').style.display = 'none';
+  document.getElementById('success-rec').style.display = 'block';
+}
+
+function voltarLogin(){
+  perfilSelecionado = null;
+  document.getElementById('btn-continuar').disabled = true;
+  document.querySelectorAll('.perfil-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('card-perfil').style.display = 'block';
+  document.getElementById('card-login').style.display = 'none';
+  document.getElementById('card-recuperar').style.display = 'none';
+  document.getElementById('inp-email') && (document.getElementById('inp-email').value='');
+  document.getElementById('inp-senha') && (document.getElementById('inp-senha').value='');
+  show('login');
+}
+</script>
