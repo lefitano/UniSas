@@ -1,0 +1,84 @@
+.topbar {
+  background: #fff;
+  border-bottom: 1px solid var(--cinza-borda);
+  padding: 0 20px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--fonte-display);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--verde);
+}
+
+.logoIcon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--amarelo-mid);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.direita {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.xp {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--amarelo-light);
+  border-radius: 8px;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #92630A;
+}
+
+.usuario {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.userInfo { text-align: right; }
+
+.userName {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--texto);
+}
+
+.userRole {
+  display: block;
+  font-size: 11px;
+  color: var(--cinza-texto);
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+}
