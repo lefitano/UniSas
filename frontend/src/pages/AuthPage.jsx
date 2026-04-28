@@ -280,7 +280,7 @@ export default function AuthPage() {
 
           <div className={styles.rodape}>
             <span>🔒</span>
-            <span>Dados protegidos por criptografia · LGPD</span>
+            <span>Dados protegidos pela LGPD</span>
           </div>
         </div>
       </div>
