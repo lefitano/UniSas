@@ -40,7 +40,7 @@ export default function LoginPage() {
               <button
                 key={perfil.id}
                 className={styles.perfilCard}
-                onClick={() => navigate(`/dashboard/${perfil.id}`)}
+                onClick={() => navigate(`/auth/${perfil.id}`)}
               >
                 <span className={styles.icone}>{perfil.icon}</span>
                 <span className={styles.label}>{perfil.label}</span>

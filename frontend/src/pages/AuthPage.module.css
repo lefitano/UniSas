@@ -1,0 +1,291 @@
+.pagina {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.fundo {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 300px;
+  background: linear-gradient(135deg, #1a3a23 0%, #2D7A3A 55%, #3B9E4A 100%);
+  z-index: 0;
+}
+
+.fundo::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0; right: 0;
+  height: 80px;
+  background: #fff;
+  clip-path: ellipse(58% 100% at 50% 100%);
+}
+
+.conteudo {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 24px 40px;
+  gap: 24px;
+}
+
+/* ── Marca ── */
+.marca {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo {
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  background: var(--amarelo-mid);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+}
+
+.nomeApp {
+  font-family: var(--fonte-display);
+  font-size: 26px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.5px;
+}
+
+.tagline {
+  font-size: 12px;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.3px;
+}
+
+/* ── Card ── */
+.card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.10);
+  padding: 24px 28px 20px;
+  width: 100%;
+  max-width: 400px;
+}
+
+/* ── Badge de perfil ── */
+.perfilBadge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--cinza-borda);
+  margin-bottom: 18px;
+}
+
+.perfilIcone {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.perfilLabel {
+  font-family: var(--fonte-display);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--texto);
+  flex: 1;
+}
+
+.trocarPerfil {
+  font-size: 11.5px;
+  color: var(--verde);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--fonte-corpo);
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.trocarPerfil:hover {
+  background: var(--verde-light);
+}
+
+/* ── Tabs ── */
+.tabs {
+  display: flex;
+  border-bottom: 1.5px solid var(--cinza-borda);
+  margin-bottom: 20px;
+}
+
+.tab {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 10px 0;
+  font-family: var(--fonte-display);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--cinza-texto);
+  cursor: pointer;
+  border-bottom: 2.5px solid transparent;
+  margin-bottom: -1.5px;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.tab:hover {
+  color: var(--texto);
+}
+
+.tabAtiva {
+  color: var(--verde);
+  border-bottom-color: var(--verde);
+  font-weight: 600;
+}
+
+/* ── Formulário ── */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.label {
+  font-family: var(--fonte-display);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--texto-leve);
+}
+
+.input {
+  height: 42px;
+  border-radius: 10px;
+  border: 1.5px solid var(--cinza-borda);
+  padding: 0 14px;
+  font-size: 14px;
+  font-family: var(--fonte-corpo);
+  color: var(--texto);
+  background: #fff;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.15s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.input:focus {
+  border-color: var(--verde);
+}
+
+.input::placeholder {
+  color: #CBD5E1;
+}
+
+select.input {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748B' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-color: #fff;
+  padding-right: 36px;
+}
+
+.inputWrapper {
+  position: relative;
+}
+
+.inputWrapper .input {
+  padding-right: 42px;
+}
+
+.olhoBtn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+  padding: 4px;
+  color: var(--cinza-texto);
+  transition: opacity 0.15s;
+}
+
+.olhoBtn:hover {
+  opacity: 0.7;
+}
+
+/* ── Erro ── */
+.erro {
+  font-size: 12px;
+  color: #B91C1C;
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  border-radius: 8px;
+  padding: 9px 12px;
+}
+
+/* ── Botão principal ── */
+.btnPrimario {
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--verde) 0%, var(--verde-mid) 100%);
+  color: #fff;
+  border: none;
+  font-family: var(--fonte-display);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  margin-top: 4px;
+  width: 100%;
+}
+
+.btnPrimario:hover {
+  opacity: 0.92;
+}
+
+/* ── Links secundários ── */
+.linkSecundario {
+  font-size: 12px;
+  color: var(--cinza-texto);
+  text-align: center;
+  margin-top: 2px;
+}
+
+.link {
+  color: var(--verde);
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+/* ── Rodapé ── */
+.rodape {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--cinza-borda);
+  font-size: 11px;
+  color: var(--cinza-texto);
+}

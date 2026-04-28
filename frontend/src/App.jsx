@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import LoginPage            from './pages/LoginPage'
+import AuthPage             from './pages/AuthPage'
 import DashboardAluno       from './pages/DashboardAluno'
 import DashboardProfessor   from './pages/DashboardProfessor'
 import DashboardResponsavel from './pages/DashboardResponsavel'
@@ -10,6 +11,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/"                       element={<LoginPage />} />
+        <Route path="/auth/:perfil"           element={<AuthPage />} />
         <Route path="/dashboard/aluno"        element={<DashboardAluno />} />
         <Route path="/dashboard/professor"    element={<DashboardProfessor />} />
         <Route path="/dashboard/responsavel"  element={<DashboardResponsavel />} />
