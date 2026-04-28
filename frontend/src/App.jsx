@@ -5,6 +5,8 @@ import DashboardAluno       from './pages/DashboardAluno'
 import DashboardProfessor   from './pages/DashboardProfessor'
 import DashboardResponsavel from './pages/DashboardResponsavel'
 import DashboardDiretor     from './pages/DashboardDiretor'
+import EditProfilePage      from './pages/EditProfilePage'
+import ConfiguracoesPage    from './pages/ConfiguracoesPage'
 
 export default function App() {
   return (
@@ -16,6 +18,8 @@ export default function App() {
         <Route path="/dashboard/professor"    element={<DashboardProfessor />} />
         <Route path="/dashboard/responsavel"  element={<DashboardResponsavel />} />
         <Route path="/dashboard/diretor"      element={<DashboardDiretor />} />
+        <Route path="/perfil/editar"          element={<EditProfilePage />} />
+        <Route path="/perfil/configuracoes"   element={<ConfiguracoesPage />} />
         <Route path="*"                       element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

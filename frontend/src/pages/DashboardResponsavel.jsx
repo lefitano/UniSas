@@ -1,10 +1,31 @@
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import TopBar from '../components/ui/TopBar'
+import { getUsuario, getIniciais, getSaudacao, avatarCores } from '../utils/usuario'
 import styles from './Dashboard.module.css'
 
 export default function DashboardResponsavel() {
+  const navigate = useNavigate()
+  const [usuario, setUsuario] = useState(null)
+
+  useEffect(() => {
+    const dados = getUsuario()
+    if (!dados || dados.perfil !== 'responsavel') { navigate('/'); return }
+    setUsuario(dados)
+  }, [navigate])
+
+  if (!usuario) return null
+
+  const primeiroNome = usuario.nome.split(' ')[0]
+
   return (
     <div className={styles.pagina}>
-      <TopBar nome="Maria Souza" cargo="Responsável · Ana Souza" avatarCor="#185FA5" avatarLetras="MS" />
+      <TopBar
+        nome={usuario.nome}
+        cargo="Responsável"
+        avatarCor={avatarCores.responsavel}
+        avatarLetras={getIniciais(usuario.nome)}
+      />
 
       <div className={styles.tabs}>
         {['Acompanhamento', 'Frequência', 'Notas', 'Chat com escola'].map((t, i) => (
@@ -15,18 +36,18 @@ export default function DashboardResponsavel() {
       <div className={styles.corpo}>
         <div className={styles.banner}>
           <div>
-            <p className={styles.bannerTitulo}>Acompanhe Ana Souza 👧</p>
-            <p className={styles.bannerSub}>9º Ano B · Turno Matutino</p>
+            <p className={styles.bannerTitulo}>{getSaudacao()}, {primeiroNome}! 👋</p>
+            <p className={styles.bannerSub}>Acompanhe o desempenho do seu filho</p>
           </div>
           <span className={styles.bannerBadge}>Responsável</span>
         </div>
 
         <div className={styles.cardsGrid}>
           {[
-            { icon: '📊', label: 'Média geral',           valor: '8,4', sub: 'Acima da média da turma', cor: 'verde' },
-            { icon: '✅', label: 'Frequência',             valor: '94%', sub: '3 faltas no mês',         cor: 'verde' },
-            { icon: '📝', label: 'Atividades pendentes',  valor: '2',   sub: '1 vence hoje',             cor: 'amarelo' },
-            { icon: '🏆', label: 'Conquistas',             valor: '12',  sub: '+3 esta semana',           cor: 'verde' },
+            { icon: '📊', label: 'Média geral',          valor: '8,4', sub: 'Acima da média da turma', cor: 'verde' },
+            { icon: '✅', label: 'Frequência',            valor: '94%', sub: '3 faltas no mês',         cor: 'verde' },
+            { icon: '📝', label: 'Atividades pendentes', valor: '2',   sub: '1 vence hoje',             cor: 'amarelo' },
+            { icon: '🏆', label: 'Conquistas',            valor: '12',  sub: '+3 esta semana',           cor: 'verde' },
           ].map((card) => (
             <div key={card.label} className={styles.statCard}>
               <div className={`${styles.statIcon} ${styles[`icon${card.cor}`]}`}>{card.icon}</div>
@@ -63,7 +84,7 @@ export default function DashboardResponsavel() {
             <div className={`${styles.liIcon}`} style={{ background: '#EEF2FF' }}>💬</div>
             <div className={styles.liTexto}>
               <p className={styles.liTitulo}>Prof. Carlos Lima</p>
-              <p className={styles.liSub}>Ana fez ótima participação hoje!</p>
+              <p className={styles.liSub}>Seu filho fez ótima participação hoje!</p>
             </div>
             <span className={`${styles.badge} ${styles.badgeVerde}`}>Hoje</span>
           </div>

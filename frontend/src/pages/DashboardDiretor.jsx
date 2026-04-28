@@ -1,10 +1,32 @@
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import TopBar from '../components/ui/TopBar'
+import { getUsuario, getIniciais, getSaudacao, avatarCores } from '../utils/usuario'
 import styles from './Dashboard.module.css'
 
 export default function DashboardDiretor() {
+  const navigate = useNavigate()
+  const [usuario, setUsuario] = useState(null)
+
+  useEffect(() => {
+    const dados = getUsuario()
+    if (!dados || dados.perfil !== 'diretor') { navigate('/'); return }
+    setUsuario(dados)
+  }, [navigate])
+
+  if (!usuario) return null
+
+  const primeiroNome = usuario.nome.split(' ')[0]
+  const escola       = usuario.escola || 'Minha Escola'
+
   return (
     <div className={styles.pagina}>
-      <TopBar nome="Diretora Sandra" cargo="Diretor · E.E. João XXIII" avatarCor="#A32D2D" avatarLetras="SD" />
+      <TopBar
+        nome={usuario.nome}
+        cargo={`Diretor · ${escola}`}
+        avatarCor={avatarCores.diretor}
+        avatarLetras={getIniciais(usuario.nome)}
+      />
 
       <div className={styles.tabs}>
         {['Painel geral', 'Turmas', 'Professores', 'Alunos', 'Relatórios'].map((t, i) => (
@@ -15,8 +37,8 @@ export default function DashboardDiretor() {
       <div className={styles.corpo}>
         <div className={styles.banner}>
           <div>
-            <p className={styles.bannerTitulo}>Painel da Direção 🏫</p>
-            <p className={styles.bannerSub}>E.E. João XXIII · Ano letivo 2026</p>
+            <p className={styles.bannerTitulo}>{getSaudacao()}, {primeiroNome}! 👋</p>
+            <p className={styles.bannerSub}>{escola} · Ano letivo 2026</p>
           </div>
           <span className={styles.bannerBadge}>Diretor</span>
         </div>

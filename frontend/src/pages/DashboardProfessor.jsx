@@ -1,10 +1,32 @@
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import TopBar from '../components/ui/TopBar'
+import { getUsuario, getIniciais, getSaudacao, avatarCores } from '../utils/usuario'
 import styles from './Dashboard.module.css'
 
 export default function DashboardProfessor() {
+  const navigate = useNavigate()
+  const [usuario, setUsuario] = useState(null)
+
+  useEffect(() => {
+    const dados = getUsuario()
+    if (!dados || dados.perfil !== 'professor') { navigate('/'); return }
+    setUsuario(dados)
+  }, [navigate])
+
+  if (!usuario) return null
+
+  const primeiroNome = usuario.nome.split(' ')[0]
+  const disciplina   = usuario.disciplina || 'Professor'
+
   return (
     <div className={styles.pagina}>
-      <TopBar nome="Prof. Carlos Lima" cargo="Professor · Matemática" avatarCor="#854F0B" avatarLetras="CL" />
+      <TopBar
+        nome={usuario.nome}
+        cargo={`Professor · ${disciplina}`}
+        avatarCor={avatarCores.professor}
+        avatarLetras={getIniciais(usuario.nome)}
+      />
 
       <div className={styles.tabs}>
         {['Início', 'Minhas turmas', 'Conteúdos', 'Banco de questões', 'Chat'].map((t, i) => (
@@ -15,18 +37,18 @@ export default function DashboardProfessor() {
       <div className={styles.corpo}>
         <div className={styles.banner}>
           <div>
-            <p className={styles.bannerTitulo}>Bem-vindo, Prof. Carlos 👋</p>
+            <p className={styles.bannerTitulo}>{getSaudacao()}, Prof. {primeiroNome}! 👋</p>
             <p className={styles.bannerSub}>3 turmas ativas · 87 alunos no total</p>
           </div>
-          <span className={styles.bannerBadge}>Matemática</span>
+          <span className={styles.bannerBadge}>{disciplina}</span>
         </div>
 
         <div className={styles.cardsGrid}>
           {[
-            { icon: '👥', label: 'Alunos',               valor: '87',  sub: '3 turmas ativas',    cor: 'verde' },
-            { icon: '📋', label: 'Atividades abertas',   valor: '5',   sub: '2 vencem hoje',       cor: 'amarelo' },
-            { icon: '🎬', label: 'Conteúdos publicados', valor: '24',  sub: 'Este semestre',       cor: 'verde' },
-            { icon: '❓', label: 'Questões no banco',    valor: '142', sub: 'Disponíveis',         cor: 'amarelo' },
+            { icon: '👥', label: 'Alunos',               valor: '87',  sub: '3 turmas ativas',  cor: 'verde' },
+            { icon: '📋', label: 'Atividades abertas',   valor: '5',   sub: '2 vencem hoje',     cor: 'amarelo' },
+            { icon: '🎬', label: 'Conteúdos publicados', valor: '24',  sub: 'Este semestre',     cor: 'verde' },
+            { icon: '❓', label: 'Questões no banco',    valor: '142', sub: 'Disponíveis',       cor: 'amarelo' },
           ].map((card) => (
             <div key={card.label} className={styles.statCard}>
               <div className={`${styles.statIcon} ${styles[`icon${card.cor}`]}`}>{card.icon}</div>

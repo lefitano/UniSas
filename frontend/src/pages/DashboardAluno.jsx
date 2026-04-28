@@ -1,10 +1,32 @@
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import TopBar from '../components/ui/TopBar'
+import { getUsuario, getIniciais, getSaudacao, avatarCores } from '../utils/usuario'
 import styles from './Dashboard.module.css'
 
 export default function DashboardAluno() {
+  const navigate = useNavigate()
+  const [usuario, setUsuario] = useState(null)
+
+  useEffect(() => {
+    const dados = getUsuario()
+    if (!dados || dados.perfil !== 'aluno') { navigate('/'); return }
+    setUsuario(dados)
+  }, [navigate])
+
+  if (!usuario) return null
+
+  const primeiroNome = usuario.nome.split(' ')[0]
+
   return (
     <div className={styles.pagina}>
-      <TopBar nome="Ana Souza" cargo="Aluna · 9º Ano B" avatarCor="#2D7A3A" avatarLetras="AS" xp="340" />
+      <TopBar
+        nome={usuario.nome}
+        cargo="Aluno"
+        avatarCor={avatarCores.aluno}
+        avatarLetras={getIniciais(usuario.nome)}
+        xp="340"
+      />
 
       <div className={styles.tabs}>
         {['Início', 'Minhas aulas', 'Atividades', 'Chat', 'Downloads'].map((t, i) => (
@@ -15,7 +37,7 @@ export default function DashboardAluno() {
       <div className={styles.corpo}>
         <div className={styles.banner}>
           <div>
-            <p className={styles.bannerTitulo}>Bom dia, Ana! 👋</p>
+            <p className={styles.bannerTitulo}>{getSaudacao()}, {primeiroNome}! 👋</p>
             <p className={styles.bannerSub}>Você tem 2 atividades pendentes hoje</p>
           </div>
           <span className={styles.bannerBadge}>9º Ano B</span>
@@ -23,10 +45,10 @@ export default function DashboardAluno() {
 
         <div className={styles.cardsGrid}>
           {[
-            { icon: '📈', label: 'Média geral',        valor: '8,4', sub: '↑ +0,3 esse mês',      cor: 'verde' },
-            { icon: '🏆', label: 'Conquistas',          valor: '12',  sub: '3 novas esta semana',  cor: 'amarelo' },
-            { icon: '✅', label: 'Frequência',          valor: '94%', sub: 'Acima da meta',         cor: 'verde' },
-            { icon: '📥', label: 'Conteúdos offline',  valor: '7',   sub: 'Disponíveis',           cor: 'amarelo' },
+            { icon: '📈', label: 'Média geral',       valor: '8,4', sub: '↑ +0,3 esse mês',     cor: 'verde' },
+            { icon: '🏆', label: 'Conquistas',         valor: '12',  sub: '3 novas esta semana', cor: 'amarelo' },
+            { icon: '✅', label: 'Frequência',         valor: '94%', sub: 'Acima da meta',        cor: 'verde' },
+            { icon: '📥', label: 'Conteúdos offline', valor: '7',   sub: 'Disponíveis',          cor: 'amarelo' },
           ].map((card) => (
             <div key={card.label} className={styles.statCard}>
               <div className={`${styles.statIcon} ${styles[`icon${card.cor}`]}`}>{card.icon}</div>

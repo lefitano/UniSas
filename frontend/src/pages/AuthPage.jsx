@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { salvarUsuario } from '../utils/usuario'
 import styles from './AuthPage.module.css'
 
 const perfilConfig = {
@@ -18,24 +19,24 @@ const perfilConfig = {
     label: 'Professor',
     icon: '🎓',
     camposCadastro: [
-      { id: 'nome',          label: 'Nome completo',           type: 'text',     placeholder: 'Ex: Carlos Lima' },
-      { id: 'email',         label: 'Email institucional',     type: 'email',    placeholder: 'professor@escola.edu.br' },
-      { id: 'siape',         label: 'SIAPE / Reg. funcional',  type: 'text',     placeholder: 'Ex: 1234567' },
-      { id: 'disciplina',    label: 'Disciplina principal',    type: 'select',   options: ['Matemática','Português','Ciências','História','Geografia','Física','Química','Biologia','Inglês','Artes','Educação Física'] },
-      { id: 'senha',         label: 'Senha',                   type: 'password', placeholder: 'Mínimo 8 caracteres' },
-      { id: 'confirmarSenha',label: 'Confirmar senha',         type: 'password', placeholder: 'Repita a senha' },
+      { id: 'nome',              label: 'Nome completo',        type: 'text',     placeholder: 'Ex: Carlos Lima' },
+      { id: 'email',             label: 'Email institucional',  type: 'email',    placeholder: 'professor@escola.edu.br' },
+      { id: 'registroFuncional', label: 'Registro Funcional',   type: 'text',     placeholder: 'Ex: 1234567' },
+      { id: 'disciplina',        label: 'Disciplina principal', type: 'select',   options: ['Matemática','Português','Ciências','História','Geografia','Física','Química','Biologia','Inglês','Artes','Educação Física'] },
+      { id: 'senha',             label: 'Senha',                type: 'password', placeholder: 'Mínimo 8 caracteres' },
+      { id: 'confirmarSenha',    label: 'Confirmar senha',      type: 'password', placeholder: 'Repita a senha' },
     ],
   },
   responsavel: {
     label: 'Responsável',
     icon: '👨‍👧',
     camposCadastro: [
-      { id: 'nome',          label: 'Nome completo',               type: 'text',     placeholder: 'Ex: Maria Souza' },
-      { id: 'email',         label: 'Email',                       type: 'email',    placeholder: 'seu@email.com' },
-      { id: 'cpf',           label: 'CPF',                         type: 'text',     placeholder: '000.000.000-00' },
-      { id: 'codigoAluno',   label: 'Matrícula do aluno vinculado',type: 'text',     placeholder: 'Ex: 2024001234' },
-      { id: 'senha',         label: 'Senha',                       type: 'password', placeholder: 'Mínimo 8 caracteres' },
-      { id: 'confirmarSenha',label: 'Confirmar senha',             type: 'password', placeholder: 'Repita a senha' },
+      { id: 'nome',          label: 'Nome completo',                type: 'text',     placeholder: 'Ex: Maria Souza' },
+      { id: 'email',         label: 'Email',                        type: 'email',    placeholder: 'seu@email.com' },
+      { id: 'cpf',           label: 'CPF',                          type: 'text',     placeholder: '000.000.000-00' },
+      { id: 'codigoAluno',   label: 'Matrícula do aluno vinculado', type: 'text',     placeholder: 'Ex: 2024001234' },
+      { id: 'senha',         label: 'Senha',                        type: 'password', placeholder: 'Mínimo 8 caracteres' },
+      { id: 'confirmarSenha',label: 'Confirmar senha',              type: 'password', placeholder: 'Repita a senha' },
     ],
   },
   diretor: {
@@ -85,6 +86,11 @@ export default function AuthPage() {
       setErro('Preencha e-mail e senha para continuar.')
       return
     }
+    // Salva dados básicos — o backend retornará o nome real futuramente
+    const prefixo = campos.email.split('@')[0]
+    const nomeTemp = prefixo.replace(/[._]/g, ' ')
+      .split(' ').map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(' ')
+    salvarUsuario({ nome: nomeTemp, email: campos.email, perfil })
     navigate(`/dashboard/${perfil}`)
   }
 
@@ -104,6 +110,18 @@ export default function AuthPage() {
       setErro('As senhas não coincidem.')
       return
     }
+    // Salva todos os dados do cadastro no localStorage
+    salvarUsuario({
+      nome:              campos.nome,
+      email:             campos.email,
+      perfil,
+      matricula:         campos.matricula         || null,
+      registroFuncional: campos.registroFuncional || null,
+      disciplina:        campos.disciplina        || null,
+      cpf:               campos.cpf               || null,
+      escola:            campos.escola            || null,
+      codigoAluno:       campos.codigoAluno       || null,
+    })
     navigate(`/dashboard/${perfil}`)
   }
 

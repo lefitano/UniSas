@@ -1,0 +1,264 @@
+.pagina {
+  min-height: 100vh;
+  background: var(--cinza-bg);
+}
+
+/* ── Topbar interno ── */
+.topbar {
+  background: #fff;
+  border-bottom: 1px solid var(--cinza-borda);
+  padding: 0 20px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.btnVoltar {
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-family: var(--fonte-corpo);
+  color: var(--verde);
+  cursor: pointer;
+  font-weight: 500;
+  padding: 6px 0;
+}
+
+.btnVoltar:hover {
+  text-decoration: underline;
+}
+
+.topbarTitulo {
+  font-family: var(--fonte-display);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--texto);
+}
+
+/* ── Conteúdo ── */
+.conteudo {
+  padding: 24px 20px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* ── Card padrão ── */
+.card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+/* ── Card de perigo ── */
+.cardPerigo {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  border: 1px solid #FECACA;
+}
+
+.secaoTitulo {
+  font-family: var(--fonte-display);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--cinza-texto);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+}
+
+/* ── Bloco de usuário ── */
+.usuarioBloco {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--fonte-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.usuarioNome {
+  font-family: var(--fonte-display);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--texto);
+}
+
+.usuarioEmail {
+  font-size: 12px;
+  color: var(--cinza-texto);
+  margin: 2px 0 6px;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: var(--fonte-display);
+  background: var(--verde-light);
+  color: var(--verde);
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+
+/* ── Opções ── */
+.opcao {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.opcaoTitulo {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--texto);
+  margin-bottom: 2px;
+}
+
+.opcaoDesc {
+  font-size: 12px;
+  color: var(--cinza-texto);
+}
+
+.divisor {
+  height: 1px;
+  background: var(--cinza-borda);
+  margin: 16px 0;
+}
+
+/* ── Botões de ação ── */
+.btnSecundario {
+  flex-shrink: 0;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 10px;
+  border: 1.5px solid var(--cinza-borda);
+  background: #fff;
+  font-size: 13px;
+  font-family: var(--fonte-display);
+  font-weight: 500;
+  color: var(--texto);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btnSecundario:hover {
+  background: var(--cinza-bg);
+}
+
+.btnSair {
+  flex-shrink: 0;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 10px;
+  border: 1.5px solid var(--cinza-borda);
+  background: #fff;
+  font-size: 13px;
+  font-family: var(--fonte-display);
+  font-weight: 500;
+  color: var(--texto-leve);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btnSair:hover {
+  background: var(--cinza-bg);
+}
+
+.btnExcluir {
+  flex-shrink: 0;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 10px;
+  border: 1.5px solid #FECACA;
+  background: #FEF2F2;
+  font-size: 13px;
+  font-family: var(--fonte-display);
+  font-weight: 500;
+  color: #B91C1C;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btnExcluir:hover {
+  background: #FEE2E2;
+}
+
+/* ── Confirmação de exclusão ── */
+.confirmarBloco {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.confirmarTexto {
+  font-size: 13px;
+  color: #B91C1C;
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  border-radius: 10px;
+  padding: 12px 14px;
+  line-height: 1.5;
+}
+
+.confirmarBtns {
+  display: flex;
+  gap: 10px;
+}
+
+.btnCancelar {
+  flex: 1;
+  height: 40px;
+  border-radius: 10px;
+  border: 1.5px solid var(--cinza-borda);
+  background: #fff;
+  font-size: 13px;
+  font-family: var(--fonte-display);
+  font-weight: 500;
+  color: var(--texto);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btnCancelar:hover {
+  background: var(--cinza-bg);
+}
+
+.btnConfirmarExcluir {
+  flex: 1;
+  height: 40px;
+  border-radius: 10px;
+  border: none;
+  background: #B91C1C;
+  font-size: 13px;
+  font-family: var(--fonte-display);
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.btnConfirmarExcluir:hover {
+  opacity: 0.9;
+}
