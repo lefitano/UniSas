@@ -1,15 +1,52 @@
+const CHAVE_USUARIO  = 'unisas_usuario'
+const CHAVE_USUARIOS = 'unisas_usuarios'
+
+// --- Usuário logado ---
+
 export function getUsuario() {
-  const dados = localStorage.getItem('unisas_usuario')
+  const dados = localStorage.getItem(CHAVE_USUARIO)
   if (!dados) return null
   return JSON.parse(dados)
 }
 
 export function salvarUsuario(dados) {
-  localStorage.setItem('unisas_usuario', JSON.stringify(dados))
+  localStorage.setItem(CHAVE_USUARIO, JSON.stringify(dados))
 }
 
 export function limparUsuario() {
-  localStorage.removeItem('unisas_usuario')
+  localStorage.removeItem(CHAVE_USUARIO)
+}
+
+// --- Lista de usuários gerenciados pelo diretor (CRUD) ---
+
+export function getUsuarios() {
+  const dados = localStorage.getItem(CHAVE_USUARIOS)
+  if (!dados) return []
+  return JSON.parse(dados)
+}
+
+export function salvarUsuarios(lista) {
+  localStorage.setItem(CHAVE_USUARIOS, JSON.stringify(lista))
+}
+
+export function adicionarUsuario(dados) {
+  const lista = getUsuarios()
+  const novo = { ...dados, id: Date.now().toString(), criadoEm: new Date().toISOString() }
+  salvarUsuarios([...lista, novo])
+  return novo
+}
+
+export function atualizarUsuario(id, dados) {
+  const lista = getUsuarios().map(u => u.id === id ? { ...u, ...dados } : u)
+  salvarUsuarios(lista)
+}
+
+export function removerUsuario(id) {
+  salvarUsuarios(getUsuarios().filter(u => u.id !== id))
+}
+
+export function getUsuarioPorId(id) {
+  return getUsuarios().find(u => u.id === id) || null
 }
 
 export function getIniciais(nome) {

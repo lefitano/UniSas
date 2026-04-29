@@ -61,7 +61,7 @@ export default function AuthPage() {
   const navigate    = useNavigate()
   const config      = perfilConfig[perfil]
 
-  const [aba,          setAba]          = useState('entrar')
+  const [aba,          setAba]          = useState('cadastro')
   const [campos,       setCampos]       = useState({})
   const [erro,         setErro]         = useState('')
   const [mostrarSenha, setMostrarSenha] = useState(false)
@@ -202,6 +202,7 @@ export default function AuthPage() {
             perfil={perfil}
             onVoltar={() => navigate('/')}
             onLogin={handleEntrar}
+            onCadastrar={() => trocarAba('cadastro')}
           />
         ) : (
           <div className={styles.card}>
@@ -213,19 +214,7 @@ export default function AuthPage() {
               </button>
             </div>
 
-            <div className={styles.tabs}>
-              <button
-                className={styles.tab}
-                onClick={() => trocarAba('entrar')}
-              >
-                Entrar
-              </button>
-              <button className={`${styles.tab} ${styles.tabAtiva}`}>
-                Criar conta
-              </button>
-            </div>
-
-            <form className={styles.form} onSubmit={handleCadastrar} noValidate>
+              <form className={styles.form} onSubmit={handleCadastrar} noValidate>
               {config.camposCadastro.map(campo => (
                 <div key={campo.id} className={styles.campo}>
                   <label className={styles.label}>{campo.label}</label>
@@ -236,6 +225,13 @@ export default function AuthPage() {
               {erro && <p className={styles.erro}>{erro}</p>}
 
               <button type="submit" className={styles.btnPrimario}>Criar conta</button>
+
+              <p className={styles.linkSecundario}>
+                Já tem uma conta?{' '}
+                <span className={styles.link} onClick={() => trocarAba('entrar')}>
+                  Faça o login
+                </span>
+              </p>
             </form>
 
             <div className={styles.rodape}>

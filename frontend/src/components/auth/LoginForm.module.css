@@ -128,6 +128,23 @@
   opacity: 0.92;
 }
 
+.linkSecundario {
+  text-align: center;
+  font-size: 13px;
+  color: var(--cinza-texto);
+  margin-top: 12px;
+}
+
+.link {
+  color: var(--verde);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
 .rodape {
   display: flex;
   flex-direction: column;

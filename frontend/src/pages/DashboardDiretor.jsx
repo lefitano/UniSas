@@ -62,12 +62,17 @@ export default function DashboardDiretor() {
         <p className={styles.secaoTitulo}>Gestão rápida</p>
         <div className={styles.acoesGrid}>
           {[
-            { icon: '➕', label: 'Nova turma' },
-            { icon: '👤', label: 'Gerenciar usuários' },
-            { icon: '📊', label: 'Relatório geral' },
-            { icon: '📢', label: 'Comunicado geral' },
+            { icon: '➕', label: 'Nova turma',          rota: null },
+            { icon: '👤', label: 'Gerenciar usuários',  rota: '/gerenciar-usuarios' },
+            { icon: '📊', label: 'Relatório geral',     rota: null },
+            { icon: '📢', label: 'Comunicado geral',    rota: null },
           ].map((a) => (
-            <div key={a.label} className={styles.acaoBtn}>
+            <div
+              key={a.label}
+              className={styles.acaoBtn}
+              onClick={() => a.rota && navigate(a.rota)}
+              style={a.rota ? { cursor: 'pointer' } : {}}
+            >
               <span className={styles.acaoIcon}>{a.icon}</span>
               <span className={styles.acaoLabel}>{a.label}</span>
             </div>
