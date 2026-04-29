@@ -5,32 +5,6 @@
   flex-direction: column;
 }
 
-/* ── Tabs ── */
-.tabs {
-  display: flex;
-  background: #fff;
-  border-bottom: 1px solid var(--cinza-borda);
-  padding: 0 16px;
-  overflow-x: auto;
-  gap: 0;
-}
-
-.tab {
-  padding: 10px 14px;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--cinza-texto);
-  cursor: pointer;
-  white-space: nowrap;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
-}
-
-.tabAtiva {
-  color: var(--verde);
-  border-bottom-color: var(--verde);
-}
-
 /* ── Corpo ── */
 .corpo {
   padding: 16px;
@@ -76,31 +50,6 @@
   gap: 10px;
 }
 
-.statCard {
-  background: #fff;
-  border-radius: 14px;
-  border: 1px solid var(--cinza-borda);
-  padding: 14px;
-}
-
-.statIcon {
-  width: 32px;
-  height: 32px;
-  border-radius: 9px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 8px;
-  font-size: 16px;
-}
-
-.iconverde  { background: var(--verde-light); }
-.iconamarelo { background: var(--amarelo-light); }
-
-.statLabel { font-size: 11px; color: var(--cinza-texto); margin-bottom: 4px; }
-.statValor { font-family: var(--fonte-display); font-size: 22px; font-weight: 700; color: var(--texto); }
-.statSub   { font-size: 11px; color: var(--verde); margin-top: 2px; }
-
 /* ── Seção título ── */
 .secaoTitulo {
   font-family: var(--fonte-display);
@@ -115,24 +64,6 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 8px;
 }
-
-.acaoBtn {
-  background: #fff;
-  border: 1px solid var(--cinza-borda);
-  border-radius: 12px;
-  padding: 12px 10px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.15s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-
-.acaoBtn:hover { border-color: var(--verde); background: var(--verde-50); }
-.acaoIcon { font-size: 20px; }
-.acaoLabel { font-size: 12px; font-weight: 500; color: var(--texto); }
 
 /* ── Lista card ── */
 .listaCard {
@@ -156,41 +87,7 @@
 
 .link { font-size: 11px; color: var(--verde); font-weight: 400; cursor: pointer; }
 
-.listaItem {
-  padding: 11px 14px;
-  border-bottom: 0.5px solid var(--cinza-borda);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.listaItem:last-child { border-bottom: none; }
-
-.liIcon {
-  width: 32px;
-  height: 32px;
-  border-radius: 9px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  font-size: 15px;
-}
-
-.bgVerde   { background: var(--verde-light); }
-.bgAmarelo { background: var(--amarelo-light); }
-
-.liTexto { flex: 1; }
-.liTitulo { font-weight: 500; color: var(--texto); font-size: 12.5px; }
-.liSub    { font-size: 11px; color: var(--cinza-texto); }
-
-/* ── Badges ── */
-.badge        { font-size: 10px; padding: 3px 7px; border-radius: 6px; font-weight: 600; white-space: nowrap; }
-.badgeVerde   { background: var(--verde-light); color: var(--verde); }
-.badgeAmarelo { background: var(--amarelo-light); color: #92630A; }
-.badgeCinza   { background: #F1F5F9; color: #64748B; }
-
-/* ── Barra de progresso ── */
+/* ── Barra de progresso (DashboardAluno) ── */
 .progressoItem {
   padding: 11px 14px;
   border-bottom: 0.5px solid var(--cinza-borda);
