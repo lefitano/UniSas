@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import TopBar from '../components/ui/TopBar'
+import TopBar        from '../components/ui/TopBar'
+import TabNav        from '../components/dashboard/TabNav'
+import StatCard      from '../components/dashboard/StatCard'
+import ListItem      from '../components/dashboard/ListItem'
 import { getUsuario, getIniciais, getSaudacao, avatarCores } from '../utils/usuario'
 import styles from './Dashboard.module.css'
 
@@ -18,6 +21,12 @@ export default function DashboardResponsavel() {
 
   const primeiroNome = usuario.nome.split(' ')[0]
 
+  const notas = [
+    { icon: '➗', titulo: 'Prova de Matemática — Bimestre 2', sub: 'Prof. Carlos Lima · 15/04', nota: '9,0', cor: '#2D7A3A', iconBg: 'verde' },
+    { icon: '📖', titulo: 'Redação — Português',              sub: 'Prof. Mariana · 12/04',    nota: '7,5', cor: '#92630A', iconBg: 'amarelo' },
+    { icon: '🔬', titulo: 'Trabalho de Ciências',             sub: 'Prof. Roberta · 10/04',    nota: '8,5', cor: '#2D7A3A', iconBg: 'verde' },
+  ]
+
   return (
     <div className={styles.pagina}>
       <TopBar
@@ -27,11 +36,7 @@ export default function DashboardResponsavel() {
         avatarLetras={getIniciais(usuario.nome)}
       />
 
-      <div className={styles.tabs}>
-        {['Acompanhamento', 'Frequência', 'Notas', 'Chat com escola'].map((t, i) => (
-          <span key={t} className={`${styles.tab} ${i === 0 ? styles.tabAtiva : ''}`}>{t}</span>
-        ))}
-      </div>
+      <TabNav abas={['Acompanhamento', 'Frequência', 'Notas', 'Chat com escola']} />
 
       <div className={styles.corpo}>
         <div className={styles.banner}>
@@ -43,51 +48,41 @@ export default function DashboardResponsavel() {
         </div>
 
         <div className={styles.cardsGrid}>
-          {[
-            { icon: '📊', label: 'Média geral',          valor: '8,4', sub: 'Acima da média da turma', cor: 'verde' },
-            { icon: '✅', label: 'Frequência',            valor: '94%', sub: '3 faltas no mês',         cor: 'verde' },
-            { icon: '📝', label: 'Atividades pendentes', valor: '2',   sub: '1 vence hoje',             cor: 'amarelo' },
-            { icon: '🏆', label: 'Conquistas',            valor: '12',  sub: '+3 esta semana',           cor: 'verde' },
-          ].map((card) => (
-            <div key={card.label} className={styles.statCard}>
-              <div className={`${styles.statIcon} ${styles[`icon${card.cor}`]}`}>{card.icon}</div>
-              <p className={styles.statLabel}>{card.label}</p>
-              <p className={styles.statValor}>{card.valor}</p>
-              <p className={styles.statSub}>{card.sub}</p>
-            </div>
-          ))}
+          <StatCard icon="📊" label="Média geral"          valor="8,4" sub="Acima da média da turma" cor="verde"   />
+          <StatCard icon="✅" label="Frequência"            valor="94%" sub="3 faltas no mês"         cor="verde"   />
+          <StatCard icon="📝" label="Atividades pendentes" valor="2"   sub="1 vence hoje"             cor="amarelo" />
+          <StatCard icon="🏆" label="Conquistas"            valor="12"  sub="+3 esta semana"           cor="verde"   />
         </div>
 
         <div className={styles.listaCard}>
           <div className={styles.listaHeader}><span>Notas recentes</span></div>
-          {[
-            { icon: '➗', materia: 'Prova de Matemática — Bimestre 2', prof: 'Prof. Carlos Lima · 15/04', nota: '9,0', cor: '#2D7A3A', bg: 'bgVerde' },
-            { icon: '📖', materia: 'Redação — Português',              prof: 'Prof. Mariana · 12/04',    nota: '7,5', cor: '#92630A', bg: 'bgAmarelo' },
-            { icon: '🔬', materia: 'Trabalho de Ciências',             prof: 'Prof. Roberta · 10/04',    nota: '8,5', cor: '#2D7A3A', bg: 'bgVerde' },
-          ].map((n) => (
-            <div key={n.materia} className={styles.listaItem}>
-              <div className={`${styles.liIcon} ${styles[n.bg]}`}>{n.icon}</div>
-              <div className={styles.liTexto}>
-                <p className={styles.liTitulo}>{n.materia}</p>
-                <p className={styles.liSub}>{n.prof}</p>
-              </div>
-              <span style={{ fontFamily: 'var(--fonte-display)', fontSize: 16, fontWeight: 700, color: n.cor }}>{n.nota}</span>
-            </div>
+          {notas.map((n) => (
+            <ListItem
+              key={n.titulo}
+              icon={n.icon}
+              iconBg={n.iconBg}
+              titulo={n.titulo}
+              sub={n.sub}
+              extra={
+                <span style={{ fontFamily: 'var(--fonte-display)', fontSize: 16, fontWeight: 700, color: n.cor }}>
+                  {n.nota}
+                </span>
+              }
+            />
           ))}
         </div>
 
         <div className={styles.listaCard}>
           <div className={styles.listaHeader}>
-            <span>Mensagens recentes</span><span className={styles.link}>Abrir chat</span>
+            <span>Mensagens recentes</span>
+            <span className={styles.link}>Abrir chat</span>
           </div>
-          <div className={styles.listaItem}>
-            <div className={`${styles.liIcon}`} style={{ background: '#EEF2FF' }}>💬</div>
-            <div className={styles.liTexto}>
-              <p className={styles.liTitulo}>Prof. Carlos Lima</p>
-              <p className={styles.liSub}>Seu filho fez ótima participação hoje!</p>
-            </div>
-            <span className={`${styles.badge} ${styles.badgeVerde}`}>Hoje</span>
-          </div>
+          <ListItem
+            icon="💬" iconBg="azul"
+            titulo="Prof. Carlos Lima"
+            sub="Seu filho fez ótima participação hoje!"
+            badge="Hoje" corBadge="verde"
+          />
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import styles from './StatCard.module.css'
-
+// card de estatística das métricas dos alunos
 export default function StatCard({ icon, label, valor, sub, cor = 'verde' }) {
   return (
     <div className={styles.statCard}>

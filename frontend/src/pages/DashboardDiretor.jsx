@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import TopBar from '../components/ui/TopBar'
+import TopBar        from '../components/ui/TopBar'
+import TabNav        from '../components/dashboard/TabNav'
+import StatCard      from '../components/dashboard/StatCard'
+import ActionButton  from '../components/dashboard/ActionButton'
+import ListItem      from '../components/dashboard/ListItem'
 import { getUsuario, getIniciais, getSaudacao, avatarCores } from '../utils/usuario'
 import styles from './Dashboard.module.css'
 
@@ -28,11 +32,7 @@ export default function DashboardDiretor() {
         avatarLetras={getIniciais(usuario.nome)}
       />
 
-      <div className={styles.tabs}>
-        {['Painel geral', 'Turmas', 'Professores', 'Alunos', 'Relatórios'].map((t, i) => (
-          <span key={t} className={`${styles.tab} ${i === 0 ? styles.tabAtiva : ''}`}>{t}</span>
-        ))}
-      </div>
+      <TabNav abas={['Painel geral', 'Turmas', 'Professores', 'Alunos', 'Relatórios']} />
 
       <div className={styles.corpo}>
         <div className={styles.banner}>
@@ -44,67 +44,25 @@ export default function DashboardDiretor() {
         </div>
 
         <div className={styles.cardsGrid}>
-          {[
-            { icon: '👨‍🎓', label: 'Total de alunos', valor: '412', sub: 'Matrículas ativas',    cor: 'verde' },
-            { icon: '👨‍🏫', label: 'Professores',      valor: '18',  sub: 'Em 6 disciplinas',     cor: 'amarelo' },
-            { icon: '🏫',  label: 'Turmas ativas',    valor: '14',  sub: 'Fund. II e Médio',      cor: 'verde' },
-            { icon: '📈',  label: 'Média da escola',  valor: '7,6', sub: '↑ +0,4 vs bimestre 1', cor: 'amarelo' },
-          ].map((card) => (
-            <div key={card.label} className={styles.statCard}>
-              <div className={`${styles.statIcon} ${styles[`icon${card.cor}`]}`}>{card.icon}</div>
-              <p className={styles.statLabel}>{card.label}</p>
-              <p className={styles.statValor}>{card.valor}</p>
-              <p className={styles.statSub}>{card.sub}</p>
-            </div>
-          ))}
+          <StatCard icon="👨‍🎓" label="Total de alunos" valor="412" sub="Matrículas ativas"    cor="verde"   />
+          <StatCard icon="👨‍🏫" label="Professores"      valor="18"  sub="Em 6 disciplinas"     cor="amarelo" />
+          <StatCard icon="🏫"  label="Turmas ativas"    valor="14"  sub="Fund. II e Médio"      cor="verde"   />
+          <StatCard icon="📈"  label="Média da escola"  valor="7,6" sub="↑ +0,4 vs bimestre 1" cor="amarelo" />
         </div>
 
         <p className={styles.secaoTitulo}>Gestão rápida</p>
         <div className={styles.acoesGrid}>
-          {[
-            { icon: '➕', label: 'Nova turma',          rota: null },
-            { icon: '👤', label: 'Gerenciar usuários',  rota: '/gerenciar-usuarios' },
-            { icon: '📊', label: 'Relatório geral',     rota: null },
-            { icon: '📢', label: 'Comunicado geral',    rota: null },
-          ].map((a) => (
-            <div
-              key={a.label}
-              className={styles.acaoBtn}
-              onClick={() => a.rota && navigate(a.rota)}
-              style={a.rota ? { cursor: 'pointer' } : {}}
-            >
-              <span className={styles.acaoIcon}>{a.icon}</span>
-              <span className={styles.acaoLabel}>{a.label}</span>
-            </div>
-          ))}
+          <ActionButton icon="➕" label="Nova turma"          />
+          <ActionButton icon="👤" label="Gerenciar usuários"  onClick={() => navigate('/gerenciar-usuarios')} />
+          <ActionButton icon="📊" label="Relatório geral"     />
+          <ActionButton icon="📢" label="Comunicado geral"    />
         </div>
 
         <div className={styles.listaCard}>
           <div className={styles.listaHeader}><span>Alertas da semana</span></div>
-          <div className={styles.listaItem}>
-            <div className={styles.liIcon} style={{ background: '#FEF2F2' }}>⚠️</div>
-            <div className={styles.liTexto}>
-              <p className={styles.liTitulo}>8º Ano A — frequência abaixo de 75%</p>
-              <p className={styles.liSub}>12 alunos com frequência crítica</p>
-            </div>
-            <span className={styles.badge} style={{ background: '#FEF2F2', color: '#A32D2D' }}>Atenção</span>
-          </div>
-          <div className={styles.listaItem}>
-            <div className={`${styles.liIcon} ${styles.bgAmarelo}`}>📋</div>
-            <div className={styles.liTexto}>
-              <p className={styles.liTitulo}>Prof. João — materiais não atualizados</p>
-              <p className={styles.liSub}>Última postagem há 12 dias</p>
-            </div>
-            <span className={`${styles.badge} ${styles.badgeAmarelo}`}>Pendente</span>
-          </div>
-          <div className={styles.listaItem}>
-            <div className={`${styles.liIcon} ${styles.bgVerde}`}>🏆</div>
-            <div className={styles.liTexto}>
-              <p className={styles.liTitulo}>7º Ano C — melhor desempenho do mês</p>
-              <p className={styles.liSub}>Média 8,1 · Prof. Carlos Lima</p>
-            </div>
-            <span className={`${styles.badge} ${styles.badgeVerde}`}>Destaque</span>
-          </div>
+          <ListItem icon="⚠️" iconBg="vermelho" titulo="8º Ano A — frequência abaixo de 75%" sub="12 alunos com frequência crítica"    badge="Atenção"  corBadge="vermelho" />
+          <ListItem icon="📋" iconBg="amarelo"  titulo="Prof. João — materiais não atualizados" sub="Última postagem há 12 dias"       badge="Pendente" corBadge="amarelo"  />
+          <ListItem icon="🏆" iconBg="verde"    titulo="7º Ano C — melhor desempenho do mês"    sub="Média 8,1 · Prof. Carlos Lima"   badge="Destaque" corBadge="verde"    />
         </div>
       </div>
     </div>

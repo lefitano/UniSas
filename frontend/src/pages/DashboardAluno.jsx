@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import TopBar from '../components/ui/TopBar'
+import TopBar        from '../components/ui/TopBar'
+import TabNav        from '../components/dashboard/TabNav'
+import StatCard      from '../components/dashboard/StatCard'
+import ListItem      from '../components/dashboard/ListItem'
 import { getUsuario, getIniciais, getSaudacao, avatarCores } from '../utils/usuario'
 import styles from './Dashboard.module.css'
 
@@ -28,11 +31,7 @@ export default function DashboardAluno() {
         xp="340"
       />
 
-      <div className={styles.tabs}>
-        {['Início', 'Minhas aulas', 'Atividades', 'Chat', 'Downloads'].map((t, i) => (
-          <span key={t} className={`${styles.tab} ${i === 0 ? styles.tabAtiva : ''}`}>{t}</span>
-        ))}
-      </div>
+      <TabNav abas={['Início', 'Minhas aulas', 'Atividades', 'Chat', 'Downloads']} />
 
       <div className={styles.corpo}>
         <div className={styles.banner}>
@@ -44,41 +43,29 @@ export default function DashboardAluno() {
         </div>
 
         <div className={styles.cardsGrid}>
-          {[
-            { icon: '📈', label: 'Média geral',       valor: '8,4', sub: '↑ +0,3 esse mês',     cor: 'verde' },
-            { icon: '🏆', label: 'Conquistas',         valor: '12',  sub: '3 novas esta semana', cor: 'amarelo' },
-            { icon: '✅', label: 'Frequência',         valor: '94%', sub: 'Acima da meta',        cor: 'verde' },
-            { icon: '📥', label: 'Conteúdos offline', valor: '7',   sub: 'Disponíveis',          cor: 'amarelo' },
-          ].map((card) => (
-            <div key={card.label} className={styles.statCard}>
-              <div className={`${styles.statIcon} ${styles[`icon${card.cor}`]}`}>{card.icon}</div>
-              <p className={styles.statLabel}>{card.label}</p>
-              <p className={styles.statValor}>{card.valor}</p>
-              <p className={styles.statSub}>{card.sub}</p>
-            </div>
-          ))}
+          <StatCard icon="📈" label="Média geral"       valor="8,4" sub="↑ +0,3 esse mês"     cor="verde"   />
+          <StatCard icon="🏆" label="Conquistas"         valor="12"  sub="3 novas esta semana" cor="amarelo" />
+          <StatCard icon="✅" label="Frequência"         valor="94%" sub="Acima da meta"        cor="verde"   />
+          <StatCard icon="📥" label="Conteúdos offline" valor="7"   sub="Disponíveis"          cor="amarelo" />
         </div>
 
         <div className={styles.listaCard}>
           <div className={styles.listaHeader}>
-            <span>Atividades pendentes</span><span className={styles.link}>Ver todas</span>
+            <span>Atividades pendentes</span>
+            <span className={styles.link}>Ver todas</span>
           </div>
-          <div className={styles.listaItem}>
-            <div className={`${styles.liIcon} ${styles.bgAmarelo}`}>📝</div>
-            <div className={styles.liTexto}>
-              <p className={styles.liTitulo}>Simulado de Matemática</p>
-              <p className={styles.liSub}>Prof. Carlos · Vence hoje às 23h</p>
-            </div>
-            <span className={`${styles.badge} ${styles.badgeAmarelo}`}>Urgente</span>
-          </div>
-          <div className={styles.listaItem}>
-            <div className={`${styles.liIcon} ${styles.bgVerde}`}>📖</div>
-            <div className={styles.liTexto}>
-              <p className={styles.liTitulo}>Leitura: Capítulo 5 — Português</p>
-              <p className={styles.liSub}>Prof. Mariana · Prazo: amanhã</p>
-            </div>
-            <span className={`${styles.badge} ${styles.badgeCinza}`}>Pendente</span>
-          </div>
+          <ListItem
+            icon="📝" iconBg="amarelo"
+            titulo="Simulado de Matemática"
+            sub="Prof. Carlos · Vence hoje às 23h"
+            badge="Urgente" corBadge="amarelo"
+          />
+          <ListItem
+            icon="📖" iconBg="verde"
+            titulo="Leitura: Capítulo 5 — Português"
+            sub="Prof. Mariana · Prazo: amanhã"
+            badge="Pendente" corBadge="cinza"
+          />
         </div>
 
         <div className={styles.listaCard}>
