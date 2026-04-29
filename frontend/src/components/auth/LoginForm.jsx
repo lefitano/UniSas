@@ -2,16 +2,19 @@ import { useState } from 'react'
 import styles from './LoginForm.module.css'
 
 const perfilInfo = {
-  ALUNO:       { label: 'Aluno',       icon: '📚' },
-  PROFESSOR:   { label: 'Professor',   icon: '🎓' },
-  RESPONSAVEL: { label: 'Responsável', icon: '👨‍👧' },
-  DIRETOR:     { label: 'Diretor',     icon: '🏫' },
+  aluno:       { label: 'Aluno',       icon: '📚' },
+  professor:   { label: 'Professor',   icon: '🎓' },
+  responsavel: { label: 'Responsável', icon: '👨‍👧' },
+  diretor:     { label: 'Diretor',     icon: '🏫' },
 }
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
 export default function LoginForm({ perfil, onVoltar, onLogin }) {
-  const [email, setEmail]   = useState('')
-  const [senha, setSenha]   = useState('')
-  const [erro, setErro]     = useState('')
+  const [email, setEmail]             = useState('')
+  const [senha, setSenha]             = useState('')
+  const [erro, setErro]               = useState('')
+  const [mostrarSenha, setMostrarSenha] = useState(false)
 
   function handleSubmit(e) {
     e.preventDefault()
@@ -19,6 +22,11 @@ export default function LoginForm({ perfil, onVoltar, onLogin }) {
 
     if (!email || !senha) {
       setErro('Preencha e-mail e senha.')
+      return
+    }
+
+    if (!emailRegex.test(email)) {
+      setErro('Informe um e-mail válido.')
       return
     }
 
@@ -42,8 +50,9 @@ export default function LoginForm({ perfil, onVoltar, onLogin }) {
 
       <form onSubmit={handleSubmit}>
         <div className={styles.campo}>
-          <label>E-mail institucional</label>
+          <label htmlFor="email">E-mail institucional</label>
           <input
+            id="email"
             type="email"
             placeholder="seunome@escola.edu.br"
             value={email}
@@ -52,13 +61,24 @@ export default function LoginForm({ perfil, onVoltar, onLogin }) {
         </div>
 
         <div className={styles.campo}>
-          <label>Senha</label>
-          <input
-            type="password"
-            placeholder="••••••••"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-          />
+          <label htmlFor="senha">Senha</label>
+          <div className={styles.inputWrapper}>
+            <input
+              id="senha"
+              type={mostrarSenha ? 'text' : 'password'}
+              placeholder="••••••••"
+              value={senha}
+              onChange={(e) => setSenha(e.target.value)}
+            />
+            <button
+              type="button"
+              className={styles.olhoBtn}
+              onClick={() => setMostrarSenha(v => !v)}
+              aria-label={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}
+            >
+              {mostrarSenha ? '🙈' : '👁️'}
+            </button>
+          </div>
         </div>
 
         {erro && <p className={styles.erro}>{erro}</p>}
@@ -69,7 +89,7 @@ export default function LoginForm({ perfil, onVoltar, onLogin }) {
       </form>
 
       <div className={styles.rodape}>
-        <span>acesso seguro via JWT</span>
+        <span>🔒</span>
         <span>Dados protegidos conforme a <strong>LGPD</strong></span>
       </div>
     </div>

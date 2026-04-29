@@ -1,12 +1,6 @@
 import { useNavigate } from 'react-router-dom'
+import ProfileSelector from '../components/auth/ProfileSelector'
 import styles from './LoginPage.module.css'
-
-const perfis = [
-  { id: 'aluno',       label: 'Aluno',       icon: '📚', desc: 'Acesso a conteúdos e atividades' },
-  { id: 'professor',   label: 'Professor',   icon: '🎓', desc: 'Gestão de turmas e conteúdo' },
-  { id: 'responsavel', label: 'Responsável', icon: '👨‍👧', desc: 'Acompanhe seu filho' },
-  { id: 'diretor',     label: 'Diretor',     icon: '🏫', desc: 'Gestão escolar completa' },
-]
 
 export default function LoginPage() {
   const navigate = useNavigate()
@@ -31,24 +25,7 @@ export default function LoginPage() {
           <span className={styles.tagline}>Sistema Acadêmico Unificado · Rede Pública</span>
         </div>
 
-        <div className={styles.card}>
-          <h2 className={styles.titulo}>Selecione seu perfil</h2>
-          <p className={styles.subtitulo}>Como você usa a plataforma hoje?</p>
-
-          <div className={styles.grid}>
-            {perfis.map((perfil) => (
-              <button
-                key={perfil.id}
-                className={styles.perfilCard}
-                onClick={() => navigate(`/auth/${perfil.id}`)}
-              >
-                <span className={styles.icone}>{perfil.icon}</span>
-                <span className={styles.label}>{perfil.label}</span>
-                <span className={styles.desc}>{perfil.desc}</span>
-              </button>
-            ))}
-          </div>
-        </div>
+        <ProfileSelector onContinuar={(perfil) => navigate(`/auth/${perfil}`)} />
       </div>
     </div>
   )

@@ -2,10 +2,10 @@ import { useState } from 'react'
 import styles from './ProfileSelector.module.css'
 
 const perfis = [
-  { id: 'ALUNO',      label: 'Aluno',       icon: '📚', desc: 'Acesso a conteúdos e atividades' },
-  { id: 'PROFESSOR',  label: 'Professor',   icon: '🎓', desc: 'Gestão de turmas e conteúdo' },
-  { id: 'RESPONSAVEL',label: 'Responsável', icon: '👨‍👧', desc: 'Acompanhe seu filho' },
-  { id: 'DIRETOR',    label: 'Diretor',     icon: '🏫', desc: 'Gestão escolar completa' },
+  { id: 'aluno',       label: 'Aluno',       icon: '📚', desc: 'Acesso a conteúdos e atividades' },
+  { id: 'professor',   label: 'Professor',   icon: '🎓', desc: 'Gestão de turmas e conteúdo' },
+  { id: 'responsavel', label: 'Responsável', icon: '👨‍👧', desc: 'Acompanhe seu filho' },
+  { id: 'diretor',     label: 'Diretor',     icon: '🏫', desc: 'Gestão escolar completa' },
 ]
 
 export default function ProfileSelector({ onContinuar }) {

@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { salvarUsuario } from '../utils/usuario'
+import LoginForm from '../components/auth/LoginForm'
 import styles from './AuthPage.module.css'
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const perfilConfig = {
   aluno: {
@@ -80,17 +83,11 @@ export default function AuthPage() {
     setMostrarSenha(false)
   }
 
-  function handleEntrar(e) {
-    e.preventDefault()
-    if (!campos.email || !campos.senha) {
-      setErro('Preencha e-mail e senha para continuar.')
-      return
-    }
-    // Salva dados básicos — o backend retornará o nome real futuramente
-    const prefixo = campos.email.split('@')[0]
+  function handleEntrar({ email }) {
+    const prefixo = email.split('@')[0]
     const nomeTemp = prefixo.replace(/[._]/g, ' ')
       .split(' ').map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(' ')
-    salvarUsuario({ nome: nomeTemp, email: campos.email, perfil })
+    salvarUsuario({ nome: nomeTemp, email, perfil })
     navigate(`/dashboard/${perfil}`)
   }
 
@@ -101,6 +98,10 @@ export default function AuthPage() {
         setErro('Preencha todos os campos obrigatórios.')
         return
       }
+    }
+    if (!emailRegex.test(campos.email)) {
+      setErro('Informe um e-mail válido.')
+      return
     }
     if (campos.senha.length < 8) {
       setErro('A senha deve ter no mínimo 8 caracteres.')
@@ -196,74 +197,34 @@ export default function AuthPage() {
           <span className={styles.tagline}>Sistema Acadêmico Unificado · Rede Pública</span>
         </div>
 
-        <div className={styles.card}>
-          <div className={styles.perfilBadge}>
-            <span className={styles.perfilIcone}>{config.icon}</span>
-            <span className={styles.perfilLabel}>{config.label}</span>
-            <button className={styles.trocarPerfil} onClick={() => navigate('/')}>
-              ← Trocar perfil
-            </button>
-          </div>
+        {aba === 'entrar' ? (
+          <LoginForm
+            perfil={perfil}
+            onVoltar={() => navigate('/')}
+            onLogin={handleEntrar}
+          />
+        ) : (
+          <div className={styles.card}>
+            <div className={styles.perfilBadge}>
+              <span className={styles.perfilIcone}>{config.icon}</span>
+              <span className={styles.perfilLabel}>{config.label}</span>
+              <button className={styles.trocarPerfil} onClick={() => navigate('/')}>
+                ← Trocar perfil
+              </button>
+            </div>
 
-          <div className={styles.tabs}>
-            <button
-              className={`${styles.tab} ${aba === 'entrar' ? styles.tabAtiva : ''}`}
-              onClick={() => trocarAba('entrar')}
-            >
-              Entrar
-            </button>
-            <button
-              className={`${styles.tab} ${aba === 'cadastro' ? styles.tabAtiva : ''}`}
-              onClick={() => trocarAba('cadastro')}
-            >
-              Criar conta
-            </button>
-          </div>
+            <div className={styles.tabs}>
+              <button
+                className={styles.tab}
+                onClick={() => trocarAba('entrar')}
+              >
+                Entrar
+              </button>
+              <button className={`${styles.tab} ${styles.tabAtiva}`}>
+                Criar conta
+              </button>
+            </div>
 
-          {aba === 'entrar' ? (
-            <form className={styles.form} onSubmit={handleEntrar} noValidate>
-              <div className={styles.campo}>
-                <label className={styles.label}>E-mail</label>
-                <input
-                  className={styles.input}
-                  type="email"
-                  placeholder="seu@email.com"
-                  value={campos.email || ''}
-                  onChange={e => atualizarCampo('email', e.target.value)}
-                />
-              </div>
-
-              <div className={styles.campo}>
-                <label className={styles.label}>Senha</label>
-                <div className={styles.inputWrapper}>
-                  <input
-                    className={styles.input}
-                    type={mostrarSenha ? 'text' : 'password'}
-                    placeholder="Sua senha"
-                    value={campos.senha || ''}
-                    onChange={e => atualizarCampo('senha', e.target.value)}
-                  />
-                  <button
-                    type="button"
-                    className={styles.olhoBtn}
-                    onClick={() => setMostrarSenha(v => !v)}
-                    aria-label={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}
-                  >
-                    {mostrarSenha ? '🙈' : '👁️'}
-                  </button>
-                </div>
-              </div>
-
-              {erro && <p className={styles.erro}>{erro}</p>}
-
-              <button type="submit" className={styles.btnPrimario}>Entrar</button>
-
-              <p className={styles.linkSecundario}>
-                Esqueceu a senha?{' '}
-                <span className={styles.link}>Recuperar acesso</span>
-              </p>
-            </form>
-          ) : (
             <form className={styles.form} onSubmit={handleCadastrar} noValidate>
               {config.camposCadastro.map(campo => (
                 <div key={campo.id} className={styles.campo}>
@@ -276,13 +237,13 @@ export default function AuthPage() {
 
               <button type="submit" className={styles.btnPrimario}>Criar conta</button>
             </form>
-          )}
 
-          <div className={styles.rodape}>
-            <span>🔒</span>
-            <span>Dados protegidos pela LGPD</span>
+            <div className={styles.rodape}>
+              <span>🔒</span>
+              <span>Dados protegidos pela LGPD</span>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   )
