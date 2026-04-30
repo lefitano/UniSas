@@ -10,7 +10,7 @@ const perfilInfo = {
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-export default function LoginForm({ perfil, onVoltar, onLogin, onCadastrar }) {
+export default function LoginForm({ perfil, onVoltar, onLogin, onCadastrar, erroExterno }) {
   const [email, setEmail]             = useState('')
   const [senha, setSenha]             = useState('')
   const [erro, setErro]               = useState('')
@@ -81,7 +81,8 @@ export default function LoginForm({ perfil, onVoltar, onLogin, onCadastrar }) {
           </div>
         </div>
 
-        {erro && <p className={styles.erro}>{erro}</p>}
+        {erro        && <p className={styles.erro}>{erro}</p>}
+        {erroExterno && <p className={styles.erro}>{erroExterno}</p>}
 
         <button type="submit" className={styles.btnEntrar}>
           Entrar no UniSAS

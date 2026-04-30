@@ -3,17 +3,10 @@ import { useNavigate } from 'react-router-dom'
 import TopBar from '../components/ui/TopBar'
 import {
   getUsuario, getIniciais, avatarCores,
-  getUsuarios, salvarUsuarios, removerUsuario,
+  getUsuarios, removerUsuario,
 } from '../utils/usuario'
 import dashStyles from './Dashboard.module.css'
 import styles from './Gerenciar.module.css'
-
-const USUARIOS_DEMO = [
-  { id: '1', perfil: 'aluno',       nome: 'Ana Souza',     email: 'ana@escola.edu.br',    matricula: '2024001234', criadoEm: '2024-02-01T00:00:00.000Z' },
-  { id: '2', perfil: 'aluno',       nome: 'Pedro Lima',    email: 'pedro@escola.edu.br',  matricula: '2024001235', criadoEm: '2024-02-01T00:00:00.000Z' },
-  { id: '3', perfil: 'professor',   nome: 'Carlos Mendes', email: 'carlos@escola.edu.br', registroFuncional: '1234567', disciplina: 'Matemática', criadoEm: '2024-01-15T00:00:00.000Z' },
-  { id: '4', perfil: 'responsavel', nome: 'Maria Souza',   email: 'maria@gmail.com',      cpf: '123.456.789-00', codigoAluno: '2024001234', criadoEm: '2024-02-05T00:00:00.000Z' },
-]
 
 const labelPerfil = { aluno: 'Aluno', professor: 'Professor', responsavel: 'Responsável' }
 
@@ -29,12 +22,7 @@ export default function GerenciarUsuariosPage() {
     if (!dados || dados.perfil !== 'diretor') { navigate('/'); return }
     setDiretor(dados)
 
-    let lista = getUsuarios()
-    if (lista.length === 0) {
-      salvarUsuarios(USUARIOS_DEMO)
-      lista = USUARIOS_DEMO
-    }
-    setUsuarios(lista)
+    setUsuarios(getUsuarios())
   }, [navigate])
 
   if (!diretor) return null

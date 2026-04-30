@@ -1,7 +1,7 @@
 const CHAVE_USUARIO  = 'unisas_usuario'
 const CHAVE_USUARIOS = 'unisas_usuarios'
 
-// --- Usuário logado ---
+// usuario logado ta aq  
 
 export function getUsuario() {
   const dados = localStorage.getItem(CHAVE_USUARIO)
@@ -17,7 +17,7 @@ export function limparUsuario() {
   localStorage.removeItem(CHAVE_USUARIO)
 }
 
-// --- Lista de usuários gerenciados pelo diretor (CRUD) ---
+//  usuários gerenciados pelo diretor (CRUD)
 
 export function getUsuarios() {
   const dados = localStorage.getItem(CHAVE_USUARIOS)

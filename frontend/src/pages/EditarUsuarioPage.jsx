@@ -64,8 +64,7 @@ export default function EditarUsuarioPage() {
   function handleSalvar(e) {
     e.preventDefault()
 
-    const campos_ = camposPorPerfil[perfil]
-    for (const campo of campos_) {
+    for (const campo of camposPorPerfil[perfil]) {
       if (!campos[campo.id]) {
         setErro('Preencha todos os campos obrigatórios.')
         return
@@ -77,7 +76,17 @@ export default function EditarUsuarioPage() {
       return
     }
 
-    atualizarUsuario(id, campos)
+    if (campos.senhaNova && campos.senhaNova.length < 6) {
+      setErro('A nova senha deve ter no mínimo 6 caracteres.')
+      return
+    }
+
+    const { senhaNova, ...dadosSemSenhaNova } = campos
+    const dadosAtualizar = senhaNova
+      ? { ...dadosSemSenhaNova, senha: senhaNova }
+      : dadosSemSenhaNova
+
+    atualizarUsuario(id, dadosAtualizar)
     setSucesso(true)
     setTimeout(() => navigate('/gerenciar-usuarios'), 1200)
   }
@@ -135,6 +144,17 @@ export default function EditarUsuarioPage() {
                 )}
               </div>
             ))}
+
+            <div className={styles.campo}>
+              <label className={styles.label}>Nova senha (opcional)</label>
+              <input
+                className={styles.input}
+                type="password"
+                placeholder="Deixe em branco para manter a atual"
+                value={campos.senhaNova || ''}
+                onChange={e => atualizarCampo('senhaNova', e.target.value)}
+              />
+            </div>
 
             {erro    && <p className={styles.erro}>{erro}</p>}
             {sucesso && <p className={styles.sucesso}>Alterações salvas com sucesso!</p>}

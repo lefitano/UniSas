@@ -4,7 +4,6 @@ import TopBar        from '../components/ui/TopBar'
 import TabNav        from '../components/dashboard/TabNav'
 import StatCard      from '../components/dashboard/StatCard'
 import ActionButton  from '../components/dashboard/ActionButton'
-import ListItem      from '../components/dashboard/ListItem'
 import { getUsuario, getIniciais, getSaudacao, avatarCores } from '../utils/usuario'
 import styles from './Dashboard.module.css'
 
@@ -44,10 +43,10 @@ export default function DashboardDiretor() {
         </div>
 
         <div className={styles.cardsGrid}>
-          <StatCard icon="👨‍🎓" label="Total de alunos" valor="412" sub="Matrículas ativas"    cor="verde"   />
-          <StatCard icon="👨‍🏫" label="Professores"      valor="18"  sub="Em 6 disciplinas"     cor="amarelo" />
-          <StatCard icon="🏫"  label="Turmas ativas"    valor="14"  sub="Fund. II e Médio"      cor="verde"   />
-          <StatCard icon="📈"  label="Média da escola"  valor="7,6" sub="↑ +0,4 vs bimestre 1" cor="amarelo" />
+          <StatCard icon="👨‍🎓" label="Total de alunos" valor="0"  sub="Nenhuma matrícula ainda" cor="verde"   />
+          <StatCard icon="👨‍🏫" label="Professores"      valor="0"  sub="Nenhum cadastrado"       cor="amarelo" />
+          <StatCard icon="🏫"  label="Turmas ativas"    valor="0"  sub="Nenhuma turma criada"    cor="verde"   />
+          <StatCard icon="📈"  label="Média da escola"  valor="—"  sub="Sem dados disponíveis"   cor="amarelo" />
         </div>
 
         <p className={styles.secaoTitulo}>Gestão rápida</p>
@@ -60,9 +59,7 @@ export default function DashboardDiretor() {
 
         <div className={styles.listaCard}>
           <div className={styles.listaHeader}><span>Alertas da semana</span></div>
-          <ListItem icon="⚠️" iconBg="vermelho" titulo="8º Ano A — frequência abaixo de 75%" sub="12 alunos com frequência crítica"    badge="Atenção"  corBadge="vermelho" />
-          <ListItem icon="📋" iconBg="amarelo"  titulo="Prof. João — materiais não atualizados" sub="Última postagem há 12 dias"       badge="Pendente" corBadge="amarelo"  />
-          <ListItem icon="🏆" iconBg="verde"    titulo="7º Ano C — melhor desempenho do mês"    sub="Média 8,1 · Prof. Carlos Lima"   badge="Destaque" corBadge="verde"    />
+          <p className={styles.vazio}>Nenhum alerta no momento.</p>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { salvarUsuario } from '../utils/usuario'
+import { salvarUsuario, adicionarUsuario, getUsuarios } from '../utils/usuario'
 import LoginForm from '../components/auth/LoginForm'
 import styles from './AuthPage.module.css'
 
@@ -64,6 +64,7 @@ export default function AuthPage() {
   const [aba,          setAba]          = useState('cadastro')
   const [campos,       setCampos]       = useState({})
   const [erro,         setErro]         = useState('')
+  const [erroLogin,    setErroLogin]    = useState('')
   const [mostrarSenha, setMostrarSenha] = useState(false)
 
   if (!config) {
@@ -80,14 +81,31 @@ export default function AuthPage() {
     setAba(novaAba)
     setCampos({})
     setErro('')
+    setErroLogin('')
     setMostrarSenha(false)
   }
 
-  function handleEntrar({ email }) {
-    const prefixo = email.split('@')[0]
-    const nomeTemp = prefixo.replace(/[._]/g, ' ')
-      .split(' ').map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(' ')
-    salvarUsuario({ nome: nomeTemp, email, perfil })
+  function handleEntrar({ email, senha }) {
+    setErroLogin('')
+    const usuarios = getUsuarios()
+    const usuario  = usuarios.find(
+      u => u.email === email && u.senha === senha && u.perfil === perfil
+    )
+    if (!usuario) {
+      setErroLogin('Email ou senha incorretos.')
+      return
+    }
+    salvarUsuario({
+      nome:              usuario.nome,
+      email:             usuario.email,
+      perfil:            usuario.perfil,
+      matricula:         usuario.matricula         || null,
+      registroFuncional: usuario.registroFuncional || null,
+      disciplina:        usuario.disciplina        || null,
+      cpf:               usuario.cpf               || null,
+      escola:            usuario.escola            || null,
+      codigoAluno:       usuario.codigoAluno       || null,
+    })
     navigate(`/dashboard/${perfil}`)
   }
 
@@ -111,10 +129,15 @@ export default function AuthPage() {
       setErro('As senhas não coincidem.')
       return
     }
-    // Salva todos os dados do cadastro no localStorage
-    salvarUsuario({
+    const jaExiste = getUsuarios().find(u => u.email === campos.email)
+    if (jaExiste) {
+      setErro('Já existe uma conta com esse e-mail.')
+      return
+    }
+    const dadosUsuario = {
       nome:              campos.nome,
       email:             campos.email,
+      senha:             campos.senha,
       perfil,
       matricula:         campos.matricula         || null,
       registroFuncional: campos.registroFuncional || null,
@@ -122,7 +145,9 @@ export default function AuthPage() {
       cpf:               campos.cpf               || null,
       escola:            campos.escola            || null,
       codigoAluno:       campos.codigoAluno       || null,
-    })
+    }
+    adicionarUsuario(dadosUsuario)
+    salvarUsuario(dadosUsuario)
     navigate(`/dashboard/${perfil}`)
   }
 
@@ -203,6 +228,7 @@ export default function AuthPage() {
             onVoltar={() => navigate('/')}
             onLogin={handleEntrar}
             onCadastrar={() => trocarAba('cadastro')}
+            erroExterno={erroLogin}
           />
         ) : (
           <div className={styles.card}>
