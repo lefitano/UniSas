@@ -6,7 +6,6 @@ import styles from './ConfiguracoesPage.module.css'
 export default function ConfiguracoesPage() {
   const navigate = useNavigate()
   const [usuario,         setUsuario]         = useState(null)
-  const [confirmarExcluir, setConfirmarExcluir] = useState(false)
 
   useEffect(() => {
     const dados = getUsuario()
@@ -17,11 +16,6 @@ export default function ConfiguracoesPage() {
   if (!usuario) return null
 
   function handleSair() {
-    limparUsuario()
-    navigate('/')
-  }
-
-  function handleExcluir() {
     limparUsuario()
     navigate('/')
   }
@@ -86,38 +80,6 @@ export default function ConfiguracoesPage() {
           </div>
         </div>
 
-        <div className={styles.cardPerigo}>
-          <p className={styles.secaoTitulo}>Zona de perigo</p>
-
-          {!confirmarExcluir ? (
-            <div className={styles.opcao}>
-              <div>
-                <p className={styles.opcaoTitulo}>Excluir minha conta</p>
-                <p className={styles.opcaoDesc}>Esta ação é permanente e não pode ser desfeita</p>
-              </div>
-              <button
-                className={styles.btnExcluir}
-                onClick={() => setConfirmarExcluir(true)}
-              >
-                Excluir
-              </button>
-            </div>
-          ) : (
-            <div className={styles.confirmarBloco}>
-              <p className={styles.confirmarTexto}>
-                ⚠️ Tem certeza? Todos os seus dados serão removidos permanentemente.
-              </p>
-              <div className={styles.confirmarBtns}>
-                <button className={styles.btnCancelar} onClick={() => setConfirmarExcluir(false)}>
-                  Cancelar
-                </button>
-                <button className={styles.btnConfirmarExcluir} onClick={handleExcluir}>
-                  Sim, excluir conta
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
       </div>
     </div>
   )
