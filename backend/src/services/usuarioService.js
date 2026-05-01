@@ -1,25 +1,25 @@
-import * as usuarioRepository from '../repositories/usuarioRepository.js'
+import { db } from '../config/database.js'
 
 export async function listarUsuarios() {
-  // TODO: return usuarioRepository.findAll()
+  // TODO: buscar e retornar todos os usuários do banco de dados
 }
 
 export async function buscarUsuarioPorId(id) {
-  // TODO: return usuarioRepository.findById(id)
+  // TODO: buscar e retornar um usuário pelo id no banco de dados
 }
 
 export async function criarUsuario(dados) {
-  // TODO: validar se email já existe
+  // TODO: validar se o email já está cadastrado
   // TODO: aplicar hash na senha antes de salvar
-  // TODO: return usuarioRepository.save(dados)
+  // TODO: inserir o novo usuário no banco de dados
 }
 
 export async function atualizarUsuario(id, dados) {
-  // TODO: validar se o usuário existe antes de atualizar
-  // TODO: return usuarioRepository.update(id, dados)
+  // TODO: verificar se o usuário existe antes de atualizar
+  // TODO: atualizar os dados do usuário no banco de dados
 }
 
 export async function removerUsuario(id) {
-  // TODO: validar se o usuário existe antes de remover
-  // TODO: return usuarioRepository.remove(id)
+  // TODO: verificar se o usuário existe antes de remover
+  // TODO: remover o usuário do banco de dados
 }

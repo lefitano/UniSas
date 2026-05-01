@@ -1,71 +1,23 @@
-const CHAVE_USUARIO  = 'unisas_usuario'
-const CHAVE_USUARIOS = 'unisas_usuarios'
+// As funções deste arquivo foram movidas para as camadas corretas:
+//   Dados / CRUD   → src/services/usuarioService.js
+//   Formatação     → src/utils/formatadores.js
+//
+// Este arquivo mantém os re-exports para não quebrar as páginas existentes.
+// Ao editar uma página, troque o import para apontar direto à origem.
 
-// usuario logado ta aq  
+export {
+  getUsuario,
+  salvarUsuario,
+  limparUsuario,
+  getUsuarios,
+  adicionarUsuario,
+  atualizarUsuario,
+  removerUsuario,
+  getUsuarioPorId,
+} from '../services/usuarioService.js'
 
-export function getUsuario() {
-  const dados = localStorage.getItem(CHAVE_USUARIO)
-  if (!dados) return null
-  return JSON.parse(dados)
-}
-
-export function salvarUsuario(dados) {
-  localStorage.setItem(CHAVE_USUARIO, JSON.stringify(dados))
-}
-
-export function limparUsuario() {
-  localStorage.removeItem(CHAVE_USUARIO)
-}
-
-//  usuários gerenciados pelo diretor (CRUD)
-
-export function getUsuarios() {
-  const dados = localStorage.getItem(CHAVE_USUARIOS)
-  if (!dados) return []
-  return JSON.parse(dados)
-}
-
-export function salvarUsuarios(lista) {
-  localStorage.setItem(CHAVE_USUARIOS, JSON.stringify(lista))
-}
-
-export function adicionarUsuario(dados) {
-  const lista = getUsuarios()
-  const novo = { ...dados, id: Date.now().toString(), criadoEm: new Date().toISOString() }
-  salvarUsuarios([...lista, novo])
-  return novo
-}
-
-export function atualizarUsuario(id, dados) {
-  const lista = getUsuarios().map(u => u.id === id ? { ...u, ...dados } : u)
-  salvarUsuarios(lista)
-}
-
-export function removerUsuario(id) {
-  salvarUsuarios(getUsuarios().filter(u => u.id !== id))
-}
-
-export function getUsuarioPorId(id) {
-  return getUsuarios().find(u => u.id === id) || null
-}
-
-export function getIniciais(nome) {
-  if (!nome) return '?'
-  const partes = nome.trim().split(' ').filter(Boolean)
-  if (partes.length === 1) return partes[0].substring(0, 2).toUpperCase()
-  return (partes[0][0] + partes[1][0]).toUpperCase()
-}
-
-export function getSaudacao() {
-  const hora = new Date().getHours()
-  if (hora < 12) return 'Bom dia'
-  if (hora < 18) return 'Boa tarde'
-  return 'Boa noite'
-}
-
-export const avatarCores = {
-  aluno:      '#2D7A3A',
-  professor:  '#854F0B',
-  responsavel:'#185FA5',
-  diretor:    '#A32D2D',
-}
+export {
+  getIniciais,
+  getSaudacao,
+  avatarCores,
+} from './formatadores.js'

@@ -1,32 +1,30 @@
 import * as usuarioService from '../services/usuarioService.js'
 
 export async function listar(req, res) {
-  // TODO: const usuarios = await usuarioService.listarUsuarios()
-  // TODO: res.json(usuarios)
+  // TODO: buscar todos os usuários via usuarioService.listarUsuarios()
+  // TODO: retornar a lista como JSON
 }
 
 export async function buscarPorId(req, res) {
-  // TODO: const { id } = req.params
-  // TODO: const usuario = await usuarioService.buscarUsuarioPorId(id)
-  // TODO: if (!usuario) return res.status(404).json({ erro: 'Usuário não encontrado' })
-  // TODO: res.json(usuario)
+  // TODO: obter o id a partir da URL (req.params)
+  // TODO: buscar o usuário via usuarioService.buscarUsuarioPorId(id)
+  // TODO: retornar erro 404 se não encontrado, ou o usuário como JSON
 }
 
 export async function criar(req, res) {
-  // TODO: const dados = req.body
-  // TODO: const novoUsuario = await usuarioService.criarUsuario(dados)
-  // TODO: res.status(201).json(novoUsuario)
+  // TODO: obter os dados do corpo da requisição (req.body)
+  // TODO: criar o usuário via usuarioService.criarUsuario(dados)
+  // TODO: retornar o usuário criado com status 201
 }
 
 export async function atualizar(req, res) {
-  // TODO: const { id } = req.params
-  // TODO: const dados = req.body
-  // TODO: const atualizado = await usuarioService.atualizarUsuario(id, dados)
-  // TODO: res.json(atualizado)
+  // TODO: obter o id da URL e os dados do corpo da requisição
+  // TODO: atualizar via usuarioService.atualizarUsuario(id, dados)
+  // TODO: retornar o usuário atualizado como JSON
 }
 
 export async function remover(req, res) {
-  // TODO: const { id } = req.params
-  // TODO: await usuarioService.removerUsuario(id)
-  // TODO: res.status(204).send()
+  // TODO: obter o id a partir da URL
+  // TODO: remover via usuarioService.removerUsuario(id)
+  // TODO: retornar status 204 (sem conteúdo)
 }
