@@ -1,11 +1,20 @@
-// Middleware de autenticação
-// Executado antes de qualquer rota protegida para verificar se o usuário está logado
+import jwt from 'jsonwebtoken'
 
-export function verificarAuth(req, res, next) {
-  // TODO: ler o token do cabeçalho da requisição
-  // TODO: verificar se o token é válido
-  // TODO: se válido, permitir a continuação da requisição
-  // TODO: se inválido, retornar erro 401 (não autorizado)
+export function verificarAuth(req, res, next){
+  const authHeader = req.headers.authorization
 
-  next() // linha temporária — remover quando implementar a autenticação
+  if(!authHeader){
+    return res.status(401).json({erro: "Token não foi fornecido"})
+  }
+
+  const partes = authHeader.split(' ')
+
+  const token = partes[1] // pegando o segundo item do array que é o token msm
+try{
+  const dadosDoToken = jwt.verify(token, process.env.JWT_SECRET)
+  req.usuario = dadosDoToken
+  next()
+}catch(erro){
+  return res.status(401).json({erro: "Token inválido ou expirado"})
+}
 }
