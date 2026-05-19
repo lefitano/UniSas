@@ -1,5 +1,8 @@
-// Conexão com o banco de dados
-// O time de backend deve escolher o banco, instalar o driver correspondente
-// e configurar a conexão usando as variáveis definidas no arquivo .env
+import {createClient} from '@supabase/supabase-js';
 
-export const db = {}
+const supabase = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_KEY
+)
+
+export default supabase;
