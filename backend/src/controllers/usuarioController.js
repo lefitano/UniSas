@@ -1,4 +1,6 @@
 import * as usuarioService from '../services/usuarioService.js'
+import bcrypt from 'bcrypt'
+
 
 export async function listar(req, res, next) {
   try{
@@ -23,7 +25,8 @@ export async function buscarPorId(req, res, next) {
 export async function criar(req, res, next) {
   try{
  const dados = req.body
- const usuario = await usuarioService.criarUsuario(dados)
+ const senha_hash = await bcrypt.hash(dados.senha, 10)
+ const usuario = await usuarioService.criarUsuario({...dados, senha_hash, senha: undefined})
  res.status(201).json(usuario)
   }
   catch(erro){
