@@ -18,11 +18,15 @@ export default function GerenciarUsuariosPage() {
   const [confirmandoId, setConfirmandoId] = useState(null)
 
   useEffect(() => {
-    const dados = getUsuario()
-    if (!dados || dados.perfil !== 'diretor') { navigate('/'); return }
-    setDiretor(dados)
+    async function carregar() {
+      const dados = getUsuario()
+      if (!dados || dados.perfil !== 'diretor') { navigate('/'); return }
+      setDiretor(dados)
 
-    setUsuarios(getUsuarios())
+      const lista = await getUsuarios()
+      setUsuarios(lista)
+    }
+    carregar()
   }, [navigate])
 
   if (!diretor) return null
@@ -31,8 +35,8 @@ export default function GerenciarUsuariosPage() {
     ? usuarios
     : usuarios.filter(u => u.perfil === filtro)
 
-  function handleRemover(id) {
-    removerUsuario(id)
+  async function handleRemover(id) {
+    await removerUsuario(id)
     setUsuarios(prev => prev.filter(u => u.id !== id))
     setConfirmandoId(null)
   }

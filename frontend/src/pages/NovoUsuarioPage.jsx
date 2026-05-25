@@ -58,7 +58,7 @@ export default function NovoUsuarioPage() {
     setErro('')
   }
 
-  function handleSalvar(e) {
+  async function handleSalvar(e) {
     e.preventDefault()
 
     const campos_ = camposPorPerfil[perfil]
@@ -79,9 +79,13 @@ export default function NovoUsuarioPage() {
       return
     }
 
-    adicionarUsuario({ ...campos, perfil })
-    setSucesso(true)
-    setTimeout(() => navigate('/gerenciar-usuarios'), 1200)
+    try {
+      await adicionarUsuario({ ...campos, perfil })
+      setSucesso(true)
+      setTimeout(() => navigate('/gerenciar-usuarios'), 1200)
+    } catch {
+      setErro('Erro ao cadastrar usuário. Tente novamente.')
+    }
   }
 
   return (

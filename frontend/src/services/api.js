@@ -1,10 +1,6 @@
-
 const BASE_URL = 'http://localhost:3001/api'
 
-
 const CHAVE_TOKEN = 'unisas_token'
-
-
 
 export function salvarToken(token) {
   localStorage.setItem(CHAVE_TOKEN, token)
@@ -30,8 +26,6 @@ function montarHeaders(incluirAuth = true) {
 
   return headers
 }
-
-
 
 export async function get(endpoint) {
   const resposta = await fetch(`${BASE_URL}${endpoint}`, {
@@ -67,8 +61,6 @@ export async function del(endpoint) {
     headers: montarHeaders(),
   })
   if (!resposta.ok) throw new Error(`Erro ${resposta.status}`)
-
- 
   if (resposta.status === 204) return null
   return resposta.json()
 }

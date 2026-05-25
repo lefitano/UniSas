@@ -43,15 +43,20 @@ export default function EditarUsuarioPage() {
   const [sucesso, setSucesso] = useState(false)
 
   useEffect(() => {
-    const dadosDiretor = getUsuario()
-    if (!dadosDiretor || dadosDiretor.perfil !== 'diretor') { navigate('/'); return }
-    setDiretor(dadosDiretor)
+    async function carregar() {
+      const dadosDiretor = getUsuario()
+      if (!dadosDiretor || dadosDiretor.perfil !== 'diretor') { navigate('/'); return }
+      setDiretor(dadosDiretor)
 
-    const usuario = getUsuarioPorId(id)
-    if (!usuario) { navigate('/gerenciar-usuarios'); return }
-
-    setPerfil(usuario.perfil)
-    setCampos(usuario)
+      try {
+        const usuario = await getUsuarioPorId(id)
+        setPerfil(usuario.perfil)
+        setCampos(usuario)
+      } catch {
+        navigate('/gerenciar-usuarios')
+      }
+    }
+    carregar()
   }, [id, navigate])
 
   if (!diretor || !perfil) return null
@@ -61,7 +66,7 @@ export default function EditarUsuarioPage() {
     setErro('')
   }
 
-  function handleSalvar(e) {
+  async function handleSalvar(e) {
     e.preventDefault()
 
     for (const campo of camposPorPerfil[perfil]) {
@@ -86,9 +91,13 @@ export default function EditarUsuarioPage() {
       ? { ...dadosSemSenhaNova, senha: senhaNova }
       : dadosSemSenhaNova
 
-    atualizarUsuario(id, dadosAtualizar)
-    setSucesso(true)
-    setTimeout(() => navigate('/gerenciar-usuarios'), 1200)
+    try {
+      await atualizarUsuario(id, dadosAtualizar)
+      setSucesso(true)
+      setTimeout(() => navigate('/gerenciar-usuarios'), 1200)
+    } catch {
+      setErro('Erro ao salvar alterações. Tente novamente.')
+    }
   }
 
   return (

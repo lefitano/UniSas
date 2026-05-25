@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getUsuario, salvarUsuario, getIniciais, avatarCores } from '../utils/usuario'
+import { getUsuario, salvarUsuario, atualizarUsuario, getIniciais, avatarCores } from '../utils/usuario'
 import styles from './EditProfilePage.module.css'
 
 const camposExtras = {
@@ -46,15 +46,20 @@ export default function EditProfilePage() {
     setErro('')
   }
 
-  function handleSalvar(e) {
+  async function handleSalvar(e) {
     e.preventDefault()
     if (!campos.nome.trim() || !campos.email.trim()) {
       setErro('Nome e e-mail são obrigatórios.')
       return
     }
-    salvarUsuario({ ...usuario, ...campos })
-    setUsuario(prev => ({ ...prev, ...campos }))
-    setSucesso(true)
+    try {
+      await atualizarUsuario(usuario.id, campos)
+      salvarUsuario({ ...usuario, ...campos })
+      setUsuario(prev => ({ ...prev, ...campos }))
+      setSucesso(true)
+    } catch {
+      setErro('Erro ao salvar alterações. Tente novamente.')
+    }
   }
 
   const extras = camposExtras[usuario.perfil] || []

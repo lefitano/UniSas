@@ -1,12 +1,6 @@
-// Serviço de usuários
-// Atualmente usa localStorage — substituir pelas chamadas à API quando o backend estiver pronto
-
 import * as api from './api.js'
 
-const CHAVE_USUARIO  = 'unisas_usuario'
-const CHAVE_USUARIOS = 'unisas_usuarios'
-
-// ─── Usuário logado ────────────────────────────────────────────────────────────
+const CHAVE_USUARIO = 'unisas_usuario'
 
 export function getUsuario() {
   const dados = localStorage.getItem(CHAVE_USUARIO)
@@ -21,37 +15,22 @@ export function limparUsuario() {
   localStorage.removeItem(CHAVE_USUARIO)
 }
 
-// ─── CRUD de usuários (gerenciado pelo diretor) ────────────────────────────────
-
-export function getUsuarios() {
-  const dados = localStorage.getItem(CHAVE_USUARIOS)
-  return dados ? JSON.parse(dados) : []
+export async function getUsuarios() {
+  return api.get('/usuarios')
 }
 
-function salvarUsuarios(lista) {
-  localStorage.setItem(CHAVE_USUARIOS, JSON.stringify(lista))
+export async function getUsuarioPorId(id) {
+  return api.get(`/usuarios/${id}`)
 }
 
-export function adicionarUsuario(dados) {
-  const lista = getUsuarios()
-  const novo = { ...dados, id: Date.now().toString(), criadoEm: new Date().toISOString() }
-  salvarUsuarios([...lista, novo])
-  return novo
-  // TODO (backend pronto): substituir por chamada à API para criar usuário
+export async function adicionarUsuario(dados) {
+  return api.post('/usuarios', dados)
 }
 
-export function atualizarUsuario(id, dados) {
-  const lista = getUsuarios().map(u => u.id === id ? { ...u, ...dados } : u)
-  salvarUsuarios(lista)
-  // TODO (backend pronto): substituir por chamada à API para atualizar usuário
+export async function atualizarUsuario(id, dados) {
+  return api.put(`/usuarios/${id}`, dados)
 }
 
-export function removerUsuario(id) {
-  salvarUsuarios(getUsuarios().filter(u => u.id !== id))
-  // TODO (backend pronto): substituir por chamada à API para remover usuário
-}
-
-export function getUsuarioPorId(id) {
-  return getUsuarios().find(u => u.id === id) || null
-  // TODO (backend pronto): substituir por chamada à API para buscar usuário por id
+export async function removerUsuario(id) {
+  return api.del(`/usuarios/${id}`)
 }
