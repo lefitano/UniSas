@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { login } from '../services/authService'
 import { salvarUsuario, adicionarUsuario, getUsuarios } from '../utils/usuario'
 import LoginForm from '../components/auth/LoginForm'
 import styles from './AuthPage.module.css'
@@ -42,6 +43,7 @@ export default function AuthPage() {
   const [erro,         setErro]         = useState('')
   const [erroLogin,    setErroLogin]    = useState('')
   const [mostrarSenha, setMostrarSenha] = useState(false)
+  const [carregando,   setCarregando]   = useState(false)
 
   if (!perfisValidos.includes(perfil)) {
     navigate('/')
@@ -61,27 +63,17 @@ export default function AuthPage() {
     setMostrarSenha(false)
   }
 
-  function handleEntrar({ email, senha }) {
+  async function handleEntrar({ email, senha }) {
     setErroLogin('')
-    const usuario = getUsuarios().find(
-      u => u.email === email && u.senha === senha && u.perfil === perfil
-    )
-    if (!usuario) {
+    setCarregando(true)
+    try {
+      const usuario = await login(email, senha)
+      navigate(`/dashboard/${usuario.perfil}`)
+    } catch {
       setErroLogin('Email ou senha incorretos.')
-      return
+    } finally {
+      setCarregando(false)
     }
-    salvarUsuario({
-      nome:              usuario.nome,
-      email:             usuario.email,
-      perfil:            usuario.perfil,
-      matricula:         usuario.matricula         || null,
-      registroFuncional: usuario.registroFuncional || null,
-      disciplina:        usuario.disciplina        || null,
-      cpf:               usuario.cpf               || null,
-      escola:            usuario.escola            || null,
-      codigoAluno:       usuario.codigoAluno       || null,
-    })
-    navigate(`/dashboard/${perfil}`)
   }
 
   function handleCadastrar(e) {
@@ -121,7 +113,7 @@ export default function AuthPage() {
     navigate('/dashboard/diretor')
   }
 
-  // Aluno, professor e responsável: somente login
+
   if (perfil !== 'diretor') {
     return (
       <div className={styles.pagina}>
@@ -133,13 +125,14 @@ export default function AuthPage() {
             onVoltar={() => navigate('/')}
             onLogin={handleEntrar}
             erroExterno={erroLogin}
+            carregando={carregando}
           />
         </div>
       </div>
     )
   }
 
-  // Diretor: cadastro ou login
+
   return (
     <div className={styles.pagina}>
       <div className={styles.fundo} />
@@ -153,6 +146,7 @@ export default function AuthPage() {
             onLogin={handleEntrar}
             onCadastrar={() => trocarAba('cadastro')}
             erroExterno={erroLogin}
+            carregando={carregando}
           />
         ) : (
           <div className={styles.card}>
