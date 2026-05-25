@@ -1,18 +1,50 @@
-// Configuração base para todas as chamadas ao backend
-// Quando o backend estiver pronto, só mude BASE_URL aqui e tudo funciona
 
 const BASE_URL = 'http://localhost:3001/api'
 
+
+const CHAVE_TOKEN = 'unisas_token'
+
+
+
+export function salvarToken(token) {
+  localStorage.setItem(CHAVE_TOKEN, token)
+}
+
+export function getToken() {
+  return localStorage.getItem(CHAVE_TOKEN)
+}
+
+export function removerToken() {
+  localStorage.removeItem(CHAVE_TOKEN)
+}
+
+function montarHeaders(incluirAuth = true) {
+  const headers = { 'Content-Type': 'application/json' }
+
+  if (incluirAuth) {
+    const token = getToken()
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`
+    }
+  }
+
+  return headers
+}
+
+
+
 export async function get(endpoint) {
-  const resposta = await fetch(`${BASE_URL}${endpoint}`)
+  const resposta = await fetch(`${BASE_URL}${endpoint}`, {
+    headers: montarHeaders(),
+  })
   if (!resposta.ok) throw new Error(`Erro ${resposta.status}`)
   return resposta.json()
 }
 
-export async function post(endpoint, dados) {
+export async function post(endpoint, dados, incluirAuth = true) {
   const resposta = await fetch(`${BASE_URL}${endpoint}`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: montarHeaders(incluirAuth),
     body: JSON.stringify(dados),
   })
   if (!resposta.ok) throw new Error(`Erro ${resposta.status}`)
@@ -22,7 +54,7 @@ export async function post(endpoint, dados) {
 export async function put(endpoint, dados) {
   const resposta = await fetch(`${BASE_URL}${endpoint}`, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    headers: montarHeaders(),
     body: JSON.stringify(dados),
   })
   if (!resposta.ok) throw new Error(`Erro ${resposta.status}`)
@@ -30,7 +62,13 @@ export async function put(endpoint, dados) {
 }
 
 export async function del(endpoint) {
-  const resposta = await fetch(`${BASE_URL}${endpoint}`, { method: 'DELETE' })
+  const resposta = await fetch(`${BASE_URL}${endpoint}`, {
+    method: 'DELETE',
+    headers: montarHeaders(),
+  })
   if (!resposta.ok) throw new Error(`Erro ${resposta.status}`)
+
+ 
+  if (resposta.status === 204) return null
   return resposta.json()
 }
