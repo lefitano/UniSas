@@ -11,11 +11,19 @@ export async function login(req, res, next) {
   }
 }
 
-export async function logout(req, res, next) {
+export async function cadastro(req, res, next) {
+  try {
+    const resultado = await authService.cadastrarDiretor(req.body)
+    res.status(201).json(resultado)
+  } catch (erro) {
+    next(erro)
+  }
+}
+
+export async function logout(_req, res, next) {
   try{
     const resultado = await authService.encerrarSessao()
     res.json(resultado)
-
   }catch(erro){
     next(erro)
   }
