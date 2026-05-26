@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { login } from '../services/authService'
-import { salvarUsuario, adicionarUsuario, getUsuarios } from '../utils/usuario'
+import { login, cadastrarDiretor } from '../services/authService'
 import LoginForm from '../components/auth/LoginForm'
 import styles from './AuthPage.module.css'
 
@@ -76,7 +75,7 @@ export default function AuthPage() {
     }
   }
 
-  function handleCadastrar(e) {
+  async function handleCadastrar(e) {
     e.preventDefault()
     for (const campo of camposCadastroDiretor) {
       if (!campos[campo.id]) {
@@ -96,21 +95,21 @@ export default function AuthPage() {
       setErro('As senhas não coincidem.')
       return
     }
-    if (getUsuarios().find(u => u.email === campos.email)) {
-      setErro('Já existe uma conta com esse e-mail.')
-      return
+    setCarregando(true)
+    try {
+      await cadastrarDiretor({
+        nome:   campos.nome,
+        email:  campos.email,
+        senha:  campos.senha,
+        cpf:    campos.cpf    || null,
+        escola: campos.escola || null,
+      })
+      navigate('/dashboard/diretor')
+    } catch (erro) {
+      setErro(erro.message || 'Erro ao criar conta. Tente novamente.')
+    } finally {
+      setCarregando(false)
     }
-    const dadosUsuario = {
-      nome:   campos.nome,
-      email:  campos.email,
-      senha:  campos.senha,
-      perfil: 'diretor',
-      cpf:    campos.cpf    || null,
-      escola: campos.escola || null,
-    }
-    adicionarUsuario(dadosUsuario)
-    salvarUsuario(dadosUsuario)
-    navigate('/dashboard/diretor')
   }
 
 
@@ -196,7 +195,9 @@ export default function AuthPage() {
 
               {erro && <p className={styles.erro}>{erro}</p>}
 
-              <button type="submit" className={styles.btnPrimario}>Criar conta</button>
+              <button type="submit" className={styles.btnPrimario} disabled={carregando}>
+                {carregando ? 'Criando conta...' : 'Criar conta'}
+              </button>
 
               <p className={styles.linkSecundario}>
                 Já tem uma conta?{' '}

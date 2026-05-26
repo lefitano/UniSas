@@ -1,32 +1,53 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import LoginPage            from './pages/LoginPage'
-import AuthPage             from './pages/AuthPage'
-import DashboardAluno       from './pages/DashboardAluno'
-import DashboardProfessor   from './pages/DashboardProfessor'
-import DashboardResponsavel from './pages/DashboardResponsavel'
-import DashboardDiretor     from './pages/DashboardDiretor'
-import EditProfilePage         from './pages/EditProfilePage'
-import ConfiguracoesPage        from './pages/ConfiguracoesPage'
-import GerenciarUsuariosPage    from './pages/GerenciarUsuariosPage'
-import NovoUsuarioPage          from './pages/NovoUsuarioPage'
-import EditarUsuarioPage        from './pages/EditarUsuarioPage'
+import { getToken }              from './services/api'
+import { getUsuario }            from './services/usuarioService'
+import LoginPage                 from './pages/LoginPage'
+import AuthPage                  from './pages/AuthPage'
+import DashboardAluno            from './pages/DashboardAluno'
+import DashboardProfessor        from './pages/DashboardProfessor'
+import DashboardResponsavel      from './pages/DashboardResponsavel'
+import DashboardDiretor          from './pages/DashboardDiretor'
+import EditProfilePage           from './pages/EditProfilePage'
+import ConfiguracoesPage         from './pages/ConfiguracoesPage'
+import GerenciarUsuariosPage     from './pages/GerenciarUsuariosPage'
+import NovoUsuarioPage           from './pages/NovoUsuarioPage'
+import EditarUsuarioPage         from './pages/EditarUsuarioPage'
+
+function RotaProtegida({ perfil, children }) {
+  const token   = getToken()
+  const usuario = getUsuario()
+
+  if (!token || !usuario) {
+    return <Navigate to="/" replace />
+  }
+
+  if (perfil && usuario.perfil !== perfil) {
+    return <Navigate to={`/dashboard/${usuario.perfil}`} replace />
+  }
+
+  return children
+}
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/"                       element={<LoginPage />} />
-        <Route path="/auth/:perfil"           element={<AuthPage />} />
-        <Route path="/dashboard/aluno"        element={<DashboardAluno />} />
-        <Route path="/dashboard/professor"    element={<DashboardProfessor />} />
-        <Route path="/dashboard/responsavel"  element={<DashboardResponsavel />} />
-        <Route path="/dashboard/diretor"      element={<DashboardDiretor />} />
-        <Route path="/perfil/editar"                     element={<EditProfilePage />} />
-        <Route path="/perfil/configuracoes"            element={<ConfiguracoesPage />} />
-        <Route path="/gerenciar-usuarios"              element={<GerenciarUsuariosPage />} />
-        <Route path="/gerenciar-usuarios/novo"         element={<NovoUsuarioPage />} />
-        <Route path="/gerenciar-usuarios/editar/:id"   element={<EditarUsuarioPage />} />
-        <Route path="*"                                element={<Navigate to="/" replace />} />
+        <Route path="/"            element={<LoginPage />} />
+        <Route path="/auth/:perfil" element={<AuthPage />} />
+
+        <Route path="/dashboard/aluno"       element={<RotaProtegida perfil="aluno">       <DashboardAluno />       </RotaProtegida>} />
+        <Route path="/dashboard/professor"   element={<RotaProtegida perfil="professor">   <DashboardProfessor />   </RotaProtegida>} />
+        <Route path="/dashboard/responsavel" element={<RotaProtegida perfil="responsavel"> <DashboardResponsavel /> </RotaProtegida>} />
+        <Route path="/dashboard/diretor"     element={<RotaProtegida perfil="diretor">     <DashboardDiretor />     </RotaProtegida>} />
+
+        <Route path="/perfil/editar"       element={<RotaProtegida> <EditProfilePage />       </RotaProtegida>} />
+        <Route path="/perfil/configuracoes" element={<RotaProtegida> <ConfiguracoesPage />    </RotaProtegida>} />
+
+        <Route path="/gerenciar-usuarios"            element={<RotaProtegida perfil="diretor"> <GerenciarUsuariosPage /> </RotaProtegida>} />
+        <Route path="/gerenciar-usuarios/novo"       element={<RotaProtegida perfil="diretor"> <NovoUsuarioPage />       </RotaProtegida>} />
+        <Route path="/gerenciar-usuarios/editar/:id" element={<RotaProtegida perfil="diretor"> <EditarUsuarioPage />     </RotaProtegida>} />
+
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   )

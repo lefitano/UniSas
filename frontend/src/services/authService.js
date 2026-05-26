@@ -8,6 +8,13 @@ export async function login(email, senha) {
   return resultado.usuario
 }
 
+export async function cadastrarDiretor(dados) {
+  const resultado = await api.post('/auth/cadastro', dados, false)
+  api.salvarToken(resultado.token)
+  salvarUsuario(resultado.usuario)
+  return resultado.usuario
+}
+
 export function logout() {
   api.removerToken()
   limparUsuario()

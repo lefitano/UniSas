@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { limparUsuario } from '../../utils/usuario'
+import { logout } from '../../services/authService'
 import styles from './TopBar.module.css'
 
 export default function TopBar({ nome, cargo, avatarCor, avatarLetras, xp }) {
@@ -20,7 +20,7 @@ export default function TopBar({ nome, cargo, avatarCor, avatarLetras, xp }) {
   }, [menuAberto])
 
   function handleSair() {
-    limparUsuario()
+    logout()
     navigate('/')
   }
 

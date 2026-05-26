@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getUsuario, limparUsuario, getIniciais, avatarCores } from '../utils/usuario'
+import { getUsuario, getIniciais, avatarCores } from '../utils/usuario'
+import { logout } from '../services/authService'
 import styles from './ConfiguracoesPage.module.css'
 
 export default function ConfiguracoesPage() {
@@ -16,7 +17,7 @@ export default function ConfiguracoesPage() {
   if (!usuario) return null
 
   function handleSair() {
-    limparUsuario()
+    logout()
     navigate('/')
   }
 

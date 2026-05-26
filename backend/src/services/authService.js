@@ -8,7 +8,7 @@ export async function autenticar(email, senha) {
   .eq('email', email)
   .single()
 
-  if(error || !usuario) throw new Error("Email ou snha incorretos")
+  if(error || !usuario) throw new Error("Email ou senha incorretos")
 
     const senhaCorreta = await bcrypt.compare(senha, usuario.senha_hash)
     if(!senhaCorreta) throw new Error("Email ou senha incorretos")

@@ -83,8 +83,8 @@ export default function NovoUsuarioPage() {
       await adicionarUsuario({ ...campos, perfil })
       setSucesso(true)
       setTimeout(() => navigate('/gerenciar-usuarios'), 1200)
-    } catch {
-      setErro('Erro ao cadastrar usuário. Tente novamente.')
+    } catch (erro) {
+      setErro(erro.message || 'Erro ao cadastrar usuário. Tente novamente.')
     }
   }
 

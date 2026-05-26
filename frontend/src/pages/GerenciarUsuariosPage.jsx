@@ -12,19 +12,26 @@ const labelPerfil = { aluno: 'Aluno', professor: 'Professor', responsavel: 'Resp
 
 export default function GerenciarUsuariosPage() {
   const navigate = useNavigate()
-  const [diretor, setDiretor]         = useState(null)
-  const [usuarios, setUsuarios]       = useState([])
-  const [filtro, setFiltro]           = useState('todos')
+  const [diretor, setDiretor]             = useState(null)
+  const [usuarios, setUsuarios]           = useState([])
+  const [filtro, setFiltro]               = useState('todos')
   const [confirmandoId, setConfirmandoId] = useState(null)
+  const [carregando, setCarregando]       = useState(true)
+  const [erro, setErro]                   = useState('')
 
   useEffect(() => {
     async function carregar() {
       const dados = getUsuario()
       if (!dados || dados.perfil !== 'diretor') { navigate('/'); return }
       setDiretor(dados)
-
-      const lista = await getUsuarios()
-      setUsuarios(lista)
+      try {
+        const lista = await getUsuarios()
+        setUsuarios(lista)
+      } catch {
+        setErro('Erro ao carregar usuários. Tente recarregar a página.')
+      } finally {
+        setCarregando(false)
+      }
     }
     carregar()
   }, [navigate])
@@ -36,9 +43,14 @@ export default function GerenciarUsuariosPage() {
     : usuarios.filter(u => u.perfil === filtro)
 
   async function handleRemover(id) {
-    await removerUsuario(id)
-    setUsuarios(prev => prev.filter(u => u.id !== id))
-    setConfirmandoId(null)
+    try {
+      await removerUsuario(id)
+      setUsuarios(prev => prev.filter(u => u.id !== id))
+      setConfirmandoId(null)
+    } catch {
+      setErro('Erro ao remover usuário. Tente novamente.')
+      setConfirmandoId(null)
+    }
   }
 
   return (
@@ -79,7 +91,9 @@ export default function GerenciarUsuariosPage() {
         </div>
 
         <div className={styles.lista}>
-          {usuariosFiltrados.length === 0 && (
+          {erro      && <p className={styles.erro}>{erro}</p>}
+          {carregando && <p className={styles.vazio}>Carregando usuários...</p>}
+          {!carregando && !erro && usuariosFiltrados.length === 0 && (
             <p className={styles.vazio}>Nenhum usuário encontrado.</p>
           )}
 

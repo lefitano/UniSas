@@ -27,11 +27,19 @@ function montarHeaders(incluirAuth = true) {
   return headers
 }
 
+async function checarResposta(resposta) {
+  if (!resposta.ok) {
+    const corpo = await resposta.json().catch(() => ({}))
+    throw new Error(corpo.erro || `Erro ${resposta.status}`)
+  }
+  return resposta
+}
+
 export async function get(endpoint) {
   const resposta = await fetch(`${BASE_URL}${endpoint}`, {
     headers: montarHeaders(),
   })
-  if (!resposta.ok) throw new Error(`Erro ${resposta.status}`)
+  await checarResposta(resposta)
   return resposta.json()
 }
 
@@ -41,7 +49,7 @@ export async function post(endpoint, dados, incluirAuth = true) {
     headers: montarHeaders(incluirAuth),
     body: JSON.stringify(dados),
   })
-  if (!resposta.ok) throw new Error(`Erro ${resposta.status}`)
+  await checarResposta(resposta)
   return resposta.json()
 }
 
@@ -51,7 +59,7 @@ export async function put(endpoint, dados) {
     headers: montarHeaders(),
     body: JSON.stringify(dados),
   })
-  if (!resposta.ok) throw new Error(`Erro ${resposta.status}`)
+  await checarResposta(resposta)
   return resposta.json()
 }
 
@@ -60,7 +68,7 @@ export async function del(endpoint) {
     method: 'DELETE',
     headers: montarHeaders(),
   })
-  if (!resposta.ok) throw new Error(`Erro ${resposta.status}`)
   if (resposta.status === 204) return null
+  await checarResposta(resposta)
   return resposta.json()
 }
