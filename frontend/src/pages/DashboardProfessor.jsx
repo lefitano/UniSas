@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import TopBar        from '../components/ui/TopBar'
-import TabNav        from '../components/dashboard/TabNav'
-import StatCard      from '../components/dashboard/StatCard'
-import ActionButton  from '../components/dashboard/ActionButton'
+import TopBar       from '../components/ui/TopBar'
+import TabNav       from '../components/dashboard/TabNav'
+import StatCard     from '../components/dashboard/StatCard'
+import ActionButton from '../components/dashboard/ActionButton'
 import { getUsuario, getIniciais, getSaudacao, avatarCores } from '../utils/usuario'
 import styles from './Dashboard.module.css'
 
@@ -19,8 +19,9 @@ export default function DashboardProfessor() {
 
   if (!usuario) return null
 
-  const primeiroNome = usuario.nome.split(' ')[0]
-  const disciplina   = usuario.disciplina || 'Professor'
+  const primeiroNome        = usuario.nome.split(' ')[0]
+  const disciplina          = usuario.disciplina         || 'Sem disciplina'
+  const registroFuncional   = usuario.registro_funcional || usuario.registroFuncional || null
 
   return (
     <div className={styles.pagina}>
@@ -37,24 +38,26 @@ export default function DashboardProfessor() {
         <div className={styles.banner}>
           <div>
             <p className={styles.bannerTitulo}>{getSaudacao()}, Prof. {primeiroNome}! 👋</p>
-            <p className={styles.bannerSub}>Nenhuma turma ativa ainda</p>
+            <p className={styles.bannerSub}>
+              {registroFuncional ? `Registro funcional: ${registroFuncional}` : 'Bem-vindo ao UniSAS'}
+            </p>
           </div>
           <span className={styles.bannerBadge}>{disciplina}</span>
         </div>
 
         <div className={styles.cardsGrid}>
-          <StatCard icon="👥" label="Alunos"               valor="0"  sub="Nenhuma turma ativa" cor="verde"   />
-          <StatCard icon="📋" label="Atividades abertas"   valor="0"  sub="Nenhuma criada"      cor="amarelo" />
-          <StatCard icon="🎬" label="Conteúdos publicados" valor="0"  sub="Este semestre"       cor="verde"   />
-          <StatCard icon="❓" label="Questões no banco"    valor="0"  sub="Nenhuma cadastrada"  cor="amarelo" />
+          <StatCard icon="👥" label="Alunos"               valor="0" sub="Nenhuma turma ativa" cor="verde"   />
+          <StatCard icon="📋" label="Atividades abertas"   valor="0" sub="Nenhuma criada"      cor="amarelo" />
+          <StatCard icon="🎬" label="Conteúdos publicados" valor="0" sub="Este semestre"       cor="verde"   />
+          <StatCard icon="❓" label="Questões no banco"    valor="0" sub="Nenhuma cadastrada"  cor="amarelo" />
         </div>
 
         <p className={styles.secaoTitulo}>Ações rápidas</p>
         <div className={styles.acoesGrid}>
-          <ActionButton icon="📤" label="Upload de aula"  />
-          <ActionButton icon="📝" label="Nova atividade"  />
-          <ActionButton icon="❓" label="Criar questão"   />
-          <ActionButton icon="📊" label="Ver desempenho"  />
+          <ActionButton icon="📤" label="Upload de aula" />
+          <ActionButton icon="📝" label="Nova atividade" />
+          <ActionButton icon="❓" label="Criar questão"  />
+          <ActionButton icon="📊" label="Ver desempenho" />
         </div>
 
         <div className={styles.listaCard}>

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import TopBar        from '../components/ui/TopBar'
-import TabNav        from '../components/dashboard/TabNav'
-import StatCard      from '../components/dashboard/StatCard'
+import TopBar   from '../components/ui/TopBar'
+import TabNav   from '../components/dashboard/TabNav'
+import StatCard from '../components/dashboard/StatCard'
 import { getUsuario, getIniciais, getSaudacao, avatarCores } from '../utils/usuario'
 import styles from './Dashboard.module.css'
 
@@ -18,7 +18,8 @@ export default function DashboardResponsavel() {
 
   if (!usuario) return null
 
-  const primeiroNome = usuario.nome.split(' ')[0]
+  const primeiroNome  = usuario.nome.split(' ')[0]
+  const codigoAluno   = usuario.codigo_aluno || usuario.codigoAluno || null
 
   return (
     <div className={styles.pagina}>
@@ -35,16 +36,20 @@ export default function DashboardResponsavel() {
         <div className={styles.banner}>
           <div>
             <p className={styles.bannerTitulo}>{getSaudacao()}, {primeiroNome}! 👋</p>
-            <p className={styles.bannerSub}>Acompanhe o desempenho do seu filho</p>
+            <p className={styles.bannerSub}>
+              {codigoAluno
+                ? `Acompanhando aluno · Matrícula ${codigoAluno}`
+                : 'Acompanhe o desempenho do seu filho'}
+            </p>
           </div>
           <span className={styles.bannerBadge}>Responsável</span>
         </div>
 
         <div className={styles.cardsGrid}>
-          <StatCard icon="📊" label="Média geral"          valor="—"  sub="Sem dados ainda"       cor="verde"   />
-          <StatCard icon="✅" label="Frequência"            valor="—"  sub="Sem registros"         cor="verde"   />
-          <StatCard icon="📝" label="Atividades pendentes" valor="0"  sub="Nenhuma pendente"      cor="amarelo" />
-          <StatCard icon="🏆" label="Conquistas"            valor="0"  sub="Nenhuma ainda"         cor="verde"   />
+          <StatCard icon="📊" label="Média geral"          valor="—" sub="Aguardando lançamento" cor="verde"   />
+          <StatCard icon="✅" label="Frequência"            valor="—" sub="Sem registros"         cor="verde"   />
+          <StatCard icon="📝" label="Atividades pendentes" valor="0" sub="Nenhuma pendente"      cor="amarelo" />
+          <StatCard icon="🏆" label="Conquistas"            valor="0" sub="Nenhuma ainda"         cor="verde"   />
         </div>
 
         <div className={styles.listaCard}>

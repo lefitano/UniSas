@@ -4,17 +4,32 @@ import TopBar        from '../components/ui/TopBar'
 import TabNav        from '../components/dashboard/TabNav'
 import StatCard      from '../components/dashboard/StatCard'
 import ActionButton  from '../components/dashboard/ActionButton'
-import { getUsuario, getIniciais, getSaudacao, avatarCores } from '../utils/usuario'
+import { getUsuario, getUsuarios, getIniciais, getSaudacao, avatarCores } from '../utils/usuario'
 import styles from './Dashboard.module.css'
 
 export default function DashboardDiretor() {
   const navigate = useNavigate()
-  const [usuario, setUsuario] = useState(null)
+  const [usuario,   setUsuario]   = useState(null)
+  const [contagens, setContagens] = useState({ alunos: 0, professores: 0, responsaveis: 0 })
 
   useEffect(() => {
-    const dados = getUsuario()
-    if (!dados || dados.perfil !== 'diretor') { navigate('/'); return }
-    setUsuario(dados)
+    async function carregar() {
+      const dados = getUsuario()
+      if (!dados || dados.perfil !== 'diretor') { navigate('/'); return }
+      setUsuario(dados)
+
+      try {
+        const lista = await getUsuarios()
+        setContagens({
+          alunos:      lista.filter(u => u.perfil === 'aluno').length,
+          professores: lista.filter(u => u.perfil === 'professor').length,
+          responsaveis: lista.filter(u => u.perfil === 'responsavel').length,
+        })
+      } catch {
+        // contagens ficam zeradas se a API falhar
+      }
+    }
+    carregar()
   }, [navigate])
 
   if (!usuario) return null
@@ -43,18 +58,18 @@ export default function DashboardDiretor() {
         </div>
 
         <div className={styles.cardsGrid}>
-          <StatCard icon="👨‍🎓" label="Total de alunos" valor="0"  sub="Nenhuma matrícula ainda" cor="verde"   />
-          <StatCard icon="👨‍🏫" label="Professores"      valor="0"  sub="Nenhum cadastrado"       cor="amarelo" />
-          <StatCard icon="🏫"  label="Turmas ativas"    valor="0"  sub="Nenhuma turma criada"    cor="verde"   />
-          <StatCard icon="📈"  label="Média da escola"  valor="—"  sub="Sem dados disponíveis"   cor="amarelo" />
+          <StatCard icon="👨‍🎓" label="Total de alunos"    valor={String(contagens.alunos)}      sub={contagens.alunos === 0      ? 'Nenhum cadastrado' : 'Matrículas ativas'}  cor="verde"   />
+          <StatCard icon="👨‍🏫" label="Professores"         valor={String(contagens.professores)} sub={contagens.professores === 0 ? 'Nenhum cadastrado' : 'Em atividade'}        cor="amarelo" />
+          <StatCard icon="👨‍👩‍👧" label="Responsáveis"      valor={String(contagens.responsaveis)}sub={contagens.responsaveis === 0? 'Nenhum cadastrado' : 'Vinculados'}           cor="verde"   />
+          <StatCard icon="🏫"  label="Turmas ativas"       valor="0"                             sub="Nenhuma turma criada"                                                       cor="amarelo" />
         </div>
 
         <p className={styles.secaoTitulo}>Gestão rápida</p>
         <div className={styles.acoesGrid}>
-          <ActionButton icon="➕" label="Nova turma"          />
-          <ActionButton icon="👤" label="Gerenciar usuários"  onClick={() => navigate('/gerenciar-usuarios')} />
-          <ActionButton icon="📊" label="Relatório geral"     />
-          <ActionButton icon="📢" label="Comunicado geral"    />
+          <ActionButton icon="➕" label="Nova turma"         />
+          <ActionButton icon="👤" label="Gerenciar usuários" onClick={() => navigate('/gerenciar-usuarios')} />
+          <ActionButton icon="📊" label="Relatório geral"    />
+          <ActionButton icon="📢" label="Comunicado geral"   />
         </div>
 
         <div className={styles.listaCard}>
