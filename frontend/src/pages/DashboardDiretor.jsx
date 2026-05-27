@@ -5,12 +5,13 @@ import TabNav        from '../components/dashboard/TabNav'
 import StatCard      from '../components/dashboard/StatCard'
 import ActionButton  from '../components/dashboard/ActionButton'
 import { getUsuario, getUsuarios, getIniciais, getSaudacao, avatarCores } from '../utils/usuario'
+import { getTurmas } from '../services/turmaService'
 import styles from './Dashboard.module.css'
 
 export default function DashboardDiretor() {
   const navigate = useNavigate()
   const [usuario,   setUsuario]   = useState(null)
-  const [contagens, setContagens] = useState({ alunos: 0, professores: 0, responsaveis: 0 })
+  const [contagens, setContagens] = useState({ alunos: 0, professores: 0, responsaveis: 0, turmas: 0 })
 
   useEffect(() => {
     async function carregar() {
@@ -19,11 +20,12 @@ export default function DashboardDiretor() {
       setUsuario(dados)
 
       try {
-        const lista = await getUsuarios()
+        const [lista, turmas] = await Promise.all([getUsuarios(), getTurmas()])
         setContagens({
           alunos:      lista.filter(u => u.perfil === 'aluno').length,
           professores: lista.filter(u => u.perfil === 'professor').length,
           responsaveis: lista.filter(u => u.perfil === 'responsavel').length,
+          turmas:      turmas.length,
         })
       } catch {}
     }
@@ -65,7 +67,7 @@ export default function DashboardDiretor() {
           <StatCard icon="👨‍🎓" label="Total de alunos"    valor={String(contagens.alunos)}      sub={contagens.alunos === 0      ? 'Nenhum cadastrado' : 'Matrículas ativas'}  cor="verde"   />
           <StatCard icon="👨‍🏫" label="Professores"         valor={String(contagens.professores)} sub={contagens.professores === 0 ? 'Nenhum cadastrado' : 'Em atividade'}        cor="amarelo" />
           <StatCard icon="👨‍👩‍👧" label="Responsáveis"      valor={String(contagens.responsaveis)}sub={contagens.responsaveis === 0? 'Nenhum cadastrado' : 'Vinculados'}           cor="verde"   />
-          <StatCard icon="🏫"  label="Turmas ativas"       valor="0"                             sub="Nenhuma turma criada"                                                       cor="amarelo" />
+          <StatCard icon="🏫"  label="Turmas ativas"       valor={String(contagens.turmas)}      sub={contagens.turmas === 0 ? 'Nenhuma turma criada' : 'Turmas cadastradas'}      cor="amarelo" />
         </div>
 
         <p className={styles.secaoTitulo}>Gestão rápida</p>
