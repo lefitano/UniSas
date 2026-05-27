@@ -44,7 +44,13 @@ export default function DashboardDiretor() {
         avatarLetras={getIniciais(usuario.nome)}
       />
 
-      <TabNav abas={['Painel geral', 'Turmas', 'Professores', 'Alunos', 'Relatórios']} />
+      <TabNav abas={[
+        { label: 'Painel geral', rota: '/dashboard/diretor' },
+        { label: 'Turmas',       rota: '/gerenciar-turmas'  },
+        'Professores',
+        'Alunos',
+        'Relatórios',
+      ]} />
 
       <div className={styles.corpo}>
         <div className={styles.banner}>

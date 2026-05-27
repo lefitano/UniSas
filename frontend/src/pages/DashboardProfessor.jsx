@@ -32,7 +32,13 @@ export default function DashboardProfessor() {
         avatarLetras={getIniciais(usuario.nome)}
       />
 
-      <TabNav abas={['Início', 'Minhas turmas', 'Conteúdos', 'Banco de questões', 'Chat']} />
+      <TabNav abas={[
+        { label: 'Início', rota: '/dashboard/professor' },
+        'Minhas turmas',
+        'Conteúdos',
+        'Banco de questões',
+        'Chat',
+      ]} />
 
       <div className={styles.corpo}>
         <div className={styles.banner}>

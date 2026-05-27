@@ -30,7 +30,13 @@ export default function DashboardAluno() {
         avatarLetras={getIniciais(usuario.nome)}
       />
 
-      <TabNav abas={['Início', 'Minhas aulas', 'Atividades', 'Chat', 'Downloads']} />
+      <TabNav abas={[
+        { label: 'Início', rota: '/dashboard/aluno' },
+        'Minhas aulas',
+        'Atividades',
+        'Chat',
+        'Downloads',
+      ]} />
 
       <div className={styles.corpo}>
         <div className={styles.banner}>

@@ -21,3 +21,8 @@
   color: var(--verde);
   border-bottom-color: var(--verde);
 }
+
+.tabSemRota {
+  cursor: default;
+  opacity: 0.45;
+}

@@ -30,7 +30,12 @@ export default function DashboardResponsavel() {
         avatarLetras={getIniciais(usuario.nome)}
       />
 
-      <TabNav abas={['Acompanhamento', 'Frequência', 'Notas', 'Chat com escola']} />
+      <TabNav abas={[
+        { label: 'Acompanhamento', rota: '/dashboard/responsavel' },
+        'Frequência',
+        'Notas',
+        'Chat com escola',
+      ]} />
 
       <div className={styles.corpo}>
         <div className={styles.banner}>
