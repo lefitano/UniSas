@@ -14,6 +14,7 @@ import NovoUsuarioPage           from './pages/NovoUsuarioPage'
 import EditarUsuarioPage         from './pages/EditarUsuarioPage'
 import GerenciarTurmasPage       from './pages/GerenciarTurmasPage'
 import NovoTurmaPage             from './pages/NovoTurmaPage'
+import EditarTurmaPage           from './pages/EditarTurmaPage'
 
 function RotaProtegida({ perfil, children }) {
   const token   = getToken()
@@ -51,6 +52,7 @@ export default function App() {
 
         <Route path="/gerenciar-turmas"            element={<RotaProtegida perfil="diretor"> <GerenciarTurmasPage /> </RotaProtegida>} />
         <Route path="/gerenciar-turmas/novo"       element={<RotaProtegida perfil="diretor"> <NovoTurmaPage />       </RotaProtegida>} />
+        <Route path="/gerenciar-turmas/editar/:id" element={<RotaProtegida perfil="diretor"> <EditarTurmaPage />     </RotaProtegida>} />
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
