@@ -1,0 +1,124 @@
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import TopBar from '../components/ui/TopBar'
+import { getUsuario, getIniciais, avatarCores } from '../utils/usuario'
+import { adicionarTurma } from '../services/turmaService'
+import dashStyles from './Dashboard.module.css'
+import styles from './Gerenciar.module.css'
+
+const anoAtual = String(new Date().getFullYear())
+
+export default function NovoTurmaPage() {
+  const navigate = useNavigate()
+  const [diretor, setDiretor]   = useState(null)
+  const [campos, setCampos]     = useState({ nome: '', turno: '', ano_letivo: anoAtual })
+  const [erro, setErro]         = useState('')
+  const [sucesso, setSucesso]   = useState(false)
+  const [salvando, setSalvando] = useState(false)
+
+  useEffect(() => {
+    const dados = getUsuario()
+    if (!dados || dados.perfil !== 'diretor') { navigate('/'); return }
+    setDiretor(dados)
+  }, [navigate])
+
+  if (!diretor) return null
+
+  function atualizarCampo(id, valor) {
+    setCampos(prev => ({ ...prev, [id]: valor }))
+    setErro('')
+  }
+
+  async function handleSalvar(e) {
+    e.preventDefault()
+
+    if (!campos.nome.trim())  { setErro('Informe o nome da turma.'); return }
+    if (!campos.turno)         { setErro('Selecione o turno.'); return }
+    if (!campos.ano_letivo.trim()) { setErro('Informe o ano letivo.'); return }
+
+    setSalvando(true)
+    try {
+      await adicionarTurma(campos)
+      setSucesso(true)
+      setTimeout(() => navigate('/gerenciar-turmas'), 1200)
+    } catch (e) {
+      setErro(e.message || 'Erro ao cadastrar turma. Tente novamente.')
+    } finally {
+      setSalvando(false)
+    }
+  }
+
+  return (
+    <div className={dashStyles.pagina}>
+      <TopBar
+        nome={diretor.nome}
+        cargo={`Diretor · ${diretor.escola || 'Minha Escola'}`}
+        avatarCor={avatarCores.diretor}
+        avatarLetras={getIniciais(diretor.nome)}
+      />
+
+      <div className={dashStyles.corpo}>
+        <div className={styles.cabecalho}>
+          <div>
+            <button className={styles.btnVoltar} onClick={() => navigate('/gerenciar-turmas')}>
+              ← Gerenciar turmas
+            </button>
+            <h1 className={styles.titulo}>Nova Turma</h1>
+          </div>
+        </div>
+
+        <div className={styles.formCard}>
+          <form onSubmit={handleSalvar} noValidate>
+            <div className={styles.campo}>
+              <label className={styles.label}>Nome da turma</label>
+              <input
+                className={styles.input}
+                type="text"
+                placeholder="Ex: 9º Ano A"
+                value={campos.nome}
+                onChange={e => atualizarCampo('nome', e.target.value)}
+              />
+            </div>
+
+            <div className={styles.campo}>
+              <label className={styles.label}>Turno</label>
+              <select
+                className={styles.select}
+                value={campos.turno}
+                onChange={e => atualizarCampo('turno', e.target.value)}
+              >
+                <option value="">Selecione...</option>
+                <option value="manha">Manhã</option>
+                <option value="tarde">Tarde</option>
+                <option value="noite">Noite</option>
+              </select>
+            </div>
+
+            <div className={styles.campo}>
+              <label className={styles.label}>Ano letivo</label>
+              <input
+                className={styles.input}
+                type="text"
+                placeholder="Ex: 2026"
+                value={campos.ano_letivo}
+                onChange={e => atualizarCampo('ano_letivo', e.target.value)}
+              />
+            </div>
+
+            {erro    && <p className={styles.erro}>{erro}</p>}
+            {sucesso && <p className={styles.sucesso}>Turma cadastrada com sucesso!</p>}
+
+            <div className={styles.botoesForm}>
+              <button type="submit" className={styles.btnSalvar} disabled={salvando}>
+                {salvando ? 'Cadastrando...' : 'Cadastrar'}
+              </button>
+              <button type="button" className={styles.btnCancelar} onClick={() => navigate('/gerenciar-turmas')}>
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  )
+}
