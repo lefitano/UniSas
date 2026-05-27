@@ -1,5 +1,4 @@
 import styles from './ListItem.module.css'
-//componente de alertas para notas,ativididades pendententes e etc.
 const bgClasses = {
   verde:    'bgVerde',
   amarelo:  'bgAmarelo',

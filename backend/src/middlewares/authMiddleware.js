@@ -9,7 +9,7 @@ export function verificarAuth(req, res, next){
 
   const partes = authHeader.split(' ')
 
-  const token = partes[1] // pegando o segundo item do array que é o token msm
+  const token = partes[1]
 try{
   const dadosDoToken = jwt.verify(token, process.env.JWT_SECRET)
   req.usuario = dadosDoToken

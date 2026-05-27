@@ -11,7 +11,7 @@ export async function listarUsuarios() {
 export async function buscarUsuarioPorId(id) {
   const {data, error} = await supabase.from('usuarios')
   .select('id, nome, email, perfil, matricula, registro_funcional, cpf, codigo_aluno, escola, criado_em')
-  .eq('id', id) // pra comparar é como se fosse um .equals
+  .eq('id', id)
   .single()
 
   if(error) throw new Error('Usuário não encontrado')
@@ -43,7 +43,7 @@ export async function atualizarUsuario(id, dados) {
 }
 
 export async function removerUsuario(id) {
-  const {data, error} = await supabase.from('usuarios')
+  const { error } = await supabase.from('usuarios')
   .delete()
   .eq('id', id)
 

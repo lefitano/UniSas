@@ -1,10 +1,3 @@
-// As funções deste arquivo foram movidas para as camadas corretas:
-//   Dados / CRUD   → src/services/usuarioService.js
-//   Formatação     → src/utils/formatadores.js
-//
-// Este arquivo mantém os re-exports para não quebrar as páginas existentes.
-// Ao editar uma página, troque o import para apontar direto à origem.
-
 export {
   getUsuario,
   salvarUsuario,

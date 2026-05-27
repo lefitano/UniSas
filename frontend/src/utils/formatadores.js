@@ -1,5 +1,3 @@
-// Funções puras de formatação — não acessam banco, API ou localStorage
-
 export function getIniciais(nome) {
   if (!nome) return '?'
   const partes = nome.trim().split(' ').filter(Boolean)

@@ -5,7 +5,6 @@
   flex-direction: column;
 }
 
-/* ── Corpo ── */
 .corpo {
   padding: 16px;
   display: flex;
@@ -13,7 +12,6 @@
   gap: 14px;
 }
 
-/* ── Banner de boas-vindas ── */
 .banner {
   background: linear-gradient(135deg, #1a3a23 0%, #2D7A3A 100%);
   border-radius: 16px;
@@ -43,14 +41,12 @@
   white-space: nowrap;
 }
 
-/* ── Cards de estatísticas ── */
 .cardsGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
 }
 
-/* ── Seção título ── */
 .secaoTitulo {
   font-family: var(--fonte-display);
   font-size: 13px;
@@ -58,14 +54,12 @@
   color: var(--texto);
 }
 
-/* ── Ações rápidas ── */
 .acoesGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 8px;
 }
 
-/* ── Lista card ── */
 .listaCard {
   background: #fff;
   border-radius: 14px;
@@ -87,7 +81,6 @@
 
 .link { font-size: 11px; color: var(--verde); font-weight: 400; cursor: pointer; }
 
-/* ── Barra de progresso (DashboardAluno) ── */
 .progressoItem {
   padding: 11px 14px;
   border-bottom: 0.5px solid var(--cinza-borda);

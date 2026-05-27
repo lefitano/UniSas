@@ -1,4 +1,4 @@
-/* Cabeçalho da página */
+
 .cabecalho {
   display: flex;
   justify-content: space-between;
@@ -45,7 +45,6 @@
 
 .btnNovo:hover { opacity: 0.9; }
 
-/* Filtros */
 .filtros {
   display: flex;
   gap: 8px;
@@ -86,7 +85,7 @@
 
 .filtroBtnAtivo .filtroCount { background: var(--verde); color: #fff; }
 
-/* Lista de usuários */
+
 .lista { display: flex; flex-direction: column; gap: 10px; }
 
 .vazio {
@@ -141,7 +140,7 @@
   text-overflow: ellipsis;
 }
 
-/* Badges de perfil */
+
 .perfilBadge {
   font-size: 11px;
   font-weight: 600;
@@ -154,8 +153,11 @@
 .badge_aluno       { background: #EAF3DE; color: #2D7A3A; }
 .badge_professor   { background: #FEF3C7; color: #854F0B; }
 .badge_responsavel { background: #DBEAFE; color: #185FA5; }
+.badge_manha       { background: #FFF7ED; color: #C2410C; }
+.badge_tarde       { background: #FFFBEB; color: #B45309; }
+.badge_noite       { background: #EDE9FE; color: #5B21B6; }
 
-/* Ações da linha */
+
 .acoes {
   display: flex;
   align-items: center;
@@ -216,7 +218,6 @@
   font-family: var(--fonte-corpo);
 }
 
-/* Formulário (Novo / Editar) */
 .formCard {
   background: #fff;
   border-radius: 16px;

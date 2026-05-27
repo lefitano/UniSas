@@ -25,9 +25,7 @@ export default function DashboardDiretor() {
           professores: lista.filter(u => u.perfil === 'professor').length,
           responsaveis: lista.filter(u => u.perfil === 'responsavel').length,
         })
-      } catch {
-        // contagens ficam zeradas se a API falhar
-      }
+      } catch {}
     }
     carregar()
   }, [navigate])
@@ -66,7 +64,7 @@ export default function DashboardDiretor() {
 
         <p className={styles.secaoTitulo}>Gestão rápida</p>
         <div className={styles.acoesGrid}>
-          <ActionButton icon="➕" label="Nova turma"         />
+          <ActionButton icon="➕" label="Nova turma"         onClick={() => navigate('/gerenciar-turmas')} />
           <ActionButton icon="👤" label="Gerenciar usuários" onClick={() => navigate('/gerenciar-usuarios')} />
           <ActionButton icon="📊" label="Relatório geral"    />
           <ActionButton icon="📢" label="Comunicado geral"   />
