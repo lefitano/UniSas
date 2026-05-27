@@ -4,6 +4,7 @@ import TopBar   from '../components/ui/TopBar'
 import TabNav   from '../components/dashboard/TabNav'
 import StatCard from '../components/dashboard/StatCard'
 import { getUsuario, getIniciais, getSaudacao, avatarCores } from '../utils/usuario'
+import { BsGraphUp, BsTrophy, BsCheckCircle, BsDownload } from 'react-icons/bs'
 import styles from './Dashboard.module.css'
 
 export default function DashboardAluno() {
@@ -50,10 +51,10 @@ export default function DashboardAluno() {
         </div>
 
         <div className={styles.cardsGrid}>
-          <StatCard icon="📈" label="Média geral"       valor="—" sub="Aguardando lançamento" cor="verde"   />
-          <StatCard icon="🏆" label="Conquistas"         valor="0" sub="Nenhuma ainda"         cor="amarelo" />
-          <StatCard icon="✅" label="Frequência"         valor="—" sub="Sem registros"         cor="verde"   />
-          <StatCard icon="📥" label="Conteúdos offline" valor="0" sub="Nenhum disponível"     cor="amarelo" />
+          <StatCard icon={<BsGraphUp size={16} />}     label="Média geral"       valor="—" sub="Aguardando lançamento" cor="verde"   />
+          <StatCard icon={<BsTrophy size={16} />}      label="Conquistas"         valor="0" sub="Nenhuma ainda"         cor="amarelo" />
+          <StatCard icon={<BsCheckCircle size={16} />} label="Frequência"         valor="—" sub="Sem registros"         cor="verde"   />
+          <StatCard icon={<BsDownload size={16} />}    label="Conteúdos offline" valor="0" sub="Nenhum disponível"     cor="amarelo" />
         </div>
 
         <div className={styles.listaCard}>

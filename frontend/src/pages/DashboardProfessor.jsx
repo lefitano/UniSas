@@ -5,6 +5,7 @@ import TabNav       from '../components/dashboard/TabNav'
 import StatCard     from '../components/dashboard/StatCard'
 import ActionButton from '../components/dashboard/ActionButton'
 import { getUsuario, getIniciais, getSaudacao, avatarCores } from '../utils/usuario'
+import { BsPeopleFill, BsClipboard, BsCameraVideo, BsQuestionCircle, BsUpload, BsPencilSquare, BsPatchQuestion, BsBarChartLine } from 'react-icons/bs'
 import styles from './Dashboard.module.css'
 
 export default function DashboardProfessor() {
@@ -52,18 +53,18 @@ export default function DashboardProfessor() {
         </div>
 
         <div className={styles.cardsGrid}>
-          <StatCard icon="👥" label="Alunos"               valor="0" sub="Nenhuma turma ativa" cor="verde"   />
-          <StatCard icon="📋" label="Atividades abertas"   valor="0" sub="Nenhuma criada"      cor="amarelo" />
-          <StatCard icon="🎬" label="Conteúdos publicados" valor="0" sub="Este semestre"       cor="verde"   />
-          <StatCard icon="❓" label="Questões no banco"    valor="0" sub="Nenhuma cadastrada"  cor="amarelo" />
+          <StatCard icon={<BsPeopleFill size={16} />}     label="Alunos"               valor="0" sub="Nenhuma turma ativa" cor="verde"   />
+          <StatCard icon={<BsClipboard size={16} />}      label="Atividades abertas"   valor="0" sub="Nenhuma criada"      cor="amarelo" />
+          <StatCard icon={<BsCameraVideo size={16} />}    label="Conteúdos publicados" valor="0" sub="Este semestre"       cor="verde"   />
+          <StatCard icon={<BsQuestionCircle size={16} />} label="Questões no banco"    valor="0" sub="Nenhuma cadastrada"  cor="amarelo" />
         </div>
 
         <p className={styles.secaoTitulo}>Ações rápidas</p>
         <div className={styles.acoesGrid}>
-          <ActionButton icon="📤" label="Upload de aula" />
-          <ActionButton icon="📝" label="Nova atividade" />
-          <ActionButton icon="❓" label="Criar questão"  />
-          <ActionButton icon="📊" label="Ver desempenho" />
+          <ActionButton icon={<BsUpload size={20} />}        label="Upload de aula" />
+          <ActionButton icon={<BsPencilSquare size={20} />}  label="Nova atividade" />
+          <ActionButton icon={<BsPatchQuestion size={20} />} label="Criar questão"  />
+          <ActionButton icon={<BsBarChartLine size={20} />}  label="Ver desempenho" />
         </div>
 
         <div className={styles.listaCard}>

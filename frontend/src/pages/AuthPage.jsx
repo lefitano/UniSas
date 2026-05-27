@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { login, cadastrarDiretor } from '../services/authService'
 import LoginForm from '../components/auth/LoginForm'
+import { BsBuilding, BsEye, BsEyeSlash, BsShieldLock } from 'react-icons/bs'
 import styles from './AuthPage.module.css'
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -150,7 +151,7 @@ export default function AuthPage() {
         ) : (
           <div className={styles.card}>
             <div className={styles.perfilBadge}>
-              <span className={styles.perfilIcone}>🏫</span>
+              <BsBuilding size={20} className={styles.perfilIcone} />
               <span className={styles.perfilLabel}>Diretor</span>
               <button className={styles.trocarPerfil} onClick={() => navigate('/')}>
                 ← Trocar perfil
@@ -177,7 +178,7 @@ export default function AuthPage() {
                           onClick={() => setMostrarSenha(v => !v)}
                           aria-label={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}
                         >
-                          {mostrarSenha ? '🙈' : '👁️'}
+                          {mostrarSenha ? <BsEyeSlash size={15} /> : <BsEye size={15} />}
                         </button>
                       )}
                     </div>
@@ -208,7 +209,7 @@ export default function AuthPage() {
             </form>
 
             <div className={styles.rodape}>
-              <span>🔒</span>
+              <BsShieldLock size={14} />
               <span>Dados protegidos pela LGPD</span>
             </div>
           </div>

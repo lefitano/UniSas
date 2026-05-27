@@ -1,11 +1,12 @@
 import { useState } from 'react'
+import { BsBook, BsMortarboard, BsPeople, BsBuilding } from 'react-icons/bs'
 import styles from './ProfileSelector.module.css'
 
 const perfis = [
-  { id: 'aluno',       label: 'Aluno',       icon: '📚', desc: 'Acesso a conteúdos e atividades' },
-  { id: 'professor',   label: 'Professor',   icon: '🎓', desc: 'Gestão de turmas e conteúdo' },
-  { id: 'responsavel', label: 'Responsável', icon: '👨‍👧', desc: 'Acompanhe seu filho' },
-  { id: 'diretor',     label: 'Diretor',     icon: '🏫', desc: 'Gestão escolar completa' },
+  { id: 'aluno',       label: 'Aluno',       icon: <BsBook size={22} />,        desc: 'Acesso a conteúdos e atividades' },
+  { id: 'professor',   label: 'Professor',   icon: <BsMortarboard size={22} />, desc: 'Gestão de turmas e conteúdo' },
+  { id: 'responsavel', label: 'Responsável', icon: <BsPeople size={22} />,      desc: 'Acompanhe seu filho' },
+  { id: 'diretor',     label: 'Diretor',     icon: <BsBuilding size={22} />,    desc: 'Gestão escolar completa' },
 ]
 
 export default function ProfileSelector({ onContinuar }) {

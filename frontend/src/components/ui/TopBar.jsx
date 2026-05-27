@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { logout } from '../../services/authService'
+import { BsPencil, BsGear, BsBoxArrowRight, BsStar } from 'react-icons/bs'
 import styles from './TopBar.module.css'
 
 export default function TopBar({ nome, cargo, avatarCor, avatarLetras, xp }) {
@@ -38,7 +39,7 @@ export default function TopBar({ nome, cargo, avatarCor, avatarLetras, xp }) {
       </div>
 
       <div className={styles.direita}>
-        {xp && <span className={styles.xp}>⭐ {xp} XP</span>}
+        {xp && <span className={styles.xp}><BsStar size={11} /> {xp} XP</span>}
 
         <div className={styles.usuarioWrapper} ref={wrapperRef}>
           <div className={styles.usuario} onClick={() => setMenuAberto(v => !v)}>
@@ -57,20 +58,20 @@ export default function TopBar({ nome, cargo, avatarCor, avatarLetras, xp }) {
                 className={styles.dropdownItem}
                 onClick={() => { setMenuAberto(false); navigate('/perfil/editar') }}
               >
-                <span>✏️</span> Editar perfil
+                <BsPencil size={14} /> Editar perfil
               </button>
               <button
                 className={styles.dropdownItem}
                 onClick={() => { setMenuAberto(false); navigate('/perfil/configuracoes') }}
               >
-                <span>⚙️</span> Configurações
+                <BsGear size={14} /> Configurações
               </button>
               <div className={styles.dropdownDivisor} />
               <button
                 className={`${styles.dropdownItem} ${styles.dropdownSair}`}
                 onClick={handleSair}
               >
-                <span>🚪</span> Sair
+                <BsBoxArrowRight size={14} /> Sair
               </button>
             </div>
           )}

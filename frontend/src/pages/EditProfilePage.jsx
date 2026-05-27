@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getUsuario, salvarUsuario, atualizarUsuario, getIniciais, avatarCores } from '../utils/usuario'
+import { BsCheckCircle } from 'react-icons/bs'
 import styles from './EditProfilePage.module.css'
 
 const camposExtras = {
@@ -123,7 +124,7 @@ export default function EditProfilePage() {
             ))}
 
             {erro    && <p className={styles.erro}>{erro}</p>}
-            {sucesso && <p className={styles.sucesso}>✅ Perfil atualizado com sucesso!</p>}
+            {sucesso && <p className={styles.sucesso}><BsCheckCircle size={13} /> Perfil atualizado com sucesso!</p>}
 
             <button type="submit" className={styles.btnSalvar}>Salvar alterações</button>
           </form>

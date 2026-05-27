@@ -1,11 +1,12 @@
 import { useState } from 'react'
+import { BsBook, BsMortarboard, BsPeople, BsBuilding, BsEye, BsEyeSlash, BsShieldLock } from 'react-icons/bs'
 import styles from './LoginForm.module.css'
 
 const perfilInfo = {
-  aluno:       { label: 'Aluno',       icon: '📚' },
-  professor:   { label: 'Professor',   icon: '🎓' },
-  responsavel: { label: 'Responsável', icon: '👨‍👧' },
-  diretor:     { label: 'Diretor',     icon: '🏫' },
+  aluno:       { label: 'Aluno',       icon: <BsBook size={18} /> },
+  professor:   { label: 'Professor',   icon: <BsMortarboard size={18} /> },
+  responsavel: { label: 'Responsável', icon: <BsPeople size={18} /> },
+  diretor:     { label: 'Diretor',     icon: <BsBuilding size={18} /> },
 }
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -76,7 +77,7 @@ export default function LoginForm({ perfil, onVoltar, onLogin, onCadastrar, erro
               onClick={() => setMostrarSenha(v => !v)}
               aria-label={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}
             >
-              {mostrarSenha ? '🙈' : '👁️'}
+              {mostrarSenha ? <BsEyeSlash size={15} /> : <BsEye size={15} />}
             </button>
           </div>
         </div>
@@ -99,7 +100,7 @@ export default function LoginForm({ perfil, onVoltar, onLogin, onCadastrar, erro
       </form>
 
       <div className={styles.rodape}>
-        <span>🔒</span>
+        <BsShieldLock size={14} />
         <span>Dados protegidos conforme a <strong>LGPD</strong></span>
       </div>
     </div>

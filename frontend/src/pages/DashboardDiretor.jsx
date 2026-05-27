@@ -6,6 +6,7 @@ import StatCard      from '../components/dashboard/StatCard'
 import ActionButton  from '../components/dashboard/ActionButton'
 import { getUsuario, getUsuarios, getIniciais, getSaudacao, avatarCores } from '../utils/usuario'
 import { getTurmas } from '../services/turmaService'
+import { BsMortarboard, BsBriefcase, BsPeopleFill, BsBuilding, BsPlusCircle, BsPersonGear, BsBarChart, BsMegaphone } from 'react-icons/bs'
 import styles from './Dashboard.module.css'
 
 export default function DashboardDiretor() {
@@ -64,18 +65,18 @@ export default function DashboardDiretor() {
         </div>
 
         <div className={styles.cardsGrid}>
-          <StatCard icon="👨‍🎓" label="Total de alunos"    valor={String(contagens.alunos)}      sub={contagens.alunos === 0      ? 'Nenhum cadastrado' : 'Matrículas ativas'}  cor="verde"   />
-          <StatCard icon="👨‍🏫" label="Professores"         valor={String(contagens.professores)} sub={contagens.professores === 0 ? 'Nenhum cadastrado' : 'Em atividade'}        cor="amarelo" />
-          <StatCard icon="👨‍👩‍👧" label="Responsáveis"      valor={String(contagens.responsaveis)}sub={contagens.responsaveis === 0? 'Nenhum cadastrado' : 'Vinculados'}           cor="verde"   />
-          <StatCard icon="🏫"  label="Turmas ativas"       valor={String(contagens.turmas)}      sub={contagens.turmas === 0 ? 'Nenhuma turma criada' : 'Turmas cadastradas'}      cor="amarelo" />
+          <StatCard icon={<BsMortarboard size={16} />}  label="Total de alunos"    valor={String(contagens.alunos)}       sub={contagens.alunos === 0       ? 'Nenhum cadastrado' : 'Matrículas ativas'}  cor="verde"   />
+          <StatCard icon={<BsBriefcase size={16} />}    label="Professores"         valor={String(contagens.professores)}  sub={contagens.professores === 0  ? 'Nenhum cadastrado' : 'Em atividade'}        cor="amarelo" />
+          <StatCard icon={<BsPeopleFill size={16} />}   label="Responsáveis"        valor={String(contagens.responsaveis)} sub={contagens.responsaveis === 0 ? 'Nenhum cadastrado' : 'Vinculados'}           cor="verde"   />
+          <StatCard icon={<BsBuilding size={16} />}     label="Turmas ativas"       valor={String(contagens.turmas)}       sub={contagens.turmas === 0       ? 'Nenhuma turma criada' : 'Turmas cadastradas'} cor="amarelo" />
         </div>
 
         <p className={styles.secaoTitulo}>Gestão rápida</p>
         <div className={styles.acoesGrid}>
-          <ActionButton icon="➕" label="Nova turma"         onClick={() => navigate('/gerenciar-turmas')} />
-          <ActionButton icon="👤" label="Gerenciar usuários" onClick={() => navigate('/gerenciar-usuarios')} />
-          <ActionButton icon="📊" label="Relatório geral"    />
-          <ActionButton icon="📢" label="Comunicado geral"   />
+          <ActionButton icon={<BsPlusCircle size={20} />}  label="Nova turma"         onClick={() => navigate('/gerenciar-turmas')} />
+          <ActionButton icon={<BsPersonGear size={20} />}  label="Gerenciar usuários" onClick={() => navigate('/gerenciar-usuarios')} />
+          <ActionButton icon={<BsBarChart size={20} />}    label="Relatório geral"    />
+          <ActionButton icon={<BsMegaphone size={20} />}   label="Comunicado geral"   />
         </div>
 
         <div className={styles.listaCard}>
