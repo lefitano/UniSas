@@ -51,12 +51,11 @@ export default function DashboardProfessor() {
 
         <p className={styles.secaoTitulo}>Ações rápidas</p>
         <div className={styles.acoesGrid}>
-          <ActionButton icon="📤" label="Upload de aula"  />
-          <ActionButton icon="📝" label="Nova atividade"  />
-          <ActionButton icon="❓" label="Criar questão"   />
-          <ActionButton icon="📊" label="Ver desempenho"  />
+          <ActionButton icon="📤" label="Upload de aula"  onClick={() => navigate('/professor/upload-aula')} />
+          <ActionButton icon="📝" label="Nova atividade"  onClick={() => navigate('/professor/nova-atividade')} />
+          <ActionButton icon="❓" label="Criar questão"    onClick={() => navigate('/professor/criar-questao')} />
+          <ActionButton icon="📊" label="Ver desempenho"  onClick={() => navigate('/professor/desempenho')} />
         </div>
-
         <div className={styles.listaCard}>
           <div className={styles.listaHeader}>
             <span>Minhas turmas</span>
