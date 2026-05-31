@@ -1,0 +1,98 @@
+.card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.10);
+  padding: 28px;
+  width: 100%;
+  max-width: 380px;
+}
+
+.titulo {
+  font-family: var(--fonte-display);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--texto);
+  margin-bottom: 4px;
+}
+
+.subtitulo {
+  font-size: 13px;
+  color: var(--cinza-texto);
+  margin-bottom: 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.perfilCard {
+  border: 1.5px solid var(--cinza-borda);
+  border-radius: 14px;
+  padding: 14px 10px;
+  cursor: pointer;
+  text-align: center;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.18s ease;
+}
+
+.perfilCard:hover {
+  border-color: var(--verde-mid);
+  background: var(--verde-50);
+}
+
+.selecionado {
+  border-color: var(--verde);
+  background: var(--verde-light);
+  box-shadow: 0 0 0 3px rgba(45, 122, 58, 0.12);
+}
+
+.icone {
+  font-size: 22px;
+  margin-bottom: 4px;
+}
+
+.label {
+  font-family: var(--fonte-display);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--texto);
+}
+
+.selecionado .label {
+  color: var(--verde);
+}
+
+.desc {
+  font-size: 10.5px;
+  color: var(--cinza-texto);
+}
+
+.btnContinuar {
+  width: 100%;
+  height: 44px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--verde) 0%, var(--verde-mid) 100%);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--fonte-display);
+  transition: opacity 0.15s;
+}
+
+.btnContinuar:hover {
+  opacity: 0.92;
+}
+
+.btnContinuar:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}

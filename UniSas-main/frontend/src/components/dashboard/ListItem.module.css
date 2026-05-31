@@ -1,0 +1,35 @@
+.listaItem {
+  padding: 11px 14px;
+  border-bottom: 0.5px solid var(--cinza-borda);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.listaItem:last-child { border-bottom: none; }
+
+.liIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 15px;
+}
+
+.bgVerde    { background: var(--verde-light); }
+.bgAmarelo  { background: var(--amarelo-light); }
+.bgVermelho { background: #FEF2F2; }
+.bgAzul     { background: #EEF2FF; }
+
+.liTexto  { flex: 1; }
+.liTitulo { font-weight: 500; color: var(--texto); font-size: 12.5px; }
+.liSub    { font-size: 11px; color: var(--cinza-texto); }
+
+.badge        { font-size: 10px; padding: 3px 7px; border-radius: 6px; font-weight: 600; white-space: nowrap; }
+.badgeVerde   { background: var(--verde-light);    color: var(--verde); }
+.badgeAmarelo { background: var(--amarelo-light);  color: #92630A; }
+.badgeCinza   { background: #F1F5F9;               color: #64748B; }
+.badgeVermelho{ background: #FEF2F2;               color: #A32D2D; }
