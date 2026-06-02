@@ -1,10 +1,11 @@
-import  supabase  from '../config/database.js'
+import supabase from '../config/database.js'
+import { AppError } from '../middlewares/AppError.js'
 
 export async function listarUsuarios() {
   const {data, error} = await supabase.from('usuarios')
-  .select('id, nome, email, perfil, matricula, registro_funcional, disciplina, cpf, codigo_aluno, escola, criado_em');
+  .select('id, nome, email, perfil, matricula, registro_funcional, disciplina, cpf, codigo_aluno, escola, turma_id, criado_em');
 
-  if(error) throw new Error('Não foi possível listar os usuarios')
+  if(error) throw new AppError('Não foi possível listar os usuarios', 500)
     return data;
 }
 
@@ -14,7 +15,7 @@ export async function buscarUsuarioPorId(id) {
   .eq('id', id)
   .single()
 
-  if(error) throw new Error('Usuário não encontrado')
+  if(error) throw new AppError('Usuário não encontrado', 404)
     return data;
 }
 
@@ -24,9 +25,9 @@ export async function criarUsuario(dados) {
   .select('id, nome, email, perfil, criado_em ')
   .single()
 
-  if(error) throw new Error(error.message)
+  if(error) throw new AppError(error.message, 400)
     return data
- 
+
 }
 
 export async function atualizarUsuario(id, dados) {
@@ -37,7 +38,7 @@ export async function atualizarUsuario(id, dados) {
   .single()
   
 
-  if(error) throw new Error('Erro ao atualizar o usuario')
+  if(error) throw new AppError('Erro ao atualizar o usuario', 500)
     return data
 
 }
@@ -47,7 +48,7 @@ export async function removerUsuario(id) {
   .delete()
   .eq('id', id)
 
-  if(error) throw new Error('Erro ao remover usuario')
+  if(error) throw new AppError('Erro ao remover usuario', 500)
 
   
 

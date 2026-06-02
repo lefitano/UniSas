@@ -1,11 +1,12 @@
 import supabase from '../config/database.js'
+import { AppError } from '../middlewares/AppError.js'
 
 export async function listarTurmas() {
   const { data, error } = await supabase
     .from('turmas')
     .select('id, nome, turno, ano_letivo, professor_id, criado_em')
     .order('nome')
-  if (error) throw new Error('Não foi possível listar as turmas')
+  if (error) throw new AppError('Não foi possível listar as turmas', 500)
   return data
 }
 
@@ -15,7 +16,7 @@ export async function listarTurmasPorProfessor(professorId) {
     .select('id, nome, turno, ano_letivo, professor_id, criado_em')
     .eq('professor_id', professorId)
     .order('nome')
-  if (error) throw new Error('Não foi possível listar as turmas')
+  if (error) throw new AppError('Não foi possível listar as turmas', 500)
   return data
 }
 
@@ -25,7 +26,7 @@ export async function buscarTurmaPorId(id) {
     .select('id, nome, turno, ano_letivo, professor_id, criado_em')
     .eq('id', id)
     .single()
-  if (error) throw new Error('Turma não encontrada')
+  if (error) throw new AppError('Turma não encontrada', 404)
   return data
 }
 
@@ -35,7 +36,7 @@ export async function criarTurma(dados) {
     .insert(dados)
     .select('id, nome, turno, ano_letivo, professor_id, criado_em')
     .single()
-  if (error) throw new Error(error.message)
+  if (error) throw new AppError(error.message, 400)
   return data
 }
 
@@ -46,7 +47,7 @@ export async function atualizarTurma(id, dados) {
     .eq('id', id)
     .select('id, nome, turno, ano_letivo, professor_id, criado_em')
     .single()
-  if (error) throw new Error('Erro ao atualizar a turma')
+  if (error) throw new AppError('Erro ao atualizar a turma', 500)
   return data
 }
 
@@ -55,7 +56,7 @@ export async function removerTurma(id) {
     .from('turmas')
     .delete()
     .eq('id', id)
-  if (error) throw new Error('Erro ao remover turma')
+  if (error) throw new AppError('Erro ao remover turma', 500)
 }
 
 export async function listarAlunosDaTurma(turmaId) {
@@ -65,7 +66,7 @@ export async function listarAlunosDaTurma(turmaId) {
     .eq('perfil', 'aluno')
     .eq('turma_id', turmaId)
     .order('nome')
-  if (error) throw new Error('Não foi possível listar os alunos da turma')
+  if (error) throw new AppError('Não foi possível listar os alunos da turma', 500)
   return data
 }
 
@@ -75,7 +76,7 @@ export async function vincularAluno(alunoId, turmaId) {
     .update({ turma_id: turmaId })
     .eq('id', alunoId)
     .eq('perfil', 'aluno')
-  if (error) throw new Error('Erro ao vincular aluno à turma')
+  if (error) throw new AppError('Erro ao vincular aluno à turma', 400)
 }
 
 export async function desvincularAluno(alunoId) {
@@ -84,5 +85,5 @@ export async function desvincularAluno(alunoId) {
     .update({ turma_id: null })
     .eq('id', alunoId)
     .eq('perfil', 'aluno')
-  if (error) throw new Error('Erro ao desvincular aluno da turma')
+  if (error) throw new AppError('Erro ao desvincular aluno da turma', 400)
 }

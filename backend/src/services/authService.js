@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import supabase from '../config/database.js'
+import { AppError } from '../middlewares/AppError.js'
 
 export async function autenticar(email, senha) {
   const {data: usuario, error} = await supabase.from('usuarios')
@@ -8,10 +9,10 @@ export async function autenticar(email, senha) {
   .eq('email', email)
   .single()
 
-  if(error || !usuario) throw new Error("Email ou senha incorretos")
+  if(error || !usuario) throw new AppError("Email ou senha incorretos", 401)
 
     const senhaCorreta = await bcrypt.compare(senha, usuario.senha_hash)
-    if(!senhaCorreta) throw new Error("Email ou senha incorretos")
+    if(!senhaCorreta) throw new AppError("Email ou senha incorretos", 401)
 
 
       const token = jwt.sign(
@@ -37,7 +38,7 @@ export async function cadastrarDiretor({ nome, email, senha, cpf, escola }) {
     .eq('email', email)
     .single()
 
-  if (existente) throw new Error('Já existe uma conta com esse e-mail.')
+  if (existente) throw new AppError('Já existe uma conta com esse e-mail.', 409)
 
   const senha_hash = await bcrypt.hash(senha, 10)
 
@@ -47,7 +48,7 @@ export async function cadastrarDiretor({ nome, email, senha, cpf, escola }) {
     .select('id, nome, email, perfil')
     .single()
 
-  if (error) throw new Error(error.message)
+  if (error) throw new AppError(error.message, 400)
 
   const token = jwt.sign(
     { userId: usuario.id, perfil: usuario.perfil },
