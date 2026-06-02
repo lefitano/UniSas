@@ -34,8 +34,8 @@ export default function DashboardProfessor() {
       />
 
       <TabNav abas={[
-        { label: 'Início', rota: '/dashboard/professor' },
-        'Minhas turmas',
+        { label: 'Início',        rota: '/dashboard/professor' },
+        { label: 'Minhas turmas', rota: '/professor/turmas'    },
         'Conteúdos',
         'Banco de questões',
         'Chat',

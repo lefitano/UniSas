@@ -1,5 +1,14 @@
 import * as turmaService from '../services/turmaService.js'
 
+export async function minhas(req, res, next) {
+  try {
+    const turmas = await turmaService.listarTurmasPorProfessor(req.usuario.id)
+    res.json(turmas)
+  } catch (erro) {
+    next(erro)
+  }
+}
+
 export async function listar(req, res, next) {
   try {
     const turmas = await turmaService.listarTurmas()

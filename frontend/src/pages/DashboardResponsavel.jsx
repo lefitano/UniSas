@@ -4,7 +4,7 @@ import TopBar   from '../components/ui/TopBar'
 import TabNav   from '../components/dashboard/TabNav'
 import StatCard from '../components/dashboard/StatCard'
 import { getUsuario, getIniciais, getSaudacao, avatarCores } from '../utils/usuario'
-import { BsBarChart, BsCheckCircle, BsClipboardText, BsTrophy } from 'react-icons/bs'
+import { BsBarChart, BsCheckCircle, BsClipboard, BsTrophy } from 'react-icons/bs'
 import styles from './Dashboard.module.css'
 
 export default function DashboardResponsavel() {
@@ -54,7 +54,7 @@ export default function DashboardResponsavel() {
         <div className={styles.cardsGrid}>
           <StatCard icon={<BsBarChart size={16} />}       label="Média geral"          valor="—" sub="Aguardando lançamento" cor="verde"   />
           <StatCard icon={<BsCheckCircle size={16} />}   label="Frequência"            valor="—" sub="Sem registros"         cor="verde"   />
-          <StatCard icon={<BsClipboardText size={16} />} label="Atividades pendentes" valor="0" sub="Nenhuma pendente"      cor="amarelo" />
+          <StatCard icon={<BsClipboard size={16} />}     label="Atividades pendentes" valor="0" sub="Nenhuma pendente"      cor="amarelo" />
           <StatCard icon={<BsTrophy size={16} />}        label="Conquistas"            valor="0" sub="Nenhuma ainda"         cor="verde"   />
         </div>
 
