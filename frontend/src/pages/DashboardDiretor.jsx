@@ -49,9 +49,9 @@ export default function DashboardDiretor() {
 
       <TabNav abas={[
         { label: 'Painel geral', rota: '/dashboard/diretor' },
-        { label: 'Turmas',       rota: '/gerenciar-turmas'  },
-        'Professores',
-        'Alunos',
+        { label: 'Turmas',       rota: '/gerenciar-turmas'    },
+        { label: 'Professores',  rota: '/diretor/professores' },
+        { label: 'Alunos',       rota: '/diretor/alunos'      },
         'Relatórios',
       ]} />
 
