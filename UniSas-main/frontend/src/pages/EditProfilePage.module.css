@@ -1,0 +1,179 @@
+.pagina {
+  min-height: 100vh;
+  background: var(--cinza-bg);
+}
+
+/* ── Topbar interno ── */
+.topbar {
+  background: #fff;
+  border-bottom: 1px solid var(--cinza-borda);
+  padding: 0 20px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.btnVoltar {
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-family: var(--fonte-corpo);
+  color: var(--verde);
+  cursor: pointer;
+  font-weight: 500;
+  padding: 6px 0;
+}
+
+.btnVoltar:hover {
+  text-decoration: underline;
+}
+
+.topbarTitulo {
+  font-family: var(--fonte-display);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--texto);
+}
+
+/* ── Conteúdo ── */
+.conteudo {
+  padding: 24px 20px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* ── Bloco do avatar ── */
+.avatarBloco {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 4px 0;
+}
+
+.avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--fonte-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.avatarNome {
+  font-family: var(--fonte-display);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--texto);
+}
+
+.avatarPerfil {
+  font-size: 12px;
+  color: var(--cinza-texto);
+  margin-top: 2px;
+}
+
+/* ── Card ── */
+.card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+.secaoTitulo {
+  font-family: var(--fonte-display);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--cinza-texto);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+}
+
+/* ── Formulário ── */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.label {
+  font-family: var(--fonte-display);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--texto-leve);
+}
+
+.input {
+  height: 42px;
+  border-radius: 10px;
+  border: 1.5px solid var(--cinza-borda);
+  padding: 0 14px;
+  font-size: 14px;
+  font-family: var(--fonte-corpo);
+  color: var(--texto);
+  background: #fff;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.input:focus {
+  border-color: var(--verde);
+}
+
+/* ── Mensagens ── */
+.erro {
+  font-size: 12px;
+  color: #B91C1C;
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  border-radius: 8px;
+  padding: 9px 12px;
+}
+
+.sucesso {
+  font-size: 12px;
+  color: #166534;
+  background: var(--verde-light);
+  border: 1px solid #BBF7D0;
+  border-radius: 8px;
+  padding: 9px 12px;
+}
+
+/* ── Botão salvar ── */
+.btnSalvar {
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--verde) 0%, var(--verde-mid) 100%);
+  color: #fff;
+  border: none;
+  font-family: var(--fonte-display);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  margin-top: 4px;
+}
+
+.btnSalvar:hover {
+  opacity: 0.92;
+}

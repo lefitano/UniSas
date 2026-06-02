@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --verde: #2D7A3A;
+  --verde-mid: #3B9E4A;
+  --verde-light: #EAF3DE;
+  --verde-50: #F2FAF4;
+  --amarelo: #D4A017;
+  --amarelo-light: #FDF6DC;
+  --amarelo-mid: #F0C040;
+  --branco: #FFFFFF;
+  --cinza-bg: #F8F9FA;
+  --cinza-borda: #E2E8F0;
+  --cinza-texto: #64748B;
+  --texto: #1A2332;
+  --texto-leve: #475569;
+  --fonte-display: 'Sora', sans-serif;
+  --fonte-corpo: 'DM Sans', sans-serif;
+}
+
+body {
+  font-family: var(--fonte-corpo);
+  background: var(--cinza-bg);
+  color: var(--texto);
+}
