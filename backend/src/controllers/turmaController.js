@@ -56,3 +56,30 @@ export async function remover(req, res, next) {
     next(erro)
   }
 }
+
+export async function listarAlunos(req, res, next) {
+  try {
+    const alunos = await turmaService.listarAlunosDaTurma(req.params.id)
+    res.json(alunos)
+  } catch (erro) {
+    next(erro)
+  }
+}
+
+export async function vincular(req, res, next) {
+  try {
+    await turmaService.vincularAluno(req.params.alunoId, req.params.id)
+    res.status(204).send()
+  } catch (erro) {
+    next(erro)
+  }
+}
+
+export async function desvincular(req, res, next) {
+  try {
+    await turmaService.desvincularAluno(req.params.alunoId)
+    res.status(204).send()
+  } catch (erro) {
+    next(erro)
+  }
+}

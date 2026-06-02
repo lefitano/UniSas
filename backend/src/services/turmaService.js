@@ -57,3 +57,32 @@ export async function removerTurma(id) {
     .eq('id', id)
   if (error) throw new Error('Erro ao remover turma')
 }
+
+export async function listarAlunosDaTurma(turmaId) {
+  const { data, error } = await supabase
+    .from('usuarios')
+    .select('id, nome, email, matricula, criado_em')
+    .eq('perfil', 'aluno')
+    .eq('turma_id', turmaId)
+    .order('nome')
+  if (error) throw new Error('Não foi possível listar os alunos da turma')
+  return data
+}
+
+export async function vincularAluno(alunoId, turmaId) {
+  const { error } = await supabase
+    .from('usuarios')
+    .update({ turma_id: turmaId })
+    .eq('id', alunoId)
+    .eq('perfil', 'aluno')
+  if (error) throw new Error('Erro ao vincular aluno à turma')
+}
+
+export async function desvincularAluno(alunoId) {
+  const { error } = await supabase
+    .from('usuarios')
+    .update({ turma_id: null })
+    .eq('id', alunoId)
+    .eq('perfil', 'aluno')
+  if (error) throw new Error('Erro ao desvincular aluno da turma')
+}
