@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import TopBar from '../components/ui/TopBar'
-import { getUsuario, getIniciais, avatarCores } from '../utils/usuario'
+import { getUsuario, getUsuarios, getIniciais, avatarCores } from '../utils/usuario'
 import { getTurmaPorId, atualizarTurma } from '../services/turmaService'
 import dashStyles from './Dashboard.module.css'
 import styles from './Gerenciar.module.css'
@@ -9,12 +9,13 @@ import styles from './Gerenciar.module.css'
 export default function EditarTurmaPage() {
   const { id }   = useParams()
   const navigate = useNavigate()
-  const [diretor, setDiretor]   = useState(null)
-  const [campos, setCampos]     = useState({ nome: '', turno: '', ano_letivo: '' })
+  const [diretor, setDiretor]       = useState(null)
+  const [professores, setProfessores] = useState([])
+  const [campos, setCampos]         = useState({ nome: '', turno: '', ano_letivo: '', professor_id: '' })
   const [carregando, setCarregando] = useState(true)
-  const [erro, setErro]         = useState('')
-  const [sucesso, setSucesso]   = useState(false)
-  const [salvando, setSalvando] = useState(false)
+  const [erro, setErro]             = useState('')
+  const [sucesso, setSucesso]       = useState(false)
+  const [salvando, setSalvando]     = useState(false)
 
   useEffect(() => {
     async function carregar() {
@@ -23,8 +24,14 @@ export default function EditarTurmaPage() {
       setDiretor(dadosDiretor)
 
       try {
-        const turma = await getTurmaPorId(id)
-        if (turma) setCampos({ nome: turma.nome, turno: turma.turno, ano_letivo: turma.ano_letivo })
+        const [turma, usuarios] = await Promise.all([getTurmaPorId(id), getUsuarios()])
+        if (turma) setCampos({
+          nome:         turma.nome,
+          turno:        turma.turno,
+          ano_letivo:   turma.ano_letivo,
+          professor_id: turma.professor_id || '',
+        })
+        setProfessores(usuarios.filter(u => u.perfil === 'professor'))
       } catch {
         navigate('/gerenciar-turmas')
       } finally {
@@ -115,6 +122,22 @@ export default function EditarTurmaPage() {
                 value={campos.ano_letivo}
                 onChange={e => atualizarCampo('ano_letivo', e.target.value)}
               />
+            </div>
+
+            <div className={styles.campo}>
+              <label className={styles.label}>Professor responsável (opcional)</label>
+              <select
+                className={styles.select}
+                value={campos.professor_id}
+                onChange={e => atualizarCampo('professor_id', e.target.value)}
+              >
+                <option value="">Sem professor atribuído</option>
+                {professores.map(p => (
+                  <option key={p.id} value={p.id}>
+                    {p.nome}{p.disciplina ? ` · ${p.disciplina}` : ''}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {erro    && <p className={styles.erro}>{erro}</p>}

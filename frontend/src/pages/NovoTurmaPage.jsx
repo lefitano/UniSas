@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import TopBar from '../components/ui/TopBar'
-import { getUsuario, getIniciais, avatarCores } from '../utils/usuario'
+import { getUsuario, getUsuarios, getIniciais, avatarCores } from '../utils/usuario'
 import { adicionarTurma } from '../services/turmaService'
 import dashStyles from './Dashboard.module.css'
 import styles from './Gerenciar.module.css'
@@ -10,16 +10,24 @@ const anoAtual = String(new Date().getFullYear())
 
 export default function NovoTurmaPage() {
   const navigate = useNavigate()
-  const [diretor, setDiretor]   = useState(null)
-  const [campos, setCampos]     = useState({ nome: '', turno: '', ano_letivo: anoAtual })
-  const [erro, setErro]         = useState('')
-  const [sucesso, setSucesso]   = useState(false)
-  const [salvando, setSalvando] = useState(false)
+  const [diretor, setDiretor]       = useState(null)
+  const [professores, setProfessores] = useState([])
+  const [campos, setCampos]         = useState({ nome: '', turno: '', ano_letivo: anoAtual, professor_id: '' })
+  const [erro, setErro]             = useState('')
+  const [sucesso, setSucesso]       = useState(false)
+  const [salvando, setSalvando]     = useState(false)
 
   useEffect(() => {
-    const dados = getUsuario()
-    if (!dados || dados.perfil !== 'diretor') { navigate('/'); return }
-    setDiretor(dados)
+    async function carregar() {
+      const dados = getUsuario()
+      if (!dados || dados.perfil !== 'diretor') { navigate('/'); return }
+      setDiretor(dados)
+      try {
+        const lista = await getUsuarios()
+        setProfessores(lista.filter(u => u.perfil === 'professor'))
+      } catch {}
+    }
+    carregar()
   }, [navigate])
 
   if (!diretor) return null
@@ -103,6 +111,22 @@ export default function NovoTurmaPage() {
                 value={campos.ano_letivo}
                 onChange={e => atualizarCampo('ano_letivo', e.target.value)}
               />
+            </div>
+
+            <div className={styles.campo}>
+              <label className={styles.label}>Professor responsável (opcional)</label>
+              <select
+                className={styles.select}
+                value={campos.professor_id}
+                onChange={e => atualizarCampo('professor_id', e.target.value)}
+              >
+                <option value="">Sem professor atribuído</option>
+                {professores.map(p => (
+                  <option key={p.id} value={p.id}>
+                    {p.nome}{p.disciplina ? ` · ${p.disciplina}` : ''}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {erro    && <p className={styles.erro}>{erro}</p>}
