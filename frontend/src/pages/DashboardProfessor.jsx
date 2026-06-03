@@ -5,17 +5,33 @@ import TabNav       from '../components/dashboard/TabNav'
 import StatCard     from '../components/dashboard/StatCard'
 import ActionButton from '../components/dashboard/ActionButton'
 import { getUsuario, getIniciais, getSaudacao, avatarCores } from '../utils/usuario'
+import { getMinhasTurmas, getAlunosDaTurma } from '../services/turmaService'
 import { BsPeopleFill, BsClipboard, BsCameraVideo, BsQuestionCircle, BsUpload, BsPencilSquare, BsPatchQuestion, BsBarChartLine } from 'react-icons/bs'
 import styles from './Dashboard.module.css'
 
+const labelTurno = { manha: 'Manhã', tarde: 'Tarde', noite: 'Noite' }
+
 export default function DashboardProfessor() {
   const navigate = useNavigate()
-  const [usuario, setUsuario] = useState(null)
+  const [usuario, setUsuario]         = useState(null)
+  const [turmas, setTurmas]           = useState([])
+  const [totalAlunos, setTotalAlunos] = useState(0)
 
   useEffect(() => {
-    const dados = getUsuario()
-    if (!dados || dados.perfil !== 'professor') { navigate('/'); return }
-    setUsuario(dados)
+    async function carregar() {
+      const dados = getUsuario()
+      if (!dados || dados.perfil !== 'professor') { navigate('/'); return }
+      setUsuario(dados)
+      try {
+        const lista = await getMinhasTurmas()
+        setTurmas(lista)
+        const listas = await Promise.all(lista.map(t => getAlunosDaTurma(t.id)))
+        setTotalAlunos(listas.reduce((acc, alunos) => acc + alunos.length, 0))
+      } catch {
+        // dashboard continua funcionando mesmo se falhar
+      }
+    }
+    carregar()
   }, [navigate])
 
   if (!usuario) return null
@@ -53,7 +69,7 @@ export default function DashboardProfessor() {
         </div>
 
         <div className={styles.cardsGrid}>
-          <StatCard icon={<BsPeopleFill size={16} />}     label="Alunos"               valor="0" sub="Nenhuma turma ativa" cor="verde"   />
+          <StatCard icon={<BsPeopleFill size={16} />}     label="Alunos"               valor={String(totalAlunos)} sub={turmas.length > 0 ? `${turmas.length} turma(s) ativa(s)` : 'Nenhuma turma ativa'} cor="verde"   />
           <StatCard icon={<BsClipboard size={16} />}      label="Atividades abertas"   valor="0" sub="Nenhuma criada"      cor="amarelo" />
           <StatCard icon={<BsCameraVideo size={16} />}    label="Conteúdos publicados" valor="0" sub="Este semestre"       cor="verde"   />
           <StatCard icon={<BsQuestionCircle size={16} />} label="Questões no banco"    valor="0" sub="Nenhuma cadastrada"  cor="amarelo" />
@@ -70,8 +86,18 @@ export default function DashboardProfessor() {
         <div className={styles.listaCard}>
           <div className={styles.listaHeader}>
             <span>Minhas turmas</span>
+            <span className={styles.link} onClick={() => navigate('/professor/turmas')}>Ver todas</span>
           </div>
-          <p className={styles.vazio}>Nenhuma turma cadastrada.</p>
+          {turmas.length === 0 && <p className={styles.vazio}>Nenhuma turma atribuída.</p>}
+          {turmas.map(t => (
+            <div key={t.id} className={styles.progressoItem} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--texto)' }}>{t.nome}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <span style={{ fontSize: 11, color: 'var(--cinza-texto)' }}>{labelTurno[t.turno] ?? t.turno}</span>
+                <span className={styles.link} onClick={() => navigate(`/professor/turmas/${t.id}`)}>Ver alunos</span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
