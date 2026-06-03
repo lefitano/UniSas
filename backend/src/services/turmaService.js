@@ -2,12 +2,22 @@ import supabase from '../config/database.js'
 import { AppError } from '../middlewares/AppError.js'
 
 export async function listarTurmas() {
-  const { data, error } = await supabase
-    .from('turmas')
-    .select('id, nome, turno, ano_letivo, professor_id, criado_em')
-    .order('nome')
+  const [
+    { data: turmas, error },
+    { data: contagens }
+  ] = await Promise.all([
+    supabase.from('turmas').select('id, nome, turno, ano_letivo, professor_id, criado_em').order('nome'),
+    supabase.from('usuarios').select('turma_id').eq('perfil', 'aluno').not('turma_id', 'is', null)
+  ])
+
   if (error) throw new AppError('Não foi possível listar as turmas', 500)
-  return data
+
+  const contagemPorTurma = {}
+  contagens?.forEach(u => {
+    contagemPorTurma[u.turma_id] = (contagemPorTurma[u.turma_id] || 0) + 1
+  })
+
+  return turmas.map(t => ({ ...t, total_alunos: contagemPorTurma[t.id] || 0 }))
 }
 
 export async function listarTurmasPorProfessor(professorId) {
