@@ -66,7 +66,12 @@ export default function MinhasTurmasPage() {
           )}
 
           {turmas.map(t => (
-            <div key={t.id} className={styles.usuarioCard}>
+            <div
+              key={t.id}
+              className={styles.usuarioCard}
+              onClick={() => navigate(`/professor/turmas/${t.id}`)}
+              style={{ cursor: 'pointer' }}
+            >
               <div
                 className={styles.usuarioAvatar}
                 style={{ background: corTurno[t.turno] ?? avatarCores.professor }}
