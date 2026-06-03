@@ -23,10 +23,15 @@ export async function autenticar(email, senha) {
       return {
         token,
         usuario: {
-          id: usuario.id,
-          nome: usuario.nome,
-          email: usuario.email,
-          perfil: usuario.perfil
+          id:                 usuario.id,
+          nome:               usuario.nome,
+          email:              usuario.email,
+          perfil:             usuario.perfil,
+          turma_id:           usuario.turma_id           || null,
+          matricula:          usuario.matricula           || null,
+          disciplina:         usuario.disciplina          || null,
+          registro_funcional: usuario.registro_funcional  || null,
+          escola:             usuario.escola              || null,
         }
       }
 }

@@ -4,17 +4,32 @@ import TopBar   from '../components/ui/TopBar'
 import TabNav   from '../components/dashboard/TabNav'
 import StatCard from '../components/dashboard/StatCard'
 import { getUsuario, getIniciais, getSaudacao, avatarCores } from '../utils/usuario'
+import { getTurmaPorId } from '../services/turmaService'
 import { BsGraphUp, BsTrophy, BsCheckCircle, BsDownload } from 'react-icons/bs'
 import styles from './Dashboard.module.css'
+
+const labelTurno = { manha: 'Manhã', tarde: 'Tarde', noite: 'Noite' }
 
 export default function DashboardAluno() {
   const navigate = useNavigate()
   const [usuario, setUsuario] = useState(null)
+  const [turma, setTurma]     = useState(null)
 
   useEffect(() => {
-    const dados = getUsuario()
-    if (!dados || dados.perfil !== 'aluno') { navigate('/'); return }
-    setUsuario(dados)
+    async function carregar() {
+      const dados = getUsuario()
+      if (!dados || dados.perfil !== 'aluno') { navigate('/'); return }
+      setUsuario(dados)
+      if (dados.turma_id) {
+        try {
+          const t = await getTurmaPorId(dados.turma_id)
+          setTurma(t)
+        } catch {
+          // segue sem turma se falhar
+        }
+      }
+    }
+    carregar()
   }, [navigate])
 
   if (!usuario) return null
@@ -47,7 +62,9 @@ export default function DashboardAluno() {
               {matricula ? `Matrícula: ${matricula}` : 'Bem-vindo ao UniSAS'}
             </p>
           </div>
-          <span className={styles.bannerBadge}>Aluno</span>
+          <span className={styles.bannerBadge}>
+            {turma ? turma.nome : 'Aluno'}
+          </span>
         </div>
 
         <div className={styles.cardsGrid}>
@@ -55,6 +72,20 @@ export default function DashboardAluno() {
           <StatCard icon={<BsTrophy size={16} />}      label="Conquistas"         valor="0" sub="Nenhuma ainda"         cor="amarelo" />
           <StatCard icon={<BsCheckCircle size={16} />} label="Frequência"         valor="—" sub="Sem registros"         cor="verde"   />
           <StatCard icon={<BsDownload size={16} />}    label="Conteúdos offline" valor="0" sub="Nenhum disponível"     cor="amarelo" />
+        </div>
+
+        <div className={styles.listaCard}>
+          <div className={styles.listaHeader}><span>Minha turma</span></div>
+          {turma ? (
+            <div className={styles.progressoItem} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--texto)' }}>{turma.nome}</span>
+              <span style={{ fontSize: 12, color: 'var(--cinza-texto)' }}>
+                {labelTurno[turma.turno] ?? turma.turno} · {turma.ano_letivo}
+              </span>
+            </div>
+          ) : (
+            <p className={styles.vazio}>Nenhuma turma atribuída.</p>
+          )}
         </div>
 
         <div className={styles.listaCard}>
