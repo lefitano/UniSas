@@ -127,6 +127,12 @@ export default function GerenciarTurmasPage() {
                   <>
                     <button
                       className={styles.btnEditar}
+                      onClick={() => navigate(`/gerenciar-turmas/${t.id}`)}
+                    >
+                      Alunos
+                    </button>
+                    <button
+                      className={styles.btnEditar}
                       onClick={() => navigate(`/gerenciar-turmas/editar/${t.id}`)}
                     >
                       Editar
