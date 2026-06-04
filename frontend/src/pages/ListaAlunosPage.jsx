@@ -2,16 +2,18 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import TopBar from '../components/ui/TopBar'
 import { getUsuario, getUsuarios, getIniciais, avatarCores } from '../utils/usuario'
+import { getTurmas } from '../services/turmaService'
 import dashStyles from './Dashboard.module.css'
 import styles from './Gerenciar.module.css'
 
 export default function ListaAlunosPage() {
   const navigate = useNavigate()
-  const [diretor, setDiretor]   = useState(null)
-  const [alunos, setAlunos]     = useState([])
-  const [busca, setBusca]       = useState('')
+  const [diretor, setDiretor]       = useState(null)
+  const [alunos, setAlunos]         = useState([])
+  const [turmaMap, setTurmaMap]     = useState({})
+  const [busca, setBusca]           = useState('')
   const [carregando, setCarregando] = useState(true)
-  const [erro, setErro]         = useState('')
+  const [erro, setErro]             = useState('')
 
   useEffect(() => {
     async function carregar() {
@@ -19,8 +21,11 @@ export default function ListaAlunosPage() {
       if (!dados || dados.perfil !== 'diretor') { navigate('/'); return }
       setDiretor(dados)
       try {
-        const lista = await getUsuarios()
-        setAlunos(lista.filter(u => u.perfil === 'aluno'))
+        const [usuarios, turmas] = await Promise.all([getUsuarios(), getTurmas()])
+        setAlunos(usuarios.filter(u => u.perfil === 'aluno'))
+        const mapa = {}
+        turmas.forEach(t => { mapa[t.id] = t.nome })
+        setTurmaMap(mapa)
       } catch {
         setErro('Erro ao carregar alunos. Tente recarregar a página.')
       } finally {
@@ -89,6 +94,7 @@ export default function ListaAlunosPage() {
                 <p className={styles.usuarioNome}>{a.nome}</p>
                 <p className={styles.usuarioEmail}>
                   {a.email}{a.matricula ? ` · Matrícula ${a.matricula}` : ''}
+                  {a.turma_id ? ` · ${turmaMap[a.turma_id] ?? '—'}` : ' · Sem turma'}
                 </p>
               </div>
 
