@@ -2,16 +2,18 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import TopBar from '../components/ui/TopBar'
 import { getUsuario, getUsuarios, getIniciais, avatarCores } from '../utils/usuario'
+import { getTurmas } from '../services/turmaService'
 import dashStyles from './Dashboard.module.css'
 import styles from './Gerenciar.module.css'
 
 export default function ListaProfessoresPage() {
   const navigate = useNavigate()
-  const [diretor, setDiretor]       = useState(null)
-  const [professores, setProfessores] = useState([])
-  const [busca, setBusca]           = useState('')
-  const [carregando, setCarregando] = useState(true)
-  const [erro, setErro]             = useState('')
+  const [diretor, setDiretor]               = useState(null)
+  const [professores, setProfessores]       = useState([])
+  const [turmasPorProf, setTurmasPorProf]   = useState({})
+  const [busca, setBusca]                   = useState('')
+  const [carregando, setCarregando]         = useState(true)
+  const [erro, setErro]                     = useState('')
 
   useEffect(() => {
     async function carregar() {
@@ -19,8 +21,13 @@ export default function ListaProfessoresPage() {
       if (!dados || dados.perfil !== 'diretor') { navigate('/'); return }
       setDiretor(dados)
       try {
-        const lista = await getUsuarios()
-        setProfessores(lista.filter(u => u.perfil === 'professor'))
+        const [usuarios, turmas] = await Promise.all([getUsuarios(), getTurmas()])
+        setProfessores(usuarios.filter(u => u.perfil === 'professor'))
+        const mapa = {}
+        turmas.forEach(t => {
+          if (t.professor_id) mapa[t.professor_id] = (mapa[t.professor_id] || 0) + 1
+        })
+        setTurmasPorProf(mapa)
       } catch {
         setErro('Erro ao carregar professores. Tente recarregar a página.')
       } finally {
@@ -93,6 +100,7 @@ export default function ListaProfessoresPage() {
                 <p className={styles.usuarioEmail}>
                   {p.disciplina || 'Sem disciplina'}
                   {p.registro_funcional ? ` · RF ${p.registro_funcional}` : ''}
+                  {` · ${turmasPorProf[p.id] ?? 0} turma(s)`}
                 </p>
               </div>
 
