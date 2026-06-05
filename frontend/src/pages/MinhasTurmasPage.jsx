@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import TopBar from '../components/ui/TopBar'
 import { getUsuario, getIniciais, avatarCores } from '../utils/usuario'
-import { getMinhasTurmas } from '../services/turmaService'
+import { getMinhasTurmas, getAlunosDaTurma } from '../services/turmaService'
 import dashStyles from './Dashboard.module.css'
 import styles from './Gerenciar.module.css'
 
@@ -11,10 +11,11 @@ const corTurno   = { manha: '#F97316', tarde: '#EAB308', noite: '#8B5CF6' }
 
 export default function MinhasTurmasPage() {
   const navigate = useNavigate()
-  const [professor, setProfessor] = useState(null)
-  const [turmas, setTurmas]       = useState([])
-  const [carregando, setCarregando] = useState(true)
-  const [erro, setErro]           = useState('')
+  const [professor, setProfessor]       = useState(null)
+  const [turmas, setTurmas]             = useState([])
+  const [contagemAlunos, setContagem]   = useState({})
+  const [carregando, setCarregando]     = useState(true)
+  const [erro, setErro]                 = useState('')
 
   useEffect(() => {
     async function carregar() {
@@ -24,6 +25,10 @@ export default function MinhasTurmasPage() {
       try {
         const lista = await getMinhasTurmas()
         setTurmas(lista)
+        const listas = await Promise.all(lista.map(t => getAlunosDaTurma(t.id)))
+        const mapa = {}
+        lista.forEach((t, i) => { mapa[t.id] = listas[i].length })
+        setContagem(mapa)
       } catch {
         setErro('Erro ao carregar turmas. Tente recarregar a página.')
       } finally {
@@ -81,7 +86,9 @@ export default function MinhasTurmasPage() {
 
               <div className={styles.usuarioInfo}>
                 <p className={styles.usuarioNome}>{t.nome}</p>
-                <p className={styles.usuarioEmail}>Ano letivo {t.ano_letivo}</p>
+                <p className={styles.usuarioEmail}>
+                  Ano letivo {t.ano_letivo} · {contagemAlunos[t.id] ?? 0} aluno(s)
+                </p>
               </div>
 
               <span className={`${styles.perfilBadge} ${styles[`badge_${t.turno}`]}`}>

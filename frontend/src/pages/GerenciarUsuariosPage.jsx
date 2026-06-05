@@ -5,6 +5,7 @@ import {
   getUsuario, getIniciais, avatarCores,
   getUsuarios, removerUsuario,
 } from '../utils/usuario'
+import { getTurmas } from '../services/turmaService'
 import dashStyles from './Dashboard.module.css'
 import styles from './Gerenciar.module.css'
 
@@ -14,6 +15,7 @@ export default function GerenciarUsuariosPage() {
   const navigate = useNavigate()
   const [diretor, setDiretor]             = useState(null)
   const [usuarios, setUsuarios]           = useState([])
+  const [turmaMap, setTurmaMap]           = useState({})
   const [filtro, setFiltro]               = useState('todos')
   const [confirmandoId, setConfirmandoId] = useState(null)
   const [carregando, setCarregando]       = useState(true)
@@ -25,8 +27,11 @@ export default function GerenciarUsuariosPage() {
       if (!dados || dados.perfil !== 'diretor') { navigate('/'); return }
       setDiretor(dados)
       try {
-        const lista = await getUsuarios()
+        const [lista, turmas] = await Promise.all([getUsuarios(), getTurmas()])
         setUsuarios(lista)
+        const mapa = {}
+        turmas.forEach(t => { mapa[t.id] = t.nome })
+        setTurmaMap(mapa)
       } catch {
         setErro('Erro ao carregar usuários. Tente recarregar a página.')
       } finally {
@@ -105,7 +110,10 @@ export default function GerenciarUsuariosPage() {
 
               <div className={styles.usuarioInfo}>
                 <p className={styles.usuarioNome}>{u.nome}</p>
-                <p className={styles.usuarioEmail}>{u.email}</p>
+                <p className={styles.usuarioEmail}>
+                  {u.email}
+                  {u.perfil === 'aluno' && (u.turma_id ? ` · ${turmaMap[u.turma_id] ?? '—'}` : ' · Sem turma')}
+                </p>
               </div>
 
               <span className={`${styles.perfilBadge} ${styles[`badge_${u.perfil}`]}`}>
