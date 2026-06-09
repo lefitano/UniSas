@@ -22,6 +22,7 @@ import DetalhesTurmaPage         from './pages/DetalhesTurmaPage'
 import AlunosDaTurmaPage         from './pages/AlunosDaTurmaPage'
 import GerenciarAtividadesPage   from './pages/GerenciarAtividadesPage'
 import NovaAtividadePage         from './pages/NovaAtividadePage'
+import MinhasAtividadesPage      from './pages/MinhasAtividadesPage'
 
 function RotaProtegida({ perfil, children }) {
   const token   = getToken()
@@ -69,6 +70,7 @@ export default function App() {
         <Route path="/professor/turmas/:id"      element={<RotaProtegida perfil="professor"> <AlunosDaTurmaPage />         </RotaProtegida>} />
         <Route path="/professor/atividades"      element={<RotaProtegida perfil="professor"> <GerenciarAtividadesPage />   </RotaProtegida>} />
         <Route path="/professor/atividades/nova" element={<RotaProtegida perfil="professor"> <NovaAtividadePage />          </RotaProtegida>} />
+        <Route path="/aluno/atividades"          element={<RotaProtegida perfil="aluno">     <MinhasAtividadesPage />       </RotaProtegida>} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

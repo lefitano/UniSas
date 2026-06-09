@@ -5,6 +5,8 @@ import TabNav   from '../components/dashboard/TabNav'
 import StatCard from '../components/dashboard/StatCard'
 import { getUsuario, getIniciais, getSaudacao, avatarCores } from '../utils/usuario'
 import { getTurmaPorId } from '../services/turmaService'
+import { getAtividadesDaTurma } from '../services/atividadeService'
+import { getNotasDoAluno } from '../services/notaService'
 import { BsGraphUp, BsTrophy, BsCheckCircle, BsDownload } from 'react-icons/bs'
 import styles from './Dashboard.module.css'
 
@@ -12,8 +14,9 @@ const labelTurno = { manha: 'Manhã', tarde: 'Tarde', noite: 'Noite' }
 
 export default function DashboardAluno() {
   const navigate = useNavigate()
-  const [usuario, setUsuario] = useState(null)
-  const [turma, setTurma]     = useState(null)
+  const [usuario, setUsuario]         = useState(null)
+  const [turma, setTurma]             = useState(null)
+  const [pendentes, setPendentes]     = useState([])
 
   useEffect(() => {
     async function carregar() {
@@ -22,10 +25,16 @@ export default function DashboardAluno() {
       setUsuario(dados)
       if (dados.turma_id) {
         try {
-          const t = await getTurmaPorId(dados.turma_id)
+          const [t, atividades, entregas] = await Promise.all([
+            getTurmaPorId(dados.turma_id),
+            getAtividadesDaTurma(dados.turma_id),
+            getNotasDoAluno(dados.id),
+          ])
           setTurma(t)
+          const entregasIds = new Set(entregas.map(e => e.atividade_id))
+          setPendentes(atividades.filter(a => !entregasIds.has(a.id)))
         } catch {
-          // segue sem turma se falhar
+          // segue sem dados se falhar
         }
       }
     }
@@ -91,8 +100,19 @@ export default function DashboardAluno() {
         <div className={styles.listaCard}>
           <div className={styles.listaHeader}>
             <span>Atividades pendentes</span>
+            <span className={styles.link} onClick={() => navigate('/aluno/atividades')}>Ver todas</span>
           </div>
-          <p className={styles.vazio}>Nenhuma atividade pendente.</p>
+          {pendentes.length === 0
+            ? <p className={styles.vazio}>Nenhuma atividade pendente.</p>
+            : pendentes.slice(0, 3).map(a => (
+                <div key={a.id} className={styles.progressoItem} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--texto)' }}>{a.titulo}</span>
+                  <span style={{ fontSize: 11, color: 'var(--cinza-texto)' }}>
+                    {a.prazo ? new Date(a.prazo).toLocaleDateString('pt-BR') : 'Sem prazo'}
+                  </span>
+                </div>
+              ))
+          }
         </div>
 
         <div className={styles.listaCard}>
