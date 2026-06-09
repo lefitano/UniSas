@@ -56,9 +56,9 @@ export default function DashboardAluno() {
       />
 
       <TabNav abas={[
-        { label: 'Início', rota: '/dashboard/aluno' },
+        { label: 'Início',     rota: '/dashboard/aluno'  },
+        { label: 'Atividades', rota: '/aluno/atividades' },
         'Minhas aulas',
-        'Atividades',
         'Chat',
         'Downloads',
       ]} />
