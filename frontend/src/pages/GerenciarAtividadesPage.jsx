@@ -137,9 +137,17 @@ export default function GerenciarAtividadesPage() {
                     <button className={styles.btnCancelarAcao} onClick={() => setConfirmandoId(null)}>Não</button>
                   </>
                 ) : (
-                  <button className={styles.btnRemover} onClick={() => setConfirmandoId(a.id)}>
-                    Remover
-                  </button>
+                  <>
+                    <button
+                      className={styles.btnEditar}
+                      onClick={() => navigate(`/professor/atividades/${a.id}/entregas`)}
+                    >
+                      Entregas
+                    </button>
+                    <button className={styles.btnRemover} onClick={() => setConfirmandoId(a.id)}>
+                      Remover
+                    </button>
+                  </>
                 )}
               </div>
             </div>
