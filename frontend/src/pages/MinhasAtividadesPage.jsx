@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import TopBar  from '../components/ui/TopBar'
 import TabNav  from '../components/dashboard/TabNav'
 import { getUsuario, getIniciais, avatarCores } from '../utils/usuario'
-import { getAtividadesDaTurma } from '../services/atividadeService'
+import { getAtividadesDaTurma, entregarAtividade } from '../services/atividadeService'
 import { getNotasDoAluno } from '../services/notaService'
 import dashStyles from './Dashboard.module.css'
 import styles    from './Gerenciar.module.css'
@@ -25,6 +25,7 @@ export default function MinhasAtividadesPage() {
   const [entregasMap, setEntregasMap] = useState({})
   const [carregando, setCarregando]   = useState(true)
   const [erro, setErro]               = useState('')
+  const [entregandoId, setEntregandoId] = useState(null)
 
   useEffect(() => {
     async function carregar() {
@@ -54,6 +55,21 @@ export default function MinhasAtividadesPage() {
     }
     carregar()
   }, [navigate])
+
+  async function handleEntregar(atividadeId) {
+    setEntregandoId(atividadeId)
+    try {
+      const entrega = await entregarAtividade(atividadeId, {
+        aluno_id:     aluno.id,
+        data_entrega: new Date().toISOString(),
+      })
+      setEntregasMap(prev => ({ ...prev, [atividadeId]: entrega ?? { atividade_id: atividadeId, nota: null } }))
+    } catch {
+      setErro('Erro ao entregar atividade. Tente novamente.')
+    } finally {
+      setEntregandoId(null)
+    }
+  }
 
   if (!aluno) return null
 
@@ -105,6 +121,8 @@ export default function MinhasAtividadesPage() {
                       key={a.id}
                       atividade={a}
                       entrega={null}
+                      onEntregar={() => handleEntregar(a.id)}
+                      entregando={entregandoId === a.id}
                     />
                   ))}
                 </div>
@@ -136,7 +154,7 @@ export default function MinhasAtividadesPage() {
   )
 }
 
-function AtividadeCard({ atividade, entrega }) {
+function AtividadeCard({ atividade, entrega, onEntregar, entregando }) {
   const vencida = !entrega && prazoPassado(atividade.prazo)
 
   return (
@@ -167,12 +185,21 @@ function AtividadeCard({ atividade, entrega }) {
             )}
           </>
         ) : (
-          <span
-            className={styles.perfilBadge}
-            style={{ background: vencida ? '#fee2e2' : '#FEF3C7', color: vencida ? '#dc2626' : '#854F0B' }}
-          >
-            {vencida ? 'Vencida' : 'Pendente'}
-          </span>
+          <>
+            <span
+              className={styles.perfilBadge}
+              style={{ background: vencida ? '#fee2e2' : '#FEF3C7', color: vencida ? '#dc2626' : '#854F0B' }}
+            >
+              {vencida ? 'Vencida' : 'Pendente'}
+            </span>
+            <button
+              className={styles.btnEditar}
+              onClick={onEntregar}
+              disabled={entregando}
+            >
+              {entregando ? '...' : 'Entregar'}
+            </button>
+          </>
         )}
       </div>
     </div>
