@@ -49,6 +49,7 @@ export async function post(endpoint, dados, incluirAuth = true) {
     headers: montarHeaders(incluirAuth),
     body: JSON.stringify(dados),
   })
+  if (resposta.status === 204) return null
   await checarResposta(resposta)
   return resposta.json()
 }
