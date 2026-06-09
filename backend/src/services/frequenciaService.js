@@ -1,5 +1,5 @@
-import { supabase } from '../config/supabase.js'
-import { AppError } from '../middlewares/errorMiddleware.js'
+import supabase from '../config/database.js'
+import { AppError } from '../middlewares/AppError.js'
 
 export async function listarFrequencias(turmaId) {
   const { data, error } = await supabase
