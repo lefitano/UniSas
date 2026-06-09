@@ -3,32 +3,70 @@ import { useNavigate } from 'react-router-dom'
 import TopBar   from '../components/ui/TopBar'
 import TabNav   from '../components/dashboard/TabNav'
 import StatCard from '../components/dashboard/StatCard'
-import { getUsuario, getIniciais, getSaudacao, avatarCores } from '../utils/usuario'
-import { BsBarChart, BsCheckCircle, BsClipboard, BsTrophy } from 'react-icons/bs'
+import { getUsuario, getUsuarios, getIniciais, getSaudacao, avatarCores } from '../utils/usuario'
+import { getTurmaPorId } from '../services/turmaService'
+import { getAtividadesDaTurma } from '../services/atividadeService'
+import { getNotasDoAluno } from '../services/notaService'
+import { BsBarChart, BsCheckCircle, BsClipboard, BsPeopleFill } from 'react-icons/bs'
 import styles from './Dashboard.module.css'
+
+const labelTurno = { manha: 'Manhã', tarde: 'Tarde', noite: 'Noite' }
 
 export default function DashboardResponsavel() {
   const navigate = useNavigate()
-  const [usuario, setUsuario] = useState(null)
+  const [responsavel, setResponsavel] = useState(null)
+  const [aluno, setAluno]             = useState(null)
+  const [turma, setTurma]             = useState(null)
+  const [pendentes, setPendentes]     = useState([])
+  const [notas, setNotas]             = useState([])
 
   useEffect(() => {
-    const dados = getUsuario()
-    if (!dados || dados.perfil !== 'responsavel') { navigate('/'); return }
-    setUsuario(dados)
+    async function carregar() {
+      const dados = getUsuario()
+      if (!dados || dados.perfil !== 'responsavel') { navigate('/'); return }
+      setResponsavel(dados)
+
+      const codigoAluno = dados.codigo_aluno || dados.codigoAluno
+      if (!codigoAluno) return
+
+      try {
+        const todos  = await getUsuarios()
+        const aluno  = todos.find(u => u.perfil === 'aluno' && u.matricula === codigoAluno)
+        if (!aluno) return
+        setAluno(aluno)
+
+        if (aluno.turma_id) {
+          const [t, atividades, entregas] = await Promise.all([
+            getTurmaPorId(aluno.turma_id),
+            getAtividadesDaTurma(aluno.turma_id),
+            getNotasDoAluno(aluno.id),
+          ])
+          setTurma(t)
+          const entregasIds = new Set(entregas.map(e => e.atividade_id))
+          setPendentes(atividades.filter(a => !entregasIds.has(a.id)))
+          setNotas(entregas)
+        } else {
+          const entregas = await getNotasDoAluno(aluno.id)
+          setNotas(entregas)
+        }
+      } catch {
+        // segue sem dados se falhar
+      }
+    }
+    carregar()
   }, [navigate])
 
-  if (!usuario) return null
+  if (!responsavel) return null
 
-  const primeiroNome  = usuario.nome.split(' ')[0]
-  const codigoAluno   = usuario.codigo_aluno || usuario.codigoAluno || null
+  const primeiroNome = responsavel.nome.split(' ')[0]
 
   return (
     <div className={styles.pagina}>
       <TopBar
-        nome={usuario.nome}
+        nome={responsavel.nome}
         cargo="Responsável"
         avatarCor={avatarCores.responsavel}
-        avatarLetras={getIniciais(usuario.nome)}
+        avatarLetras={getIniciais(responsavel.nome)}
       />
 
       <TabNav abas={[
@@ -43,29 +81,62 @@ export default function DashboardResponsavel() {
           <div>
             <p className={styles.bannerTitulo}>{getSaudacao()}, {primeiroNome}! 👋</p>
             <p className={styles.bannerSub}>
-              {codigoAluno
-                ? `Acompanhando aluno · Matrícula ${codigoAluno}`
-                : 'Acompanhe o desempenho do seu filho'}
+              {aluno ? `Acompanhando: ${aluno.nome}` : 'Acompanhe o desempenho do seu filho'}
             </p>
           </div>
           <span className={styles.bannerBadge}>Responsável</span>
         </div>
 
         <div className={styles.cardsGrid}>
-          <StatCard icon={<BsBarChart size={16} />}       label="Média geral"          valor="—" sub="Aguardando lançamento" cor="verde"   />
-          <StatCard icon={<BsCheckCircle size={16} />}   label="Frequência"            valor="—" sub="Sem registros"         cor="verde"   />
-          <StatCard icon={<BsClipboard size={16} />}     label="Atividades pendentes" valor="0" sub="Nenhuma pendente"      cor="amarelo" />
-          <StatCard icon={<BsTrophy size={16} />}        label="Conquistas"            valor="0" sub="Nenhuma ainda"         cor="verde"   />
+          <StatCard icon={<BsPeopleFill size={16} />}  label="Aluno vinculado"      valor={aluno ? '1' : '—'}              sub={aluno ? aluno.nome.split(' ')[0] : 'Não vinculado'}     cor="verde"   />
+          <StatCard icon={<BsCheckCircle size={16} />} label="Turma"                valor={turma ? turma.nome : '—'}       sub={turma ? (labelTurno[turma.turno] ?? turma.turno) : 'Sem turma'} cor="verde"   />
+          <StatCard icon={<BsClipboard size={16} />}   label="Atividades pendentes" valor={String(pendentes.length)}       sub={pendentes.length === 0 ? 'Tudo em dia' : 'Pendentes'}  cor="amarelo" />
+          <StatCard icon={<BsBarChart size={16} />}    label="Notas lançadas"       valor={String(notas.length)}           sub={notas.length === 0 ? 'Nenhuma ainda' : 'Este período'}  cor="amarelo" />
+        </div>
+
+        {aluno && (
+          <div className={styles.listaCard}>
+            <div className={styles.listaHeader}><span>Dados do aluno</span></div>
+            <div className={styles.progressoItem} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--texto)' }}>{aluno.nome}</span>
+              <span style={{ fontSize: 12, color: 'var(--cinza-texto)' }}>
+                {aluno.matricula ? `Matrícula: ${aluno.matricula}` : 'Sem matrícula'}
+                {turma ? ` · ${turma.nome}` : ''}
+              </span>
+            </div>
+          </div>
+        )}
+
+        <div className={styles.listaCard}>
+          <div className={styles.listaHeader}><span>Atividades pendentes</span></div>
+          {pendentes.length === 0
+            ? <p className={styles.vazio}>{aluno ? 'Nenhuma atividade pendente.' : 'Nenhum aluno vinculado.'}</p>
+            : pendentes.slice(0, 3).map(a => (
+                <div key={a.id} className={styles.progressoItem} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--texto)' }}>{a.titulo}</span>
+                  <span style={{ fontSize: 11, color: 'var(--cinza-texto)' }}>
+                    {a.prazo ? new Date(a.prazo).toLocaleDateString('pt-BR') : 'Sem prazo'}
+                  </span>
+                </div>
+              ))
+          }
         </div>
 
         <div className={styles.listaCard}>
           <div className={styles.listaHeader}><span>Notas recentes</span></div>
-          <p className={styles.vazio}>Nenhuma nota registrada.</p>
-        </div>
-
-        <div className={styles.listaCard}>
-          <div className={styles.listaHeader}><span>Mensagens recentes</span></div>
-          <p className={styles.vazio}>Nenhuma mensagem.</p>
+          {notas.length === 0
+            ? <p className={styles.vazio}>{aluno ? 'Nenhuma nota registrada.' : 'Nenhum aluno vinculado.'}</p>
+            : notas.slice(0, 3).map(n => (
+                <div key={n.id} className={styles.progressoItem} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--texto)' }}>
+                    {n.atividades?.titulo ?? 'Atividade'}
+                  </span>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: n.nota >= 6 ? 'var(--verde)' : '#dc2626' }}>
+                    {n.nota ?? '—'}
+                  </span>
+                </div>
+              ))
+          }
         </div>
       </div>
     </div>

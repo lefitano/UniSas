@@ -1,19 +1,19 @@
 import supabase from '../config/database.js'
 import { AppError } from '../middlewares/AppError.js'
 
-export async function buscarNotasPorAluno(alunoId) {
+export async function listarFrequencias(turmaId) {
   const { data, error } = await supabase
-    .from('entregas')
-    .select('id, atividade_id, nota, atividades(titulo)')
-    .eq('aluno_id', alunoId)
+    .from('frequencias')
+    .select('*')
+    .eq('turma_id', turmaId)
 
   if (error) throw new AppError(error.message, 400)
   return data
 }
 
-export async function lancarNota(dados) {
+export async function registrarFrequencia(dados) {
   const { data, error } = await supabase
-    .from('entregas')
+    .from('frequencias')
     .insert([dados])
     .select()
     .single()
@@ -22,10 +22,10 @@ export async function lancarNota(dados) {
   return data
 }
 
-export async function alterarNota(id, nota) {
+export async function atualizarFrequencia(id, dados) {
   const { data, error } = await supabase
-    .from('entregas')
-    .update({ nota })
+    .from('frequencias')
+    .update(dados)
     .eq('id', id)
     .select()
     .single()

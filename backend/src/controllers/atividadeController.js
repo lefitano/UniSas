@@ -2,19 +2,8 @@ import * as atividadeService from '../services/atividadeService.js'
 
 export async function listar(req, res, next) {
   try {
-    const { turmaId } = req.query
-    const atividades = await atividadeService.listarAtividades(turmaId)
+    const atividades = await atividadeService.listarAtividades()
     res.json(atividades)
-  } catch (erro) {
-    next(erro)
-  }
-}
-
-export async function buscarPorId(req, res, next) {
-  try {
-    const { id } = req.params
-    const atividade = await atividadeService.buscarAtividadePorId(id)
-    res.json(atividade)
   } catch (erro) {
     next(erro)
   }
@@ -49,11 +38,10 @@ export async function remover(req, res, next) {
   }
 }
 
-export async function submeterEntrega(req, res, next) {
+export async function entregar(req, res, next) {
   try {
     const { id } = req.params
-    const { alunoId } = req.body
-    const entrega = await atividadeService.submeterEntrega(id, alunoId)
+    const entrega = await atividadeService.submeterEntrega(id, req.body)
     res.status(201).json(entrega)
   } catch (erro) {
     next(erro)

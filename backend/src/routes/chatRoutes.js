@@ -1,12 +1,11 @@
 import { Router } from 'express'
-import { listar, criar, atualizar } from '../controllers/notaController.js'
+import { listar, criar } from '../controllers/chatController.js'
 import { verificarAuth } from '../middlewares/authMiddleware.js'
 import { validarCampos } from '../middlewares/validacaoMiddleware.js'
 
 const router = Router()
 
 router.get('/', verificarAuth, listar)
-router.post('/', verificarAuth, validarCampos(['atividade_id', 'aluno_id', 'nota']), criar)
-router.put('/:id', verificarAuth, validarCampos(['nota']), atualizar)
+router.post('/', verificarAuth, validarCampos(['remetente_id', 'destinatario_id', 'texto']), criar)
 
 export default router

@@ -1,15 +1,14 @@
 import { Router } from 'express'
-import { listar, buscarPorId, criar, atualizar, remover, submeterEntrega } from '../controllers/atividadeController.js'
+import { listar, criar, atualizar, remover, entregar } from '../controllers/atividadeController.js'
 import { verificarAuth } from '../middlewares/authMiddleware.js'
 import { validarCampos } from '../middlewares/validacaoMiddleware.js'
 
 const router = Router()
 
-router.get('/',           verificarAuth, listar)
-router.get('/:id',        verificarAuth, buscarPorId)
-router.post('/',          verificarAuth, validarCampos(['turma_id', 'titulo']), criar)
-router.put('/:id',        verificarAuth, validarCampos(['titulo']), atualizar)
-router.delete('/:id',     verificarAuth, remover)
-router.post('/:id/entregas', verificarAuth, submeterEntrega)
+router.get('/', verificarAuth, listar)
+router.post('/', verificarAuth, validarCampos(['turma_id', 'titulo', 'prazo']), criar)
+router.put('/:id', verificarAuth, validarCampos(['titulo', 'prazo']), atualizar)
+router.delete('/:id', verificarAuth, remover)
+router.post('/:id/entregas', verificarAuth, validarCampos(['aluno_id', 'data_entrega']), entregar)
 
 export default router
