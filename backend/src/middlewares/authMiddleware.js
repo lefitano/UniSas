@@ -12,7 +12,7 @@ export function verificarAuth(req, res, next){
   const token = partes[1]
 try{
   const dadosDoToken = jwt.verify(token, process.env.JWT_SECRET)
-  req.usuario = dadosDoToken
+  req.usuario = { ...dadosDoToken, id: dadosDoToken.userId }
   next()
 }catch(erro){
   return res.status(401).json({erro: "Token inválido ou expirado"})
