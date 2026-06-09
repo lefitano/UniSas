@@ -6,6 +6,7 @@ import frequenciaRoutes from './frequenciaRoutes.js'
 import atividadeRoutes from './atividadeRoutes.js'
 import notaRoutes from './notaRoutes.js'
 import chatRoutes from './chatRoutes.js'
+import recuperacaoRoutes from './recuperacaoRoutes.js'
 
 const router = Router()
 
@@ -16,5 +17,6 @@ router.use('/frequencias', frequenciaRoutes)
 router.use('/atividades', atividadeRoutes)
 router.use('/notas', notaRoutes)
 router.use('/mensagens', chatRoutes)
+router.use('/recuperacao', recuperacaoRoutes)
 
 export default router
