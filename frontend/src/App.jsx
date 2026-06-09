@@ -23,6 +23,8 @@ import AlunosDaTurmaPage         from './pages/AlunosDaTurmaPage'
 import GerenciarAtividadesPage   from './pages/GerenciarAtividadesPage'
 import NovaAtividadePage         from './pages/NovaAtividadePage'
 import MinhasAtividadesPage      from './pages/MinhasAtividadesPage'
+import EsqueciSenhaPage          from './pages/EsqueciSenhaPage'
+import RedefinirSenhaPage        from './pages/RedefinirSenhaPage'
 
 function RotaProtegida({ perfil, children }) {
   const token   = getToken()
@@ -43,8 +45,10 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/"            element={<LoginPage />} />
-        <Route path="/auth/:perfil" element={<AuthPage />} />
+        <Route path="/"                  element={<LoginPage />} />
+        <Route path="/auth/:perfil"      element={<AuthPage />} />
+        <Route path="/esqueci-senha"     element={<EsqueciSenhaPage />} />
+        <Route path="/redefinir-senha"   element={<RedefinirSenhaPage />} />
 
         <Route path="/dashboard/aluno"       element={<RotaProtegida perfil="aluno">       <DashboardAluno />       </RotaProtegida>} />
         <Route path="/dashboard/professor"   element={<RotaProtegida perfil="professor">   <DashboardProfessor />   </RotaProtegida>} />

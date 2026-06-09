@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { BsBook, BsMortarboard, BsPeople, BsBuilding, BsEye, BsEyeSlash, BsShieldLock } from 'react-icons/bs'
 import styles from './LoginForm.module.css'
 
@@ -12,9 +13,10 @@ const perfilInfo = {
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export default function LoginForm({ perfil, onVoltar, onLogin, onCadastrar, erroExterno, carregando }) {
-  const [email, setEmail]             = useState('')
-  const [senha, setSenha]             = useState('')
-  const [erro, setErro]               = useState('')
+  const navigate = useNavigate()
+  const [email, setEmail]               = useState('')
+  const [senha, setSenha]               = useState('')
+  const [erro, setErro]                 = useState('')
   const [mostrarSenha, setMostrarSenha] = useState(false)
 
   function handleSubmit(e) {
@@ -84,6 +86,12 @@ export default function LoginForm({ perfil, onVoltar, onLogin, onCadastrar, erro
 
         {erro        && <p className={styles.erro}>{erro}</p>}
         {erroExterno && <p className={styles.erro}>{erroExterno}</p>}
+
+        <p className={styles.linkEsqueci}>
+          <span className={styles.link} onClick={() => navigate('/esqueci-senha')}>
+            Esqueci minha senha
+          </span>
+        </p>
 
         <button type="submit" className={styles.btnEntrar} disabled={carregando}>
           {carregando ? 'Entrando...' : 'Entrar no UniSAS'}

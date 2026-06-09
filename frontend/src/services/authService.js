@@ -19,3 +19,11 @@ export function logout() {
   api.removerToken()
   limparUsuario()
 }
+
+export async function solicitarRecuperacao(email) {
+  return api.post('/recuperacao/solicitar', { email }, false)
+}
+
+export async function redefinirSenha(token, novaSenha) {
+  return api.post('/recuperacao/redefinir', { token, novaSenha }, false)
+}
