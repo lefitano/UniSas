@@ -73,10 +73,10 @@ export default function DashboardDiretor() {
 
         <p className={styles.secaoTitulo}>Gestão rápida</p>
         <div className={styles.acoesGrid}>
-          <ActionButton icon={<BsPlusCircle size={20} />}  label="Nova turma"         onClick={() => navigate('/gerenciar-turmas')} />
+          <ActionButton icon={<BsPlusCircle size={20} />}  label="Nova turma"         onClick={() => navigate('/gerenciar-turmas/novo')} />
           <ActionButton icon={<BsPersonGear size={20} />}  label="Gerenciar usuários" onClick={() => navigate('/gerenciar-usuarios')} />
-          <ActionButton icon={<BsBarChart size={20} />}    label="Relatório geral"    />
-          <ActionButton icon={<BsMegaphone size={20} />}   label="Comunicado geral"   />
+          <ActionButton icon={<BsBarChart size={20} />}    label="Relatório geral"    onClick={() => navigate('/em-breve')} />
+          <ActionButton icon={<BsMegaphone size={20} />}   label="Comunicado geral"   onClick={() => navigate('/em-breve')} />
         </div>
 
         <div className={styles.listaCard}>

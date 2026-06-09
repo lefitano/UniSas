@@ -84,10 +84,10 @@ export default function DashboardProfessor() {
 
         <p className={styles.secaoTitulo}>Ações rápidas</p>
         <div className={styles.acoesGrid}>
-          <ActionButton icon={<BsUpload size={20} />}        label="Upload de aula" />
-          <ActionButton icon={<BsPencilSquare size={20} />}  label="Nova atividade" onClick={() => navigate('/professor/atividades')} />
-          <ActionButton icon={<BsPatchQuestion size={20} />} label="Criar questão"  />
-          <ActionButton icon={<BsBarChartLine size={20} />}  label="Ver desempenho" />
+          <ActionButton icon={<BsUpload size={20} />}        label="Upload de aula" onClick={() => navigate('/em-breve')} />
+          <ActionButton icon={<BsPencilSquare size={20} />}  label="Nova atividade" onClick={() => navigate('/professor/atividades/nova')} />
+          <ActionButton icon={<BsPatchQuestion size={20} />} label="Criar questão"  onClick={() => navigate('/em-breve')} />
+          <ActionButton icon={<BsBarChartLine size={20} />}  label="Ver desempenho" onClick={() => navigate('/professor/atividades')} />
         </div>
 
         <div className={styles.listaCard}>

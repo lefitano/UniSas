@@ -17,6 +17,7 @@ export default function DashboardAluno() {
   const [usuario, setUsuario]         = useState(null)
   const [turma, setTurma]             = useState(null)
   const [pendentes, setPendentes]     = useState([])
+  const [media, setMedia]             = useState(null)
 
   useEffect(() => {
     async function carregar() {
@@ -33,6 +34,11 @@ export default function DashboardAluno() {
           setTurma(t)
           const entregasIds = new Set(entregas.map(e => e.atividade_id))
           setPendentes(atividades.filter(a => !entregasIds.has(a.id)))
+          const comNota = entregas.filter(e => e.nota !== null && e.nota !== undefined)
+          if (comNota.length > 0) {
+            const soma = comNota.reduce((acc, e) => acc + Number(e.nota), 0)
+            setMedia((soma / comNota.length).toFixed(1))
+          }
         } catch {
           // segue sem dados se falhar
         }
@@ -77,7 +83,7 @@ export default function DashboardAluno() {
         </div>
 
         <div className={styles.cardsGrid}>
-          <StatCard icon={<BsGraphUp size={16} />}     label="Média geral"       valor="—" sub="Aguardando lançamento" cor="verde"   />
+          <StatCard icon={<BsGraphUp size={16} />}     label="Média geral"       valor={media ?? '—'} sub={media ? `Média das notas` : 'Aguardando lançamento'} cor="verde"   />
           <StatCard icon={<BsTrophy size={16} />}      label="Conquistas"         valor="0" sub="Nenhuma ainda"         cor="amarelo" />
           <StatCard icon={<BsCheckCircle size={16} />} label="Frequência"         valor="—" sub="Sem registros"         cor="verde"   />
           <StatCard icon={<BsDownload size={16} />}    label="Conteúdos offline" valor="0" sub="Nenhum disponível"     cor="amarelo" />

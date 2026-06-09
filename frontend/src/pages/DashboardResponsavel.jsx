@@ -72,7 +72,7 @@ export default function DashboardResponsavel() {
       <TabNav abas={[
         { label: 'Acompanhamento', rota: '/dashboard/responsavel' },
         'Frequência',
-        'Notas',
+        { label: 'Notas', rota: '/responsavel/notas' },
         'Chat com escola',
       ]} />
 

@@ -26,6 +26,8 @@ import MinhasAtividadesPage      from './pages/MinhasAtividadesPage'
 import EntregasAtividadePage     from './pages/EntregasAtividadePage'
 import EsqueciSenhaPage          from './pages/EsqueciSenhaPage'
 import RedefinirSenhaPage        from './pages/RedefinirSenhaPage'
+import NotasResponsavelPage      from './pages/NotasResponsavelPage'
+import EmBrevePage               from './pages/EmBrevePage'
 
 function RotaProtegida({ perfil, children }) {
   const token   = getToken()
@@ -76,7 +78,9 @@ export default function App() {
         <Route path="/professor/atividades"      element={<RotaProtegida perfil="professor"> <GerenciarAtividadesPage />   </RotaProtegida>} />
         <Route path="/professor/atividades/nova"          element={<RotaProtegida perfil="professor"> <NovaAtividadePage />        </RotaProtegida>} />
         <Route path="/professor/atividades/:id/entregas" element={<RotaProtegida perfil="professor"> <EntregasAtividadePage />    </RotaProtegida>} />
-        <Route path="/aluno/atividades"          element={<RotaProtegida perfil="aluno">     <MinhasAtividadesPage />       </RotaProtegida>} />
+        <Route path="/aluno/atividades"          element={<RotaProtegida perfil="aluno">        <MinhasAtividadesPage />     </RotaProtegida>} />
+        <Route path="/responsavel/notas"         element={<RotaProtegida perfil="responsavel"> <NotasResponsavelPage />     </RotaProtegida>} />
+        <Route path="/em-breve"                  element={<RotaProtegida> <EmBrevePage /> </RotaProtegida>} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
