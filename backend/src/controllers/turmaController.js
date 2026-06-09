@@ -11,7 +11,9 @@ export async function minhas(req, res, next) {
 
 export async function listar(req, res, next) {
   try {
-    const turmas = await turmaService.listarTurmas()
+    const pagina = req.query.pagina ? Number(req.query.pagina) : null
+    const limite = req.query.limite ? Number(req.query.limite) : null
+    const turmas = await turmaService.listarTurmas(pagina, limite)
     res.json(turmas)
   } catch (erro) {
     next(erro)

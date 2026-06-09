@@ -1,12 +1,18 @@
 import supabase from '../config/database.js'
 import { AppError } from '../middlewares/AppError.js'
 
-export async function listarTurmas() {
+export async function listarTurmas(pagina, limite) {
+  const selecao = 'id, nome, turno, ano_letivo, professor_id, criado_em'
+
+  const turmasQuery = (pagina && limite)
+    ? supabase.from('turmas').select(selecao, { count: 'exact' }).order('nome').range((pagina - 1) * limite, pagina * limite - 1)
+    : supabase.from('turmas').select(selecao).order('nome')
+
   const [
-    { data: turmas, error },
+    { data: turmas, error, count },
     { data: contagens }
   ] = await Promise.all([
-    supabase.from('turmas').select('id, nome, turno, ano_letivo, professor_id, criado_em').order('nome'),
+    turmasQuery,
     supabase.from('usuarios').select('turma_id').eq('perfil', 'aluno').not('turma_id', 'is', null)
   ])
 
@@ -17,7 +23,12 @@ export async function listarTurmas() {
     contagemPorTurma[u.turma_id] = (contagemPorTurma[u.turma_id] || 0) + 1
   })
 
-  return turmas.map(t => ({ ...t, total_alunos: contagemPorTurma[t.id] || 0 }))
+  const turmasComContagem = turmas.map(t => ({ ...t, total_alunos: contagemPorTurma[t.id] || 0 }))
+
+  if (pagina && limite) {
+    return { dados: turmasComContagem, total: count, pagina, limite, totalPaginas: Math.ceil(count / limite) }
+  }
+  return turmasComContagem
 }
 
 export async function listarTurmasPorProfessor(professorId) {

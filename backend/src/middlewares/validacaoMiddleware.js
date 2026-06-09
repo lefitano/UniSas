@@ -9,3 +9,23 @@ export function validarCampos(campos) {
         next()
     }
 }
+
+export function validarEmail(req, res, next) {
+    const { email } = req.body
+    if (!email) return next()
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+        return res.status(400).json({ erro: 'Formato de email inválido' })
+    }
+    next()
+}
+
+export function validarNota(req, res, next) {
+    const { nota } = req.body
+    if (nota === undefined || nota === null || nota === '') return next()
+    const valor = Number(nota)
+    if (isNaN(valor) || valor < 0 || valor > 10) {
+        return res.status(400).json({ erro: 'Nota deve ser um número entre 0 e 10' })
+    }
+    next()
+}

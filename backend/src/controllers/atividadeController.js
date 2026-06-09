@@ -2,7 +2,9 @@ import * as atividadeService from '../services/atividadeService.js'
 
 export async function listar(req, res, next) {
   try {
-    const atividades = await atividadeService.listarAtividades()
+    const pagina = req.query.pagina ? Number(req.query.pagina) : null
+    const limite = req.query.limite ? Number(req.query.limite) : null
+    const atividades = await atividadeService.listarAtividades(pagina, limite)
     res.json(atividades)
   } catch (erro) {
     next(erro)

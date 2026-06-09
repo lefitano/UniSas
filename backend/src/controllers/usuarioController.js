@@ -18,10 +18,12 @@ function normalizarCampos(dados) {
 
 
 export async function listar(req, res, next) {
-  try{
-  const usuarios = await usuarioService.listarUsuarios()
-  res.json(usuarios)
-  }catch(erro){
+  try {
+    const pagina = req.query.pagina ? Number(req.query.pagina) : null
+    const limite = req.query.limite ? Number(req.query.limite) : null
+    const usuarios = await usuarioService.listarUsuarios(pagina, limite)
+    res.json(usuarios)
+  } catch(erro) {
     next(erro)
   }
 }
