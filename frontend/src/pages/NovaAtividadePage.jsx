@@ -47,11 +47,10 @@ export default function NovaAtividadePage() {
     setErro('')
     try {
       await criarAtividade({
-        titulo:       titulo.trim(),
-        descricao:    descricao.trim() || null,
+        titulo:    titulo.trim(),
+        descricao: descricao.trim() || null,
         prazo,
-        turma_id:     turmaId,
-        professor_id: professor.id,
+        turma_id:  turmaId,
       })
       setSucesso(true)
       setTimeout(() => navigate('/professor/atividades'), 1200)
