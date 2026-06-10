@@ -22,6 +22,8 @@ import DetalhesTurmaPage         from './pages/DetalhesTurmaPage'
 import AlunosDaTurmaPage         from './pages/AlunosDaTurmaPage'
 import GerenciarAtividadesPage   from './pages/GerenciarAtividadesPage'
 import NovaAtividadePage         from './pages/NovaAtividadePage'
+import ConteudosPage             from './pages/ConteudosPage'
+import NovoConteudoPage          from './pages/NovoConteudoPage'
 import MinhasAtividadesPage      from './pages/MinhasAtividadesPage'
 import EntregasAtividadePage     from './pages/EntregasAtividadePage'
 import EsqueciSenhaPage          from './pages/EsqueciSenhaPage'
@@ -74,9 +76,11 @@ export default function App() {
         <Route path="/diretor/professores" element={<RotaProtegida perfil="diretor">    <ListaProfessoresPage /> </RotaProtegida>} />
         <Route path="/professor/turmas"          element={<RotaProtegida perfil="professor"> <MinhasTurmasPage />          </RotaProtegida>} />
         <Route path="/professor/turmas/:id"      element={<RotaProtegida perfil="professor"> <AlunosDaTurmaPage />         </RotaProtegida>} />
-        <Route path="/professor/atividades"      element={<RotaProtegida perfil="professor"> <GerenciarAtividadesPage />   </RotaProtegida>} />
-        <Route path="/professor/atividades/nova"          element={<RotaProtegida perfil="professor"> <NovaAtividadePage />        </RotaProtegida>} />
-        <Route path="/professor/atividades/:id/entregas" element={<RotaProtegida perfil="professor"> <EntregasAtividadePage />    </RotaProtegida>} />
+        <Route path="/professor/atividades"                 element={<RotaProtegida perfil="professor"> <GerenciarAtividadesPage /> </RotaProtegida>} />
+        <Route path="/professor/atividades/nova"          element={<RotaProtegida perfil="professor"> <NovaAtividadePage />       </RotaProtegida>} />
+        <Route path="/professor/atividades/:id/entregas" element={<RotaProtegida perfil="professor"> <EntregasAtividadePage />   </RotaProtegida>} />
+        <Route path="/professor/conteudos"               element={<RotaProtegida perfil="professor"> <ConteudosPage />           </RotaProtegida>} />
+        <Route path="/professor/conteudos/novo"          element={<RotaProtegida perfil="professor"> <NovoConteudoPage />        </RotaProtegida>} />
         <Route path="/aluno/atividades"          element={<RotaProtegida perfil="aluno">        <MinhasAtividadesPage />     </RotaProtegida>} />
         <Route path="/em-breve"                  element={<RotaProtegida> <EmBrevePage /> </RotaProtegida>} />
         <Route path="*" element={<Navigate to="/" replace />} />

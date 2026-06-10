@@ -8,10 +8,12 @@ import notaRoutes from './notaRoutes.js'
 import chatRoutes from './chatRoutes.js'
 import recuperacaoRoutes from './recuperacaoRoutes.js'
 import uploadRoutes from './uploadRoutes.js'
+import conteudoRoutes from './conteudoRoutes.js'
 
 const router = Router()
 
-router.use('/upload', uploadRoutes)
+router.use('/upload',    uploadRoutes)
+router.use('/conteudos', conteudoRoutes)
 router.use('/usuarios', usuarioRoutes)
 router.use('/auth', authRoutes)
 router.use('/turmas', turmaRoutes)

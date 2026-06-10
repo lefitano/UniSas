@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import TopBar from '../components/ui/TopBar'
+import TopBar  from '../components/ui/TopBar'
+import TabNav  from '../components/dashboard/TabNav'
 import { getUsuario, getIniciais, avatarCores } from '../utils/usuario'
 import { getMinhasTurmas, getAlunosDaTurma } from '../services/turmaService'
 import dashStyles from './Dashboard.module.css'
@@ -50,6 +51,14 @@ export default function MinhasTurmasPage() {
         avatarCor={avatarCores.professor}
         avatarLetras={getIniciais(professor.nome)}
       />
+
+      <TabNav abas={[
+        { label: 'Início',        rota: '/dashboard/professor'  },
+        { label: 'Minhas turmas', rota: '/professor/turmas'     },
+        { label: 'Atividades',    rota: '/professor/atividades' },
+        { label: 'Conteúdos',     rota: '/professor/conteudos'  },
+        'Chat',
+      ]} />
 
       <div className={dashStyles.corpo}>
         <div className={styles.cabecalho}>

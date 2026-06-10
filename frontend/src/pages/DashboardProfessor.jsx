@@ -57,9 +57,10 @@ export default function DashboardProfessor() {
       />
 
       <TabNav abas={[
-        { label: 'Início',        rota: '/dashboard/professor' },
-        { label: 'Minhas turmas', rota: '/professor/turmas'    },
-        'Conteúdos',
+        { label: 'Início',        rota: '/dashboard/professor'  },
+        { label: 'Minhas turmas', rota: '/professor/turmas'     },
+        { label: 'Atividades',    rota: '/professor/atividades' },
+        { label: 'Conteúdos',     rota: '/professor/conteudos'  },
         'Chat',
       ]} />
 
@@ -83,7 +84,7 @@ export default function DashboardProfessor() {
 
         <p className={styles.secaoTitulo}>Ações rápidas</p>
         <div className={styles.acoesGrid}>
-          <ActionButton icon={<BsUpload size={20} />}       label="Upload de aula"  onClick={() => navigate('/em-breve')} />
+          <ActionButton icon={<BsUpload size={20} />}       label="Upload de aula"  onClick={() => navigate('/professor/conteudos/novo')} />
           <ActionButton icon={<BsPencilSquare size={20} />} label="Nova atividade"  onClick={() => navigate('/professor/atividades/nova')} />
           <ActionButton icon={<BsBarChartLine size={20} />} label="Lançar notas"    onClick={() => navigate('/professor/atividades')} />
           <ActionButton icon={<BsGrid1X2 size={20} />}      label="Minhas turmas"   onClick={() => navigate('/professor/turmas')} />
