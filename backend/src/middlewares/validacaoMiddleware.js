@@ -29,3 +29,13 @@ export function validarNota(req, res, next) {
     }
     next()
 }
+
+export function validarCPF(req, res, next) {
+    const { cpf } = req.body
+    if (!cpf) return next()
+    const nums = cpf.replace(/\D/g, '')
+    if (nums.length !== 11) {
+        return res.status(400).json({ erro: 'CPF deve ter exatamente 11 dígitos' })
+    }
+    next()
+}

@@ -7,12 +7,20 @@ import styles from './Gerenciar.module.css'
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
+function mascararCPF(valor) {
+  const nums = valor.replace(/\D/g, '').slice(0, 11)
+  if (nums.length <= 3) return nums
+  if (nums.length <= 6) return `${nums.slice(0,3)}.${nums.slice(3)}`
+  if (nums.length <= 9) return `${nums.slice(0,3)}.${nums.slice(3,6)}.${nums.slice(6)}`
+  return `${nums.slice(0,3)}.${nums.slice(3,6)}.${nums.slice(6,9)}-${nums.slice(9)}`
+}
+
 const camposPorPerfil = {
   aluno: [
     { id: 'nome',      label: 'Nome completo',       type: 'text',     placeholder: 'Ex: Ana Souza' },
     { id: 'email',     label: 'Email institucional', type: 'email',    placeholder: 'aluno@escola.edu.br' },
     { id: 'matricula', label: 'Número de matrícula', type: 'text',     placeholder: 'Ex: 2024001234' },
-    { id: 'senha',     label: 'Senha de acesso',     type: 'password', placeholder: 'Mínimo 6 caracteres' },
+    { id: 'senha',     label: 'Senha de acesso',     type: 'password', placeholder: 'Mínimo 8 caracteres' },
   ],
   professor: [
     { id: 'nome',              label: 'Nome completo',        type: 'text',     placeholder: 'Ex: Carlos Lima' },
@@ -20,14 +28,14 @@ const camposPorPerfil = {
     { id: 'registroFuncional', label: 'Registro Funcional',   type: 'text',     placeholder: 'Ex: 1234567' },
     { id: 'disciplina',        label: 'Disciplina principal', type: 'select',
       options: ['Matemática','Português','Ciências','História','Geografia','Física','Química','Biologia','Inglês','Artes','Educação Física'] },
-    { id: 'senha',             label: 'Senha de acesso',      type: 'password', placeholder: 'Mínimo 6 caracteres' },
+    { id: 'senha',             label: 'Senha de acesso',      type: 'password', placeholder: 'Mínimo 8 caracteres' },
   ],
   responsavel: [
     { id: 'nome',        label: 'Nome completo',                type: 'text',     placeholder: 'Ex: Maria Souza' },
     { id: 'email',       label: 'Email',                        type: 'email',    placeholder: 'seu@email.com' },
     { id: 'cpf',         label: 'CPF',                          type: 'text',     placeholder: '000.000.000-00' },
     { id: 'codigoAluno', label: 'Matrícula do aluno vinculado', type: 'text',     placeholder: 'Ex: 2024001234' },
-    { id: 'senha',       label: 'Senha de acesso',              type: 'password', placeholder: 'Mínimo 6 caracteres' },
+    { id: 'senha',       label: 'Senha de acesso',              type: 'password', placeholder: 'Mínimo 8 caracteres' },
   ],
 }
 
@@ -48,7 +56,8 @@ export default function NovoUsuarioPage() {
   if (!diretor) return null
 
   function atualizarCampo(id, valor) {
-    setCampos(prev => ({ ...prev, [id]: valor }))
+    const valorFinal = id === 'cpf' ? mascararCPF(valor) : valor
+    setCampos(prev => ({ ...prev, [id]: valorFinal }))
     setErro('')
   }
 
@@ -69,14 +78,41 @@ export default function NovoUsuarioPage() {
       }
     }
 
+    if (campos.nome.trim().split(/\s+/).length < 2) {
+      setErro('Informe o nome completo (nome e sobrenome).')
+      return
+    }
+
     if (!emailRegex.test(campos.email)) {
       setErro('Informe um e-mail válido.')
       return
     }
 
-    if (campos.senha.length < 6) {
-      setErro('A senha deve ter no mínimo 6 caracteres.')
+    if (campos.senha.length < 8) {
+      setErro('A senha deve ter no mínimo 8 caracteres.')
       return
+    }
+
+    if (perfil === 'aluno' && !/^\d+$/.test(campos.matricula)) {
+      setErro('Matrícula deve conter apenas números.')
+      return
+    }
+
+    if (perfil === 'professor' && !/^\d+$/.test(campos.registroFuncional)) {
+      setErro('Registro Funcional deve conter apenas números.')
+      return
+    }
+
+    if (perfil === 'responsavel') {
+      const cpfNums = campos.cpf.replace(/\D/g, '')
+      if (cpfNums.length !== 11) {
+        setErro('CPF deve ter exatamente 11 dígitos.')
+        return
+      }
+      if (!/^\d+$/.test(campos.codigoAluno)) {
+        setErro('Matrícula do aluno deve conter apenas números.')
+        return
+      }
     }
 
     try {

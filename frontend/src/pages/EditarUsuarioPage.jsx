@@ -10,6 +10,14 @@ import styles from './Gerenciar.module.css'
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
+function mascararCPF(valor) {
+  const nums = valor.replace(/\D/g, '').slice(0, 11)
+  if (nums.length <= 3) return nums
+  if (nums.length <= 6) return `${nums.slice(0,3)}.${nums.slice(3)}`
+  if (nums.length <= 9) return `${nums.slice(0,3)}.${nums.slice(3,6)}.${nums.slice(6)}`
+  return `${nums.slice(0,3)}.${nums.slice(3,6)}.${nums.slice(6,9)}-${nums.slice(9)}`
+}
+
 const camposPorPerfil = {
   aluno: [
     { id: 'nome',      label: 'Nome completo',       type: 'text',  placeholder: 'Ex: Ana Souza' },
@@ -62,7 +70,8 @@ export default function EditarUsuarioPage() {
   if (!diretor || !perfil) return null
 
   function atualizarCampo(campo, valor) {
-    setCampos(prev => ({ ...prev, [campo]: valor }))
+    const valorFinal = campo === 'cpf' ? mascararCPF(valor) : valor
+    setCampos(prev => ({ ...prev, [campo]: valorFinal }))
     setErro('')
   }
 
@@ -76,14 +85,37 @@ export default function EditarUsuarioPage() {
       }
     }
 
+    if (campos.nome.trim().split(/\s+/).length < 2) {
+      setErro('Informe o nome completo (nome e sobrenome).')
+      return
+    }
+
     if (!emailRegex.test(campos.email)) {
       setErro('Informe um e-mail válido.')
       return
     }
 
-    if (campos.senhaNova && campos.senhaNova.length < 6) {
-      setErro('A nova senha deve ter no mínimo 6 caracteres.')
+    if (campos.senhaNova && campos.senhaNova.length < 8) {
+      setErro('A nova senha deve ter no mínimo 8 caracteres.')
       return
+    }
+
+    if (perfil === 'aluno' && campos.matricula && !/^\d+$/.test(campos.matricula)) {
+      setErro('Matrícula deve conter apenas números.')
+      return
+    }
+
+    if (perfil === 'professor' && campos.registroFuncional && !/^\d+$/.test(campos.registroFuncional)) {
+      setErro('Registro Funcional deve conter apenas números.')
+      return
+    }
+
+    if (perfil === 'responsavel' && campos.cpf) {
+      const cpfNums = campos.cpf.replace(/\D/g, '')
+      if (cpfNums.length !== 11) {
+        setErro('CPF deve ter exatamente 11 dígitos.')
+        return
+      }
     }
 
     const { senhaNova, ...dadosSemSenhaNova } = campos
