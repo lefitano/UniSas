@@ -4,6 +4,7 @@ import TopBar from '../components/ui/TopBar'
 import { getUsuario, getIniciais, avatarCores } from '../utils/usuario'
 import { getMinhasTurmas } from '../services/turmaService'
 import { getAtividades, removerAtividade } from '../services/atividadeService'
+import { BsFilePdf } from 'react-icons/bs'
 import dashStyles from './Dashboard.module.css'
 import styles from './Gerenciar.module.css'
 
@@ -130,6 +131,24 @@ export default function GerenciarAtividadesPage() {
               </div>
 
               <div className={styles.acoes}>
+                {a.arquivo_url && (
+                  <a
+                    href={a.arquivo_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 4,
+                      fontSize: 12,
+                      color: 'var(--verde)',
+                      fontWeight: 600,
+                      textDecoration: 'none',
+                    }}
+                  >
+                    <BsFilePdf size={14} /> PDF
+                  </a>
+                )}
                 {confirmandoId === a.id ? (
                   <>
                     <span className={styles.confirmarTexto}>Remover?</span>

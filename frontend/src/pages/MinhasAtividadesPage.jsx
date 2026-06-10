@@ -5,6 +5,7 @@ import TabNav  from '../components/dashboard/TabNav'
 import { getUsuario, getIniciais, avatarCores } from '../utils/usuario'
 import { getAtividadesDaTurma, entregarAtividade } from '../services/atividadeService'
 import { getNotasDoAluno } from '../services/notaService'
+import { BsFilePdf } from 'react-icons/bs'
 import dashStyles from './Dashboard.module.css'
 import styles    from './Gerenciar.module.css'
 
@@ -172,6 +173,16 @@ function AtividadeCard({ atividade, entrega, onEntregar, entregando }) {
           Prazo: {formatarPrazo(atividade.prazo)}
           {vencida && ' · Vencida'}
         </p>
+        {atividade.arquivo_url && (
+          <a
+            href={atividade.arquivo_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--verde)', fontWeight: 600, textDecoration: 'none', marginTop: 2 }}
+          >
+            <BsFilePdf size={12} /> Ver PDF
+          </a>
+        )}
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>

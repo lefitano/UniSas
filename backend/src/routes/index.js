@@ -7,9 +7,11 @@ import atividadeRoutes from './atividadeRoutes.js'
 import notaRoutes from './notaRoutes.js'
 import chatRoutes from './chatRoutes.js'
 import recuperacaoRoutes from './recuperacaoRoutes.js'
+import uploadRoutes from './uploadRoutes.js'
 
 const router = Router()
 
+router.use('/upload', uploadRoutes)
 router.use('/usuarios', usuarioRoutes)
 router.use('/auth', authRoutes)
 router.use('/turmas', turmaRoutes)

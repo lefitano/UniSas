@@ -17,7 +17,6 @@ const camposCadastroDiretor = [
 ]
 
 const perfisValidos = ['aluno', 'professor', 'responsavel', 'diretor']
-const labelPerfil   = { aluno: 'Aluno', professor: 'Professor', responsavel: 'Responsável', diretor: 'Diretor' }
 
 const Logo = () => (
   <div className={styles.marca}>
@@ -71,7 +70,7 @@ export default function AuthPage() {
       const usuario = await login(email, senha)
       if (usuario.perfil !== perfil) {
         logout()
-        setErroLogin(`Esta conta pertence ao perfil "${labelPerfil[usuario.perfil]}". Selecione o perfil correto na tela inicial.`)
+        setErroLogin('Email ou senha incorretos.')
         return
       }
       navigate(`/dashboard/${usuario.perfil}`)
