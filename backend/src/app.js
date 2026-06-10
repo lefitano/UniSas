@@ -3,6 +3,7 @@ import cors from 'cors'
 import routes from './routes/index.js'
 import { tratarErros } from './middlewares/errorMiddleware.js'
 import { logRequisicoes } from './middlewares/logMiddleware.js'
+import { limiteGeral } from './middlewares/rateLimitMiddleware.js'
 
 const app = express()
 
@@ -11,6 +12,7 @@ app.use(cors({
 }))
 app.use(express.json())
 app.use(logRequisicoes)
+app.use(limiteGeral)
 
 app.use('/api', routes)
 
