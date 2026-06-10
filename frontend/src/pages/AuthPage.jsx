@@ -69,8 +69,13 @@ export default function AuthPage() {
     try {
       const usuario = await login(email, senha)
       navigate(`/dashboard/${usuario.perfil}`)
-    } catch {
-      setErroLogin('Email ou senha incorretos.')
+    } catch (e) {
+      const mensagem = e.message || ''
+      if (mensagem.includes('fetch') || mensagem.includes('network') || mensagem.includes('Failed')) {
+        setErroLogin('Não foi possível conectar ao servidor. Verifique sua conexão.')
+      } else {
+        setErroLogin('Email ou senha incorretos.')
+      }
     } finally {
       setCarregando(false)
     }

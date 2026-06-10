@@ -27,11 +27,12 @@ export async function autenticar(email, senha) {
           nome:               usuario.nome,
           email:              usuario.email,
           perfil:             usuario.perfil,
-          turma_id:           usuario.turma_id           || null,
-          matricula:          usuario.matricula           || null,
-          disciplina:         usuario.disciplina          || null,
-          registro_funcional: usuario.registro_funcional  || null,
-          escola:             usuario.escola              || null,
+          turma_id:           usuario.turma_id            || null,
+          matricula:          usuario.matricula            || null,
+          codigo_aluno:       usuario.codigo_aluno         || null,
+          disciplina:         usuario.disciplina           || null,
+          registro_funcional: usuario.registro_funcional   || null,
+          escola:             usuario.escola               || null,
         }
       }
 }

@@ -55,7 +55,7 @@ export default function RedefinirSenhaPage() {
   async function handleSubmit(e) {
     e.preventDefault()
     if (!novaSenha || !confirmar) { setErro('Preencha os dois campos.'); return }
-    if (novaSenha.length < 6)     { setErro('A senha deve ter no mínimo 6 caracteres.'); return }
+    if (novaSenha.length < 8)     { setErro('A senha deve ter no mínimo 8 caracteres.'); return }
     if (novaSenha !== confirmar)  { setErro('As senhas não coincidem.'); return }
     setErro('')
     setCarregando(true)
@@ -96,7 +96,7 @@ export default function RedefinirSenhaPage() {
                   <input
                     className={styles.input}
                     type={mostrarSenha ? 'text' : 'password'}
-                    placeholder="Mínimo 6 caracteres"
+                    placeholder="Mínimo 8 caracteres"
                     value={novaSenha}
                     onChange={e => { setNovaSenha(e.target.value); setErro('') }}
                   />
