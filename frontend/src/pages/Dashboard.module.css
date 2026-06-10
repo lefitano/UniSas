@@ -87,6 +87,13 @@
 }
 .progressoItem:last-child { border-bottom: none; }
 
+.vazio {
+  padding: 20px 14px;
+  font-size: 13px;
+  color: var(--cinza-texto);
+  text-align: center;
+}
+
 .progressoTopo {
   display: flex;
   justify-content: space-between;
