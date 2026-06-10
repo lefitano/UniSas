@@ -87,9 +87,9 @@ export default function MinhasAtividadesPage() {
       />
 
       <TabNav abas={[
-        { label: 'Início',      rota: '/dashboard/aluno'   },
-        { label: 'Atividades',  rota: '/aluno/atividades'  },
-        'Minhas aulas',
+        { label: 'Início',       rota: '/dashboard/aluno'  },
+        { label: 'Atividades',   rota: '/aluno/atividades' },
+        { label: 'Minhas aulas', rota: '/aluno/aulas'      },
         'Chat',
         'Downloads',
       ]} />

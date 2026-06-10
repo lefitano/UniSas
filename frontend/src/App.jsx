@@ -25,6 +25,7 @@ import NovaAtividadePage         from './pages/NovaAtividadePage'
 import ConteudosPage             from './pages/ConteudosPage'
 import NovoConteudoPage          from './pages/NovoConteudoPage'
 import MinhasAtividadesPage      from './pages/MinhasAtividadesPage'
+import MinhasAulasPage           from './pages/MinhasAulasPage'
 import EntregasAtividadePage     from './pages/EntregasAtividadePage'
 import EsqueciSenhaPage          from './pages/EsqueciSenhaPage'
 import RedefinirSenhaPage        from './pages/RedefinirSenhaPage'
@@ -81,7 +82,8 @@ export default function App() {
         <Route path="/professor/atividades/:id/entregas" element={<RotaProtegida perfil="professor"> <EntregasAtividadePage />   </RotaProtegida>} />
         <Route path="/professor/conteudos"               element={<RotaProtegida perfil="professor"> <ConteudosPage />           </RotaProtegida>} />
         <Route path="/professor/conteudos/novo"          element={<RotaProtegida perfil="professor"> <NovoConteudoPage />        </RotaProtegida>} />
-        <Route path="/aluno/atividades"          element={<RotaProtegida perfil="aluno">        <MinhasAtividadesPage />     </RotaProtegida>} />
+        <Route path="/aluno/atividades"  element={<RotaProtegida perfil="aluno"> <MinhasAtividadesPage /> </RotaProtegida>} />
+        <Route path="/aluno/aulas"       element={<RotaProtegida perfil="aluno"> <MinhasAulasPage />      </RotaProtegida>} />
         <Route path="/em-breve"                  element={<RotaProtegida> <EmBrevePage /> </RotaProtegida>} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

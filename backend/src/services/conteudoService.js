@@ -16,7 +16,7 @@ export async function listarConteudosPorTurma(turmaId) {
   const { data, error } = await supabase
     .from('conteudos')
     .select('*, turmas(nome)')
-    .eq('turma_id', turmaId)
+    .or(`turma_id.eq.${turmaId},turma_id.is.null`)
     .order('created_at', { ascending: false })
 
   if (error) throw new AppError(error.message, 400)
