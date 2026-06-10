@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { login, cadastrarDiretor } from '../services/authService'
+import { login, cadastrarDiretor, logout } from '../services/authService'
 import LoginForm from '../components/auth/LoginForm'
 import { BsBuilding, BsEye, BsEyeSlash, BsShieldLock } from 'react-icons/bs'
 import styles from './AuthPage.module.css'
@@ -17,6 +17,7 @@ const camposCadastroDiretor = [
 ]
 
 const perfisValidos = ['aluno', 'professor', 'responsavel', 'diretor']
+const labelPerfil   = { aluno: 'Aluno', professor: 'Professor', responsavel: 'Responsável', diretor: 'Diretor' }
 
 const Logo = () => (
   <div className={styles.marca}>
@@ -68,6 +69,11 @@ export default function AuthPage() {
     setCarregando(true)
     try {
       const usuario = await login(email, senha)
+      if (usuario.perfil !== perfil) {
+        logout()
+        setErroLogin(`Esta conta pertence ao perfil "${labelPerfil[usuario.perfil]}". Selecione o perfil correto na tela inicial.`)
+        return
+      }
       navigate(`/dashboard/${usuario.perfil}`)
     } catch (e) {
       const mensagem = e.message || ''
