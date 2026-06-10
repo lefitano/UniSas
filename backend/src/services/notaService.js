@@ -22,6 +22,16 @@ export async function lancarNota(dados) {
   return data
 }
 
+export async function buscarNotasPorAtividade(atividadeId) {
+  const { data, error } = await supabase
+    .from('entregas')
+    .select('id, aluno_id, atividade_id, nota, data_entrega')
+    .eq('atividade_id', atividadeId)
+
+  if (error) throw new AppError(error.message, 400)
+  return data
+}
+
 export async function alterarNota(id, nota) {
   const { data, error } = await supabase
     .from('entregas')

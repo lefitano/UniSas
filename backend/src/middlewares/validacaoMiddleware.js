@@ -1,9 +1,11 @@
 export function validarCampos(campos) {
     return (req, res, next) => {
-        const faltando = campos.filter(campo => !req.body[campo])
-        if (faltando.length > 0){
+        const faltando = campos.filter(campo =>
+            req.body[campo] === undefined || req.body[campo] === null || req.body[campo] === ''
+        )
+        if (faltando.length > 0) {
             return res.status(400).json({
-                erro: `Campos obrigatórios faltando :  ${faltando.join(',')} `
+                erro: `Campos obrigatórios faltando: ${faltando.join(', ')}`
             })
         }
         next()

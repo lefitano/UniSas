@@ -2,7 +2,11 @@ import * as notaService from '../services/notaService.js'
 
 export async function listar(req, res, next) {
   try {
-    const { alunoId } = req.query
+    const { alunoId, atividadeId } = req.query
+    if (atividadeId) {
+      const notas = await notaService.buscarNotasPorAtividade(atividadeId)
+      return res.json(notas)
+    }
     const notas = await notaService.buscarNotasPorAluno(alunoId)
     res.json(notas)
   } catch (erro) {

@@ -7,7 +7,7 @@ import ActionButton from '../components/dashboard/ActionButton'
 import { getUsuario, getIniciais, getSaudacao, avatarCores } from '../utils/usuario'
 import { getMinhasTurmas, getAlunosDaTurma } from '../services/turmaService'
 import { getAtividades } from '../services/atividadeService'
-import { BsPeopleFill, BsClipboard, BsCameraVideo, BsQuestionCircle, BsUpload, BsPencilSquare, BsPatchQuestion, BsBarChartLine } from 'react-icons/bs'
+import { BsPeopleFill, BsClipboard, BsCameraVideo, BsAward, BsUpload, BsPencilSquare, BsBarChartLine, BsGrid1X2 } from 'react-icons/bs'
 import styles from './Dashboard.module.css'
 
 const labelTurno = { manha: 'Manhã', tarde: 'Tarde', noite: 'Noite' }
@@ -60,7 +60,6 @@ export default function DashboardProfessor() {
         { label: 'Início',        rota: '/dashboard/professor' },
         { label: 'Minhas turmas', rota: '/professor/turmas'    },
         'Conteúdos',
-        'Banco de questões',
         'Chat',
       ]} />
 
@@ -78,16 +77,16 @@ export default function DashboardProfessor() {
         <div className={styles.cardsGrid}>
           <StatCard icon={<BsPeopleFill size={16} />}     label="Alunos"               valor={String(totalAlunos)} sub={turmas.length > 0 ? `${turmas.length} turma(s) ativa(s)` : 'Nenhuma turma ativa'} cor="verde"   />
           <StatCard icon={<BsClipboard size={16} />}      label="Atividades abertas"   valor={String(totalAtividades)} sub={totalAtividades === 0 ? 'Nenhuma criada' : `${totalAtividades} atividade(s)`} cor="amarelo" />
-          <StatCard icon={<BsCameraVideo size={16} />}    label="Conteúdos publicados" valor="0" sub="Este semestre"       cor="verde"   />
-          <StatCard icon={<BsQuestionCircle size={16} />} label="Questões no banco"    valor="0" sub="Nenhuma cadastrada"  cor="amarelo" />
+          <StatCard icon={<BsCameraVideo size={16} />} label="Conteúdos publicados" valor="0"    sub="Este semestre"       cor="verde"   />
+          <StatCard icon={<BsAward size={16} />}      label="Notas lançadas"       valor="—"   sub="Via atividades"       cor="amarelo" />
         </div>
 
         <p className={styles.secaoTitulo}>Ações rápidas</p>
         <div className={styles.acoesGrid}>
-          <ActionButton icon={<BsUpload size={20} />}        label="Upload de aula" onClick={() => navigate('/em-breve')} />
-          <ActionButton icon={<BsPencilSquare size={20} />}  label="Nova atividade" onClick={() => navigate('/professor/atividades/nova')} />
-          <ActionButton icon={<BsPatchQuestion size={20} />} label="Criar questão"  onClick={() => navigate('/em-breve')} />
-          <ActionButton icon={<BsBarChartLine size={20} />}  label="Ver desempenho" onClick={() => navigate('/professor/atividades')} />
+          <ActionButton icon={<BsUpload size={20} />}       label="Upload de aula"  onClick={() => navigate('/em-breve')} />
+          <ActionButton icon={<BsPencilSquare size={20} />} label="Nova atividade"  onClick={() => navigate('/professor/atividades/nova')} />
+          <ActionButton icon={<BsBarChartLine size={20} />} label="Lançar notas"    onClick={() => navigate('/professor/atividades')} />
+          <ActionButton icon={<BsGrid1X2 size={20} />}      label="Minhas turmas"   onClick={() => navigate('/professor/turmas')} />
         </div>
 
         <div className={styles.listaCard}>
