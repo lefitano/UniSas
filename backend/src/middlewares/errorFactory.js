@@ -1,9 +1,9 @@
 import { AppError } from './AppError.js'
 
-export const ErrorFactory = {
-  invalido:      (msg) => new AppError(msg, 400),
-  naoAutorizado: (msg) => new AppError(msg, 401),
-  naoEncontrado: (msg) => new AppError(msg, 404),
-  conflito:      (msg) => new AppError(msg, 409),
-  interno:       (msg) => new AppError(msg, 500),
+export class ErrorFactory {
+  static invalido(msg)      { return new AppError(msg, 400) }
+  static naoAutorizado(msg) { return new AppError(msg, 401) }
+  static naoEncontrado(msg) { return new AppError(msg, 404) }
+  static conflito(msg)      { return new AppError(msg, 409) }
+  static interno(msg)       { return new AppError(msg, 500) }
 }
