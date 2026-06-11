@@ -66,7 +66,6 @@ export default function DashboardAluno() {
         { label: 'Atividades',   rota: '/aluno/atividades' },
         { label: 'Minhas aulas', rota: '/aluno/aulas'      },
         'Chat',
-        'Downloads',
       ]} />
 
       <div className={styles.corpo}>
@@ -121,10 +120,6 @@ export default function DashboardAluno() {
           }
         </div>
 
-        <div className={styles.listaCard}>
-          <div className={styles.listaHeader}><span>Progresso por disciplina</span></div>
-          <p className={styles.vazio}>Nenhum progresso registrado.</p>
-        </div>
       </div>
     </div>
   )

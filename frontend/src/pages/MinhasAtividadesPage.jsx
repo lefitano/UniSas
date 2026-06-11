@@ -91,7 +91,6 @@ export default function MinhasAtividadesPage() {
         { label: 'Atividades',   rota: '/aluno/atividades' },
         { label: 'Minhas aulas', rota: '/aluno/aulas'      },
         'Chat',
-        'Downloads',
       ]} />
 
       <div className={dashStyles.corpo}>

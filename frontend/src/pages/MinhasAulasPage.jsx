@@ -13,7 +13,6 @@ const ABAS_ALUNO = [
   { label: 'Atividades',  rota: '/aluno/atividades' },
   { label: 'Minhas aulas', rota: '/aluno/aulas'     },
   'Chat',
-  'Downloads',
 ]
 
 function formatarData(data) {
