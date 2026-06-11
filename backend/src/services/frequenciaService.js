@@ -1,5 +1,5 @@
 import supabase from '../config/database.js'
-import { AppError } from '../middlewares/AppError.js'
+import { ErrorFactory } from '../middlewares/errorFactory.js'
 
 export async function listarFrequencias(turmaId) {
   const { data, error } = await supabase
@@ -7,7 +7,7 @@ export async function listarFrequencias(turmaId) {
     .select('*')
     .eq('turma_id', turmaId)
 
-  if (error) throw new AppError(error.message, 400)
+  if (error) throw ErrorFactory.invalido(error.message)
   return data
 }
 
@@ -18,7 +18,7 @@ export async function registrarFrequencia(dados) {
     .select()
     .single()
 
-  if (error) throw new AppError(error.message, 400)
+  if (error) throw ErrorFactory.invalido(error.message)
   return data
 }
 
@@ -30,6 +30,6 @@ export async function atualizarFrequencia(id, dados) {
     .select()
     .single()
 
-  if (error) throw new AppError(error.message, 400)
+  if (error) throw ErrorFactory.invalido(error.message)
   return data
 }

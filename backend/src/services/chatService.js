@@ -1,5 +1,5 @@
 import supabase from '../config/database.js'
-import { AppError } from '../middlewares/AppError.js'
+import { ErrorFactory } from '../middlewares/errorFactory.js'
 
 export async function listarMensagens(remetente, destinatario) {
   const { data, error } = await supabase
@@ -8,7 +8,7 @@ export async function listarMensagens(remetente, destinatario) {
     .or(`and(remetente_id.eq.${remetente},destinatario_id.eq.${destinatario}),and(remetente_id.eq.${destinatario},destinatario_id.eq.${remetente})`)
     .order('created_at', { ascending: true })
 
-  if (error) throw new AppError(error.message, 400)
+  if (error) throw ErrorFactory.invalido(error.message)
   return data
 }
 
@@ -19,6 +19,6 @@ export async function enviarMensagem(dados) {
     .select()
     .single()
 
-  if (error) throw new AppError(error.message, 400)
+  if (error) throw ErrorFactory.invalido(error.message)
   return data
 }

@@ -1,5 +1,5 @@
 import supabase from '../config/database.js'
-import { AppError } from '../middlewares/AppError.js'
+import { ErrorFactory } from '../middlewares/errorFactory.js'
 
 export async function listarUsuarios(pagina, limite) {
   const selecao = 'id, nome, email, perfil, matricula, registro_funcional, disciplina, cpf, codigo_aluno, escola, turma_id, criado_em'
@@ -10,12 +10,12 @@ export async function listarUsuarios(pagina, limite) {
     const { data, error, count } = await supabase.from('usuarios')
       .select(selecao, { count: 'exact' })
       .range(from, to)
-    if (error) throw new AppError('Não foi possível listar os usuarios', 500)
+    if (error) throw ErrorFactory.interno('Não foi possível listar os usuarios')
     return { dados: data, total: count, pagina, limite, totalPaginas: Math.ceil(count / limite) }
   }
 
   const { data, error } = await supabase.from('usuarios').select(selecao)
-  if (error) throw new AppError('Não foi possível listar os usuarios', 500)
+  if (error) throw ErrorFactory.interno('Não foi possível listar os usuarios')
   return data
 }
 
@@ -25,7 +25,7 @@ export async function buscarUsuarioPorId(id) {
   .eq('id', id)
   .single()
 
-  if(error) throw new AppError('Usuário não encontrado', 404)
+  if(error) throw ErrorFactory.naoEncontrado('Usuário não encontrado')
     return data;
 }
 
@@ -35,7 +35,7 @@ export async function criarUsuario(dados) {
   .select('id, nome, email, perfil, criado_em ')
   .single()
 
-  if(error) throw new AppError(error.message, 400)
+  if(error) throw ErrorFactory.invalido(error.message)
     return data
 
 }
@@ -48,7 +48,7 @@ export async function atualizarUsuario(id, dados) {
   .single()
   
 
-  if(error) throw new AppError('Erro ao atualizar o usuario', 500)
+  if(error) throw ErrorFactory.interno('Erro ao atualizar o usuario')
     return data
 
 }
@@ -58,7 +58,7 @@ export async function removerUsuario(id) {
   .delete()
   .eq('id', id)
 
-  if(error) throw new AppError('Erro ao remover usuario', 500)
+  if(error) throw ErrorFactory.interno('Erro ao remover usuario')
 
   
 

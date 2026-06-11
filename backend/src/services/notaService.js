@@ -1,5 +1,5 @@
 import supabase from '../config/database.js'
-import { AppError } from '../middlewares/AppError.js'
+import { ErrorFactory } from '../middlewares/errorFactory.js'
 
 export async function buscarNotasPorAluno(alunoId) {
   const { data, error } = await supabase
@@ -7,7 +7,7 @@ export async function buscarNotasPorAluno(alunoId) {
     .select('id, atividade_id, nota, atividades(titulo)')
     .eq('aluno_id', alunoId)
 
-  if (error) throw new AppError(error.message, 400)
+  if (error) throw ErrorFactory.invalido(error.message)
   return data
 }
 
@@ -18,7 +18,7 @@ export async function lancarNota(dados) {
     .select()
     .single()
 
-  if (error) throw new AppError(error.message, 400)
+  if (error) throw ErrorFactory.invalido(error.message)
   return data
 }
 
@@ -28,7 +28,7 @@ export async function buscarNotasPorAtividade(atividadeId) {
     .select('id, aluno_id, atividade_id, nota, data_entrega')
     .eq('atividade_id', atividadeId)
 
-  if (error) throw new AppError(error.message, 400)
+  if (error) throw ErrorFactory.invalido(error.message)
   return data
 }
 
@@ -40,6 +40,6 @@ export async function alterarNota(id, nota) {
     .select()
     .single()
 
-  if (error) throw new AppError(error.message, 400)
+  if (error) throw ErrorFactory.invalido(error.message)
   return data
 }

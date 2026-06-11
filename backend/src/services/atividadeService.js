@@ -1,5 +1,5 @@
 import supabase from '../config/database.js'
-import { AppError } from '../middlewares/AppError.js'
+import { ErrorFactory } from '../middlewares/errorFactory.js'
 
 export async function listarAtividades(pagina, limite) {
   if (pagina && limite) {
@@ -9,12 +9,12 @@ export async function listarAtividades(pagina, limite) {
       .from('atividades')
       .select('*', { count: 'exact' })
       .range(from, to)
-    if (error) throw new AppError(error.message, 400)
+    if (error) throw ErrorFactory.interno(error.message)
     return { dados: data, total: count, pagina, limite, totalPaginas: Math.ceil(count / limite) }
   }
 
   const { data, error } = await supabase.from('atividades').select('*')
-  if (error) throw new AppError(error.message, 400)
+  if (error) throw ErrorFactory.interno(error.message)
   return data
 }
 
@@ -25,7 +25,7 @@ export async function criarAtividade(dados) {
     .select()
     .single()
 
-  if (error) throw new AppError(error.message, 400)
+  if (error) throw ErrorFactory.invalido(error.message)
   return data
 }
 
@@ -37,7 +37,7 @@ export async function atualizarAtividade(id, dados) {
     .select()
     .single()
 
-  if (error) throw new AppError(error.message, 400)
+  if (error) throw ErrorFactory.invalido(error.message)
   return data
 }
 
@@ -47,7 +47,7 @@ export async function removerAtividade(id) {
     .delete()
     .eq('id', id)
 
-  if (error) throw new AppError(error.message, 400)
+  if (error) throw ErrorFactory.invalido(error.message)
 }
 
 export async function submeterEntrega(atividadeId, dados) {
@@ -57,6 +57,6 @@ export async function submeterEntrega(atividadeId, dados) {
     .select()
     .single()
 
-  if (error) throw new AppError(error.message, 400)
+  if (error) throw ErrorFactory.invalido(error.message)
   return data
 }
