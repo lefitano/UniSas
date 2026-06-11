@@ -1,6 +1,6 @@
 import { getToken } from './api.js'
 
-const BASE_URL = 'http://localhost:3001/api'
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api'
 
 export async function uploadPDF(arquivo) {
   const formData = new FormData()
