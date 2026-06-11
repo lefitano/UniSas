@@ -16,7 +16,7 @@ export function usarCache(chave) {
         return jsonOriginal(dados)
       }
     } catch {
-      // se Redis estiver indisponível, continua sem cache
+      
     }
     next()
   }
@@ -27,7 +27,7 @@ export function invalidarCache(...chaves) {
     try {
       await Promise.all(chaves.map(c => redis.del(c)))
     } catch {
-      // falha silenciosa — não bloqueia a requisição
+     
     }
     next()
   }
