@@ -7,7 +7,8 @@ import { getUsuario, getIniciais, getSaudacao, avatarCores } from '../utils/usua
 import { getTurmaPorId } from '../services/turmaService'
 import { getAtividadesDaTurma } from '../services/atividadeService'
 import { getNotasDoAluno } from '../services/notaService'
-import { BsGraphUp, BsTrophy, BsCheckCircle, BsDownload } from 'react-icons/bs'
+import { getConteudosPorTurma } from '../services/conteudoService'
+import { BsGraphUp, BsCheckCircle, BsFilePdf, BsPlayCircle } from 'react-icons/bs'
 import styles from './Dashboard.module.css'
 
 const labelTurno = { manha: 'Manhã', tarde: 'Tarde', noite: 'Noite' }
@@ -18,6 +19,7 @@ export default function DashboardAluno() {
   const [turma, setTurma]             = useState(null)
   const [pendentes, setPendentes]     = useState([])
   const [media, setMedia]             = useState(null)
+  const [aulas, setAulas]             = useState([])
 
   useEffect(() => {
     async function carregar() {
@@ -26,12 +28,14 @@ export default function DashboardAluno() {
       setUsuario(dados)
       if (dados.turma_id) {
         try {
-          const [t, atividades, entregas] = await Promise.all([
+          const [t, atividades, entregas, listaAulas] = await Promise.all([
             getTurmaPorId(dados.turma_id),
             getAtividadesDaTurma(dados.turma_id),
             getNotasDoAluno(dados.id),
+            getConteudosPorTurma(dados.turma_id),
           ])
           setTurma(t)
+          setAulas(listaAulas)
           const entregasIds = new Set(entregas.map(e => e.atividade_id))
           setPendentes(atividades.filter(a => !entregasIds.has(a.id)))
           const comNota = entregas.filter(e => e.nota !== null && e.nota !== undefined)
@@ -82,10 +86,10 @@ export default function DashboardAluno() {
         </div>
 
         <div className={styles.cardsGrid}>
-          <StatCard icon={<BsGraphUp size={16} />}     label="Média geral"       valor={media ?? '—'} sub={media ? `Média das notas` : 'Aguardando lançamento'} cor="verde"   />
-          <StatCard icon={<BsTrophy size={16} />}      label="Conquistas"         valor="0" sub="Nenhuma ainda"         cor="amarelo" />
-          <StatCard icon={<BsCheckCircle size={16} />} label="Frequência"         valor="—" sub="Sem registros"         cor="verde"   />
-          <StatCard icon={<BsDownload size={16} />}    label="Conteúdos offline" valor="0" sub="Nenhum disponível"     cor="amarelo" />
+          <StatCard icon={<BsGraphUp size={16} />}     label="Média geral"  valor={media ?? '—'} sub={media ? 'Média das notas' : 'Aguardando lançamento'} cor="verde"   />
+          <StatCard icon={<BsPlayCircle size={16} />}  label="Aulas disponíveis" valor={aulas.length} sub={aulas.length > 0 ? 'Publicadas pelo professor' : 'Nenhuma publicada ainda'} cor="amarelo" />
+          <StatCard icon={<BsCheckCircle size={16} />} label="Frequência"   valor="—" sub="Sem registros" cor="verde" />
+          <StatCard icon={<BsFilePdf size={16} />}     label="Pendentes"    valor={pendentes.length} sub={pendentes.length > 0 ? 'Atividades em aberto' : 'Nenhuma pendente'} cor="amarelo" />
         </div>
 
         <div className={styles.listaCard}>
@@ -115,6 +119,32 @@ export default function DashboardAluno() {
                   <span style={{ fontSize: 11, color: 'var(--cinza-texto)' }}>
                     {a.prazo ? new Date(a.prazo).toLocaleDateString('pt-BR') : 'Sem prazo'}
                   </span>
+                </div>
+              ))
+          }
+        </div>
+
+        <div className={styles.listaCard}>
+          <div className={styles.listaHeader}>
+            <span>Últimas aulas</span>
+            <span className={styles.link} onClick={() => navigate('/aluno/aulas')}>Ver todas</span>
+          </div>
+          {aulas.length === 0
+            ? <p className={styles.vazio}>Nenhuma aula publicada ainda.</p>
+            : aulas.slice(0, 3).map(a => (
+                <div key={a.id} className={styles.progressoItem} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <BsFilePdf size={14} color="var(--verde)" />
+                    <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--texto)' }}>{a.titulo}</span>
+                  </div>
+                  <a
+                    href={a.arquivo_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ fontSize: 11, color: 'var(--verde)', fontWeight: 600, textDecoration: 'none' }}
+                  >
+                    Abrir PDF
+                  </a>
                 </div>
               ))
           }
