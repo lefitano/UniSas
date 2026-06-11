@@ -7,6 +7,7 @@ import ActionButton from '../components/dashboard/ActionButton'
 import { getUsuario, getIniciais, getSaudacao, avatarCores } from '../utils/usuario'
 import { getMinhasTurmas, getAlunosDaTurma } from '../services/turmaService'
 import { getAtividades } from '../services/atividadeService'
+import { getConteudos } from '../services/conteudoService'
 import { BsPeopleFill, BsClipboard, BsCameraVideo, BsAward, BsUpload, BsPencilSquare, BsBarChartLine, BsGrid1X2 } from 'react-icons/bs'
 import styles from './Dashboard.module.css'
 
@@ -18,6 +19,7 @@ export default function DashboardProfessor() {
   const [turmas, setTurmas]                   = useState([])
   const [totalAlunos, setTotalAlunos]         = useState(0)
   const [totalAtividades, setTotalAtividades] = useState(0)
+  const [totalConteudos, setTotalConteudos]   = useState(0)
 
   useEffect(() => {
     async function carregar() {
@@ -28,12 +30,14 @@ export default function DashboardProfessor() {
         const lista = await getMinhasTurmas()
         setTurmas(lista)
         const turmaIds = new Set(lista.map(t => t.id))
-        const [listas, todasAtividades] = await Promise.all([
+        const [listas, todasAtividades, listaConteudos] = await Promise.all([
           Promise.all(lista.map(t => getAlunosDaTurma(t.id))),
           getAtividades(),
+          getConteudos(dados.id),
         ])
         setTotalAlunos(listas.reduce((acc, alunos) => acc + alunos.length, 0))
         setTotalAtividades(todasAtividades.filter(a => turmaIds.has(a.turma_id)).length)
+        setTotalConteudos(listaConteudos.length)
       } catch {
         // dashboard continua funcionando mesmo se falhar
       }
@@ -78,7 +82,7 @@ export default function DashboardProfessor() {
         <div className={styles.cardsGrid}>
           <StatCard icon={<BsPeopleFill size={16} />}     label="Alunos"               valor={String(totalAlunos)} sub={turmas.length > 0 ? `${turmas.length} turma(s) ativa(s)` : 'Nenhuma turma ativa'} cor="verde"   />
           <StatCard icon={<BsClipboard size={16} />}      label="Atividades abertas"   valor={String(totalAtividades)} sub={totalAtividades === 0 ? 'Nenhuma criada' : `${totalAtividades} atividade(s)`} cor="amarelo" />
-          <StatCard icon={<BsCameraVideo size={16} />} label="Conteúdos publicados" valor="0"    sub="Este semestre"       cor="verde"   />
+          <StatCard icon={<BsCameraVideo size={16} />} label="Conteúdos publicados" valor={String(totalConteudos)} sub="Este semestre" cor="verde" />
           <StatCard icon={<BsAward size={16} />}      label="Notas lançadas"       valor="—"   sub="Via atividades"       cor="amarelo" />
         </div>
 
