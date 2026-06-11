@@ -8,6 +8,7 @@ import { getUsuario, getIniciais, getSaudacao, avatarCores } from '../utils/usua
 import { getMinhasTurmas, getAlunosDaTurma } from '../services/turmaService'
 import { getAtividades } from '../services/atividadeService'
 import { getConteudos } from '../services/conteudoService'
+import { getNotasPorAtividade } from '../services/notaService'
 import { BsPeopleFill, BsClipboard, BsCameraVideo, BsAward, BsUpload, BsPencilSquare, BsBarChartLine, BsGrid1X2 } from 'react-icons/bs'
 import styles from './Dashboard.module.css'
 
@@ -20,6 +21,7 @@ export default function DashboardProfessor() {
   const [totalAlunos, setTotalAlunos]         = useState(0)
   const [totalAtividades, setTotalAtividades] = useState(0)
   const [totalConteudos, setTotalConteudos]   = useState(0)
+  const [totalNotas, setTotalNotas]           = useState(0)
 
   useEffect(() => {
     async function carregar() {
@@ -35,9 +37,15 @@ export default function DashboardProfessor() {
           getAtividades(),
           getConteudos(dados.id),
         ])
+        const atividadesDoProfessor = todasAtividades.filter(a => turmaIds.has(a.turma_id))
         setTotalAlunos(listas.reduce((acc, alunos) => acc + alunos.length, 0))
-        setTotalAtividades(todasAtividades.filter(a => turmaIds.has(a.turma_id)).length)
+        setTotalAtividades(atividadesDoProfessor.length)
         setTotalConteudos(listaConteudos.length)
+
+        const notasPorAtividade = await Promise.all(
+          atividadesDoProfessor.map(a => getNotasPorAtividade(a.id))
+        )
+        setTotalNotas(notasPorAtividade.reduce((acc, notas) => acc + notas.length, 0))
       } catch {
         // dashboard continua funcionando mesmo se falhar
       }
@@ -83,7 +91,7 @@ export default function DashboardProfessor() {
           <StatCard icon={<BsPeopleFill size={16} />}     label="Alunos"               valor={String(totalAlunos)} sub={turmas.length > 0 ? `${turmas.length} turma(s) ativa(s)` : 'Nenhuma turma ativa'} cor="verde"   />
           <StatCard icon={<BsClipboard size={16} />}      label="Atividades abertas"   valor={String(totalAtividades)} sub={totalAtividades === 0 ? 'Nenhuma criada' : `${totalAtividades} atividade(s)`} cor="amarelo" />
           <StatCard icon={<BsCameraVideo size={16} />} label="Conteúdos publicados" valor={String(totalConteudos)} sub="Este semestre" cor="verde" />
-          <StatCard icon={<BsAward size={16} />}      label="Notas lançadas"       valor="—"   sub="Via atividades"       cor="amarelo" />
+          <StatCard icon={<BsAward size={16} />}      label="Notas lançadas"       valor={String(totalNotas)} sub={totalNotas === 0 ? 'Nenhuma lançada' : `${totalNotas} nota(s)`} cor="amarelo" />
         </div>
 
         <p className={styles.secaoTitulo}>Ações rápidas</p>
